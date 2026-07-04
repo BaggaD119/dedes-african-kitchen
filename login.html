@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en" style="visibility:hidden">
+<head>
+<meta charset="utf-8" />
+<title>Dede's African Kitchen — Sign In</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="icon" type="image/png" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="favicon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<style>
+  :root{
+    --orange:#F39A36;
+    --orange-2:#F08A1F;
+    --ink:#222629;
+    --ink-soft:#3a3f44;
+    --muted:#9aa1a8;
+    --muted-2:#c9ced3;
+    --bg:#f4f5f7;
+    --card:#ffffff;
+    --green:#26C281;
+    --chip:#f1f2f4;
+    --shadow-card: 0 10px 30px -16px rgba(20,24,28,.18), 0 2px 6px rgba(20,24,28,.04);
+    --shadow-soft: 0 8px 22px -14px rgba(20,24,28,.25);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);font-family:'Poppins',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100%}
+  button{font-family:inherit;border:0;background:none;cursor:pointer;color:inherit}
+
+  .shell{
+    min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:#2b2f33;color:#fff;position:relative;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:60px 64px;
+  }
+  .hero::before{content:'';position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;background:rgba(243,154,54,.16)}
+  .hero::after{content:'';position:absolute;left:-100px;bottom:-140px;width:300px;height:300px;border-radius:50%;background:rgba(243,154,54,.1)}
+  .hero-inner{position:relative;z-index:1;max-width:460px}
+  .logo{
+    width:48px;height:48px;border-radius:13px;background:var(--orange);
+    display:grid;place-items:center;color:#fff;margin-bottom:22px;
+    box-shadow:0 12px 22px -10px rgba(243,154,54,.7);overflow:hidden;
+  }
+  .logo svg{width:24px;height:24px}
+  .logo img{width:100%;height:100%;object-fit:cover}
+  .hero h1{font-size:38px;line-height:1.18;font-weight:700;margin:0 0 16px;letter-spacing:-.01em}
+  .hero h1 span{color:var(--orange)}
+  .hero p{font-size:14.5px;line-height:1.7;color:#c9ced3;margin:0 0 32px;max-width:400px}
+  .hero-stats{display:flex;gap:36px}
+  .hero-stats .stat b{display:block;font-size:22px;font-weight:700;margin-bottom:2px}
+  .hero-stats .stat span{font-size:11.5px;color:#9aa1a8;font-weight:500}
+
+  /* ---------- Auth panel ---------- */
+  .auth{display:flex;align-items:center;justify-content:center;padding:40px 24px}
+  .auth-card{width:100%;max-width:400px}
+  .auth-tabs{display:flex;gap:6px;background:var(--chip);padding:4px;border-radius:12px;margin-bottom:26px}
+  .auth-tab{flex:1;padding:10px;border-radius:9px;font-weight:600;font-size:13.5px;color:#5e646b;transition:all .15s ease}
+  .auth-tab.active{background:#fff;color:var(--ink);box-shadow:var(--shadow-soft)}
+
+  .auth-card h2{font-size:21px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em}
+  .auth-card .sub{font-size:12.5px;color:var(--muted);font-weight:500;margin:0 0 22px;line-height:1.6}
+
+  .field-lbl{font-size:12px;font-weight:600;color:var(--ink-soft);margin:0 0 6px;display:block}
+  .mfield{display:block;width:100%;height:46px;border:1.5px solid #eef0f2;border-radius:12px;padding:0 14px;font:500 14px 'Poppins',sans-serif;outline:none;color:var(--ink);margin-bottom:14px;transition:border .15s;box-sizing:border-box}
+  .mfield:focus{border-color:var(--orange)}
+
+  .mprimary{width:100%;padding:14px;border-radius:12px;font:600 14.5px 'Poppins',sans-serif;cursor:pointer;border:0;background:var(--orange);color:#fff;box-shadow:0 14px 26px -12px rgba(243,154,54,.7);transition:all .15s ease}
+  .mprimary:hover{background:var(--orange-2);transform:translateY(-1px)}
+  .mprimary:disabled{opacity:.6;cursor:default;transform:none}
+
+  .auth-error{background:#fdecea;color:#e54848;font-size:12.5px;font-weight:600;padding:10px 14px;border-radius:10px;margin:-2px 0 14px;display:none;line-height:1.5}
+  .auth-error.show{display:block}
+  .auth-notice{background:#e7f7ef;color:#1c8f5e;font-size:12.5px;font-weight:600;padding:10px 14px;border-radius:10px;margin:-2px 0 14px;display:none;line-height:1.5}
+  .auth-notice.show{display:block}
+
+  .forgot{display:block;text-align:right;font-size:12px;color:var(--orange);font-weight:600;margin:-6px 0 18px}
+  .forgot:hover{color:var(--orange-2)}
+
+  .vendor-note{margin-top:18px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6}
+
+  @media(max-width:860px){
+    .shell{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+    .hero{padding:44px 28px}
+    .hero h1{font-size:28px}
+    .hero-stats{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <section class="hero">
+    <div class="hero-inner">
+      <a href="index.html" class="logo" aria-label="Back to home">
+        <img src="favicon-180.png" alt="Dede's African Kitchen" />
+      </a>
+      <h1>Great food,<br/>delivered <span>your way</span></h1>
+      <p>Order from your favorite local kitchen and track it every step of the way — from the stove to your door.</p>
+      <div class="hero-stats">
+        <div class="stat"><b>15–30</b><span>Min Delivery</span></div>
+        <div class="stat"><b>4.8★</b><span>Customer Rating</span></div>
+        <div class="stat"><b>24/7</b><span>Order Anytime</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="auth">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin">Log In</button>
+        <button class="auth-tab" id="tabSignup">Sign Up</button>
+      </div>
+
+      <!-- Login -->
+      <div id="loginPane">
+        <h2>Welcome back</h2>
+        <p class="sub">Log in to see your orders, wallet, and favorites.</p>
+        <div class="auth-error" id="loginError"></div>
+        <div class="auth-notice" id="loginNotice"></div>
+        <form id="loginForm">
+          <label class="field-lbl" for="loginEmail">Email</label>
+          <input class="mfield" id="loginEmail" type="email" autocomplete="email" required placeholder="you@example.com" />
+          <label class="field-lbl" for="loginPassword">Password</label>
+          <input class="mfield" id="loginPassword" type="password" autocomplete="current-password" required placeholder="••••••••" />
+          <a href="#" class="forgot" id="forgotLink">Forgot password?</a>
+          <button class="mprimary" id="loginSubmit" type="submit">Log In</button>
+        </form>
+      </div>
+
+      <!-- Sign up -->
+      <div id="signupPane" style="display:none">
+        <h2>Create your account</h2>
+        <p class="sub">Sign up to start ordering.</p>
+        <div class="auth-error" id="signupError"></div>
+        <div class="auth-notice" id="signupNotice"></div>
+        <form id="signupForm">
+          <label class="field-lbl" for="suName">Full Name</label>
+          <input class="mfield" id="suName" type="text" autocomplete="name" required placeholder="Jane Doe" />
+          <label class="field-lbl" for="suEmail">Email</label>
+          <input class="mfield" id="suEmail" type="email" autocomplete="email" required placeholder="you@example.com" />
+          <label class="field-lbl" for="suPassword">Password</label>
+          <input class="mfield" id="suPassword" type="password" autocomplete="new-password" required minlength="6" placeholder="At least 6 characters" />
+          <button class="mprimary" id="signupSubmit" type="submit">Create Account</button>
+        </form>
+        <p class="vendor-note">By creating an account, you agree to our <a href="terms.html" style="color:var(--orange);font-weight:600">Terms</a> and <a href="privacy.html" style="color:var(--orange);font-weight:600">Privacy Policy</a>.</p>
+        <p class="vendor-note">Run this restaurant? Contact us directly for a staff account — sign up here is for customers only.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Reveal once we know whether to redirect an already-logged-in visitor.
+  FoodieAuth.redirectIfLoggedIn().finally(() => {
+    document.documentElement.style.visibility = 'visible';
+  });
+
+  // ---- Tabs ----
+  const tabLogin = document.getElementById('tabLogin');
+  const tabSignup = document.getElementById('tabSignup');
+  const loginPane = document.getElementById('loginPane');
+  const signupPane = document.getElementById('signupPane');
+
+  function switchTab(name){
+    const toLogin = name === 'login';
+    tabLogin.classList.toggle('active', toLogin);
+    tabSignup.classList.toggle('active', !toLogin);
+    loginPane.style.display = toLogin ? '' : 'none';
+    signupPane.style.display = toLogin ? 'none' : '';
+  }
+  tabLogin.addEventListener('click', () => switchTab('login'));
+  tabSignup.addEventListener('click', () => switchTab('signup'));
+  if(new URLSearchParams(location.search).get('tab') === 'signup') switchTab('signup');
+
+  function setError(id, msg){
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.toggle('show', !!msg);
+  }
+  function setNotice(id, msg){
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.toggle('show', !!msg);
+  }
+
+  // ---- Login ----
+  document.getElementById('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    setError('loginError', '');
+    setNotice('loginNotice', '');
+    const btn = document.getElementById('loginSubmit');
+    btn.disabled = true; btn.textContent = 'Logging in…';
+    try{
+      const { data, error } = await FoodieAuth.signIn({
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPassword').value,
+      });
+      if(error){ setError('loginError', error.message); return; }
+      const { data: profile } = await window.sbClient
+        .from('profiles').select('role').eq('id', data.user.id).single();
+      location.href = profile?.role === 'vendor' ? 'Vendor.html' : FoodieAuth.customerHome();
+    }catch(err){
+      setError('loginError', 'Something went wrong. Please try again.');
+    }finally{
+      btn.disabled = false; btn.textContent = 'Log In';
+    }
+  });
+
+  // ---- Forgot password ----
+  document.getElementById('forgotLink').addEventListener('click', async e => {
+    e.preventDefault();
+    setError('loginError', '');
+    const email = document.getElementById('loginEmail').value.trim();
+    if(!email){ setError('loginError', 'Enter your email above first, then click "Forgot password?"'); return; }
+    try{
+      const { error } = await window.sbClient.auth.resetPasswordForEmail(email);
+      if(error){ setError('loginError', error.message); return; }
+      setNotice('loginNotice', 'Check your email for a password reset link.');
+    }catch(err){
+      setError('loginError', 'Something went wrong. Please try again.');
+    }
+  });
+
+  // ---- Sign up ----
+  document.getElementById('signupForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    setError('signupError', '');
+    setNotice('signupNotice', '');
+    const btn = document.getElementById('signupSubmit');
+    btn.disabled = true; btn.textContent = 'Creating account…';
+    try{
+      const { data, error } = await FoodieAuth.signUp({
+        fullName: document.getElementById('suName').value.trim(),
+        email: document.getElementById('suEmail').value.trim(),
+        password: document.getElementById('suPassword').value,
+      });
+      if(error){ setError('signupError', error.message); return; }
+      if(data.session){
+        location.href = FoodieAuth.customerHome();
+      } else {
+        setNotice('signupNotice', 'Check your email to confirm your account, then log in.');
+        document.getElementById('signupForm').reset();
+        switchTab('login');
+      }
+    }catch(err){
+      setError('signupError', 'Something went wrong. Please try again.');
+    }finally{
+      btn.disabled = false; btn.textContent = 'Create Account';
+    }
+  });
+</script>
+</body>
+</html>
