@@ -2,6 +2,7 @@
 <html lang="en" style="visibility:hidden">
 <head>
 <meta charset="utf-8" />
+<script src="js/theme.js"></script>
 <title>Dede's African Kitchen — Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <link rel="icon" type="image/png" href="favicon-32.png" />
@@ -13,6 +14,7 @@
 <script src="js/supabase-config.js"></script>
 <script src="js/supabase-client.js"></script>
 <script src="js/auth.js"></script>
+<link rel="stylesheet" href="css/common.css">
 <style>
   :root{
     --orange:#F39A36;
@@ -21,12 +23,23 @@
     --ink-soft:#3a3f44;
     --muted:#9aa1a8;
     --muted-2:#c9ced3;
+    --muted-3:#5e646b;
     --bg:#f4f5f7;
     --card:#ffffff;
     --green:#26C281;
     --chip:#f1f2f4;
     --shadow-card: 0 10px 30px -16px rgba(20,24,28,.18), 0 2px 6px rgba(20,24,28,.04);
     --shadow-soft: 0 8px 22px -14px rgba(20,24,28,.25);
+  }
+  [data-theme="dark"]{
+    --ink:#F2F3F4;
+    --ink-soft:#c7cbcf;
+    --muted:#9aa1a8;
+    --muted-2:#3a3f44;
+    --muted-3:#9aa1a8;
+    --bg:#121316;
+    --card:#1c1e22;
+    --chip:#2a2d32;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);font-family:'Poppins',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;height:100%;overflow:hidden}
@@ -37,7 +50,7 @@
   .app{
     width:1280px;
     margin:24px auto;
-    background:#fff;
+    background:var(--card,#fff);
     border-radius:24px;
     box-shadow:0 30px 80px -40px rgba(20,24,28,.18);
     display:grid;
@@ -53,13 +66,13 @@
     flex-direction:column;
     align-items:center;
     gap:8px;
-    border-right:1px solid #f0f1f3;
-    background:#fff;
+    border-right:1px solid var(--chip);
+    background:var(--card,#fff);
   }
   .nav-btn{
     width:44px;height:44px;border-radius:12px;
     display:grid;place-items:center;
-    color:#b9bec4;
+    color:var(--muted-2);
     background:transparent;
     position:relative;
     isolation:isolate;
@@ -68,7 +81,7 @@
   .nav-btn::before{
     content:'';
     position:absolute;inset:0;border-radius:inherit;
-    background:#f6f7f9;
+    background:var(--chip);
     opacity:0;
     transition:opacity .15s ease;
     z-index:-1;
@@ -92,15 +105,15 @@
   .greet .hi{color:var(--muted);font-size:14px;font-weight:500;margin:0 0 4px}
   .greet h1{font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em}
   .search{
-    width:380px;height:48px;background:#eeeff1;border-radius:14px;
+    width:380px;height:48px;background:var(--chip);border-radius:14px;
     display:flex;align-items:center;gap:10px;padding:0 16px;
   }
-  .search svg{width:18px;height:18px;color:#9aa1a8}
+  .search svg{width:18px;height:18px;color:var(--muted)}
   .search input{
     flex:1;border:0;background:transparent;outline:none;
     font:500 14px/1 'Poppins',sans-serif;color:var(--ink);
   }
-  .search input::placeholder{color:#9aa1a8}
+  .search input::placeholder{color:var(--muted)}
 
   /* ---------- Promo banner ---------- */
   .promo{
@@ -144,12 +157,12 @@
   .menu-tabs{display:flex;gap:10px;flex:1;margin-left:8px}
   .tab{
     display:flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;
-    background:#fff;border-radius:999px;border:1px solid #eef0f2;
-    font-weight:600;font-size:13px;color:#5e646b;
+    background:var(--card,#fff);border-radius:999px;border:1px solid var(--chip);
+    font-weight:600;font-size:13px;color:var(--muted-3);
     transition:all .15s ease;
   }
-  .tab:hover{border-color:#dadde0;color:var(--ink)}
-  .tab.active{background:#fff;color:var(--ink);border-color:transparent;box-shadow:var(--shadow-soft)}
+  .tab:hover{border-color:var(--chip);color:var(--ink)}
+  .tab.active{background:var(--card,#fff);color:var(--ink);border-color:transparent;box-shadow:var(--shadow-soft)}
   .tab .ic{
     width:30px;height:30px;border-radius:50%;
     background-size:cover;background-position:center;
@@ -161,7 +174,7 @@
   /* ---------- Dish cards ---------- */
   .dishes{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   .dish{
-    background:#fff;border-radius:18px;
+    background:var(--card,#fff);border-radius:18px;
     box-shadow:var(--shadow-card);
     display:grid;grid-template-columns:170px 1fr;align-items:center;gap:14px;
     padding:14px 18px 14px 14px;
@@ -180,8 +193,8 @@
   .dish .price{font-size:18px;color:var(--green);font-weight:700}
   .dish .add{
     position:absolute;right:14px;bottom:14px;
-    width:42px;height:42px;border-radius:14px;background:#fff;
-    box-shadow:0 8px 18px -8px rgba(20,24,28,.25), 0 0 0 1px #f0f1f3 inset;
+    width:42px;height:42px;border-radius:14px;background:var(--card,#fff);
+    box-shadow:0 8px 18px -8px rgba(20,24,28,.25), 0 0 0 1px var(--chip) inset;
     display:grid;place-items:center;color:var(--ink);
     transition:all .15s ease;
   }
@@ -218,28 +231,28 @@
   }
   .cart-overlay.open{display:flex}
   .cart-drawer{
-    width:100%;background:#fff;
+    width:100%;background:var(--card,#fff);
     border-radius:24px 24px 0 0;
     max-height:82vh;display:flex;flex-direction:column;
     animation:drawerUp .22s ease;
   }
   @keyframes drawerUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .drawer-handle{width:36px;height:4px;background:#e0e2e5;border-radius:2px;margin:12px auto 4px}
+  .drawer-handle{width:36px;height:4px;background:var(--chip);border-radius:2px;margin:12px auto 4px}
   .drawer-head{
     display:flex;align-items:center;justify-content:space-between;
-    padding:14px 20px 12px;border-bottom:1px solid #f0f1f3;flex-shrink:0;
+    padding:14px 20px 12px;border-bottom:1px solid var(--chip);flex-shrink:0;
   }
   .drawer-head h4{margin:0;font-size:17px;font-weight:700}
   .drawer-close{
     width:30px;height:30px;border-radius:50%;
-    background:#f4f5f7;color:#9aa1a8;
+    background:var(--chip);color:var(--muted);
     display:grid;place-items:center;
     transition:background .12s;
   }
-  .drawer-close:hover{background:#eeeff1}
+  .drawer-close:hover{background:var(--chip)}
   .drawer-close svg{width:14px;height:14px}
   .drawer-body{flex:1;overflow-y:auto;padding:12px 20px 4px}
-  .drawer-foot{padding:12px 20px max(20px,env(safe-area-inset-bottom));border-top:1px solid #f0f1f3;flex-shrink:0}
+  .drawer-foot{padding:12px 20px max(20px,env(safe-area-inset-bottom));border-top:1px solid var(--chip);flex-shrink:0}
   .drawer-total{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
   .drawer-total .lbl{font-size:13px;color:var(--muted);font-weight:500}
   .drawer-total .amt{font-size:20px;font-weight:700;color:var(--ink)}
@@ -247,8 +260,8 @@
   /* ---------- Right panel ---------- */
   .right{
     padding:28px 26px 32px;
-    background:#fff;
-    border-left:1px solid #f0f1f3;
+    background:var(--card,#fff);
+    border-left:1px solid var(--chip);
     display:flex;flex-direction:column;
     overflow-y:auto;min-height:0;
   }
@@ -258,19 +271,19 @@
   .avatar{
     width:44px;height:44px;border-radius:50%;
     background-size:cover;background-position:center;
-    background-color:#dde1e5;flex-shrink:0;
+    background-color:var(--chip);flex-shrink:0;
   }
   .profile .name{font-weight:700;font-size:16px;flex:1}
   .bell{
     width:38px;height:38px;border-radius:12px;
-    display:grid;place-items:center;color:#5e646b;
+    display:grid;place-items:center;color:var(--muted-3);
     position:relative;
   }
-  .bell:hover{background:#f6f7f9;color:var(--ink)}
+  .bell:hover{background:var(--chip);color:var(--ink)}
   .bell svg{width:20px;height:20px}
   .bell::after{
     content:'';position:absolute;top:10px;right:11px;width:7px;height:7px;border-radius:50%;
-    background:var(--orange);border:2px solid #fff;
+    background:var(--orange);border:2px solid var(--card,#fff);
   }
 
   /* Card stack */
@@ -295,7 +308,7 @@
     position:relative;
   }
   .ccard .chip::after{
-    content:'';position:absolute;right:2px;top:2px;width:18px;height:18px;border-radius:50%;background:#fff;
+    content:'';position:absolute;right:2px;top:2px;width:18px;height:18px;border-radius:50%;background:var(--card,#fff);
   }
   .ccard .num{font-size:18px;font-weight:600;letter-spacing:.04em;font-variant-numeric:tabular-nums}
   .ccard .foot{font-size:11px;opacity:.92;font-weight:500;display:flex;justify-content:space-between}
@@ -310,11 +323,11 @@
   .order-list{display:flex;flex-direction:column;gap:12px}
   .order-item{
     display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:12px;
-    background:#f6f7f9;border-radius:16px;padding:10px 12px;
+    background:var(--chip);border-radius:16px;padding:10px 12px;
   }
   .order-item .pic{
     width:54px;height:54px;border-radius:50%;
-    background-size:cover;background-position:center;background-color:#e5e8eb;
+    background-size:cover;background-position:center;background-color:var(--chip);
     box-shadow:0 6px 14px -8px rgba(20,24,28,.25);
   }
   .order-item .info .t{font-size:13.5px;font-weight:700;line-height:1.15;margin:0 0 2px}
@@ -324,12 +337,12 @@
     display:flex;align-items:center;gap:6px;font-weight:600;font-size:12px;color:var(--ink);
   }
   .qty button{
-    width:22px;height:22px;border-radius:7px;background:#fff;
-    display:grid;place-items:center;color:#5e646b;
-    box-shadow:0 0 0 1px #e7e9ec inset;
+    width:22px;height:22px;border-radius:7px;background:var(--card,#fff);
+    display:grid;place-items:center;color:var(--muted-3);
+    box-shadow:0 0 0 1px var(--chip) inset;
     transition:all .12s ease;
   }
-  .qty button:hover{color:var(--ink);box-shadow:0 0 0 1px #c9ced3 inset}
+  .qty button:hover{color:var(--ink);box-shadow:0 0 0 1px var(--muted-2) inset}
   .qty button:active{transform:scale(.92)}
   .qty .n{min-width:18px;text-align:center;font-variant-numeric:tabular-nums}
 
@@ -338,7 +351,7 @@
     display:flex;align-items:baseline;justify-content:space-between;
     margin:22px 4px 16px;
   }
-  .total .lbl{font-size:14px;color:#5e646b;font-weight:500}
+  .total .lbl{font-size:14px;color:var(--muted-3);font-weight:500}
   .total .amt{font-size:22px;color:var(--green);font-weight:700;font-variant-numeric:tabular-nums}
   .checkout{
     margin:0 auto;display:block;
@@ -394,8 +407,8 @@
 
   .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .info-card{
-    background:#fff;border-radius:16px;padding:18px 20px;
-    box-shadow:0 0 0 1px #f1f2f4;
+    background:var(--card,#fff);border-radius:16px;padding:18px 20px;
+    box-shadow:0 0 0 1px var(--chip);
   }
   .info-card .lbl{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:6px;letter-spacing:.02em;text-transform:uppercase}
   .info-card .val{font-size:14px;font-weight:600;color:var(--ink)}
@@ -405,8 +418,8 @@
 
   .addresses{display:flex;flex-direction:column;gap:12px}
   .addr{
-    background:#fff;border-radius:16px;padding:16px 18px;display:flex;gap:14px;align-items:center;
-    box-shadow:0 0 0 1px #f1f2f4;
+    background:var(--card,#fff);border-radius:16px;padding:16px 18px;display:flex;gap:14px;align-items:center;
+    box-shadow:0 0 0 1px var(--chip);
   }
   .addr .pin{width:42px;height:42px;border-radius:12px;background:#FFF1E0;color:var(--orange);display:grid;place-items:center;flex-shrink:0}
   .addr .pin svg{width:20px;height:20px}
@@ -417,7 +430,7 @@
 
   /* right panel: payment methods */
   .pay-card{
-    background:#f6f7f9;border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;
+    background:var(--chip);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;
   }
   .pay-card .brand{
     width:42px;height:30px;border-radius:7px;background:linear-gradient(135deg,#F8A640,#F08A1F);
@@ -427,12 +440,12 @@
   .pay-card .nm{font-size:13px;font-weight:700;margin:0 0 2px}
   .pay-card .nb{font-size:11px;color:var(--muted);font-weight:500}
   .pay-card .body{flex:1}
-  .pay-card .dot{width:8px;height:8px;border-radius:50%;background:#c9ced3}
+  .pay-card .dot{width:8px;height:8px;border-radius:50%;background:var(--muted-2)}
   .pay-card.active .dot{background:var(--green)}
   .pay-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
   .add-card-btn{
-    width:100%;padding:14px;background:transparent;border:1.5px dashed #d6d9dd;border-radius:14px;
-    color:#5e646b;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;padding:14px;background:transparent;border:1.5px dashed var(--chip);border-radius:14px;
+    color:var(--muted-3);font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;
     transition:all .15s ease;
   }
   .add-card-btn:hover{border-color:var(--orange);color:var(--orange)}
@@ -458,18 +471,18 @@
 
   .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
   .quick{
-    background:#fff;border-radius:16px;padding:18px 12px;text-align:center;
-    box-shadow:0 0 0 1px #f1f2f4;transition:all .15s ease;
+    background:var(--card,#fff);border-radius:16px;padding:18px 12px;text-align:center;
+    box-shadow:0 0 0 1px var(--chip);transition:all .15s ease;
   }
   .quick:hover{transform:translateY(-2px);box-shadow:0 10px 24px -16px rgba(20,24,28,.3)}
   .quick .ic{width:40px;height:40px;border-radius:12px;background:#FFF1E0;color:var(--orange);display:grid;place-items:center;margin:0 auto 8px}
   .quick .ic svg{width:18px;height:18px}
-  .quick .lbl{font-size:11.5px;font-weight:600;color:#3a3f44}
+  .quick .lbl{font-size:11.5px;font-weight:600;color:var(--ink-soft)}
 
   .txlist{display:flex;flex-direction:column;gap:10px}
   .tx{
     display:grid;grid-template-columns:42px 1fr auto;gap:14px;align-items:center;
-    background:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 0 0 1px #f1f2f4;
+    background:var(--card,#fff);border-radius:14px;padding:12px 16px;box-shadow:0 0 0 1px var(--chip);
   }
   .tx .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center}
   .tx .ic.out{background:#fde7e7;color:#e54848}
@@ -483,30 +496,30 @@
 
   /* ============ Settings page ============ */
   .settings-list{display:flex;flex-direction:column;gap:8px}
-  .set-group{background:#fff;border-radius:16px;box-shadow:0 0 0 1px #f1f2f4;overflow:hidden}
+  .set-group{background:var(--card,#fff);border-radius:16px;box-shadow:0 0 0 1px var(--chip);overflow:hidden}
   .set-group h5{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:14px 20px 8px;margin:0}
   .set-row{
     display:flex;align-items:center;gap:14px;padding:14px 20px;
     transition:background .12s ease;cursor:pointer;
   }
-  .set-row + .set-row{border-top:1px solid #f4f5f7}
-  .set-row:hover{background:#fafbfc}
+  .set-row + .set-row{border-top:1px solid var(--chip)}
+  .set-row:hover{background:var(--chip)}
   .set-row .ic{width:36px;height:36px;border-radius:10px;background:#FFF1E0;color:var(--orange);display:grid;place-items:center;flex-shrink:0}
   .set-row .ic svg{width:16px;height:16px}
   .set-row .lbl{flex:1}
   .set-row .lbl .t{font-size:13.5px;font-weight:600;margin:0 0 1px}
   .set-row .lbl .s{font-size:11px;color:var(--muted)}
-  .set-row .chev{color:#c9ced3}
+  .set-row .chev{color:var(--muted-2)}
   .set-row .chev svg{width:16px;height:16px}
   /* toggle */
   .tgl{
-    width:38px;height:22px;border-radius:99px;background:#dde1e5;position:relative;cursor:pointer;
+    width:38px;height:22px;border-radius:99px;background:var(--chip);position:relative;cursor:pointer;
     transition:background .15s ease;flex-shrink:0;
   }
-  .tgl::after{content:'';position:absolute;left:2px;top:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.15);transition:left .15s ease}
+  .tgl::after{content:'';position:absolute;left:2px;top:2px;width:18px;height:18px;border-radius:50%;background:var(--card,#fff);box-shadow:0 2px 4px rgba(0,0,0,.15);transition:left .15s ease}
   .tgl.on{background:var(--orange)}
   .tgl.on::after{left:18px}
-  .pill-val{font-size:11px;color:#5e646b;font-weight:600;background:#f4f5f7;padding:4px 10px;border-radius:99px}
+  .pill-val{font-size:11px;color:var(--muted-3);font-weight:600;background:var(--chip);padding:4px 10px;border-radius:99px}
 
   /* Settings right panel: about */
   .about-card{
@@ -521,38 +534,38 @@
   /* ============ Inbox page ============ */
   .inbox-tabs{display:flex;gap:6px;margin-bottom:14px}
   .inbox-tabs button{
-    padding:8px 16px;border-radius:99px;background:#f4f5f7;color:#5e646b;font-size:12px;font-weight:600;
+    padding:8px 16px;border-radius:99px;background:var(--chip);color:var(--muted-3);font-size:12px;font-weight:600;
     transition:all .15s ease;display:flex;align-items:center;gap:6px;
   }
   .inbox-tabs button.active{background:var(--orange);color:#fff;box-shadow:0 8px 16px -8px rgba(243,154,54,.6)}
   .inbox-tabs .num{font-size:10px;background:rgba(255,255,255,.25);padding:2px 7px;border-radius:99px;font-weight:700}
-  .inbox-tabs button:not(.active) .num{background:#fff;color:var(--ink)}
+  .inbox-tabs button:not(.active) .num{background:var(--card,#fff);color:var(--ink)}
 
   .inbox-list{display:flex;flex-direction:column;gap:10px}
   .nx{
     display:grid;grid-template-columns:42px 1fr auto;gap:14px;align-items:flex-start;
-    background:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 0 0 1px #f1f2f4;
+    background:var(--card,#fff);border-radius:14px;padding:14px 18px;box-shadow:0 0 0 1px var(--chip);
     transition:background .12s ease;cursor:pointer;position:relative;
   }
-  .nx.unread{box-shadow:0 0 0 1px #f1f2f4, 0 12px 22px -16px rgba(243,154,54,.25)}
+  .nx.unread{box-shadow:0 0 0 1px var(--chip), 0 12px 22px -16px rgba(243,154,54,.25)}
   .nx.unread::before{content:'';position:absolute;left:6px;top:50%;transform:translateY(-50%);width:4px;height:24px;border-radius:99px;background:var(--orange)}
-  .nx:hover{background:#fafbfc}
+  .nx:hover{background:var(--chip)}
   .nx .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:var(--orange);background:#FFF1E0}
   .nx .ic.delivery{background:#e7f7ef;color:var(--green)}
   .nx .ic.promo{background:#FFF1E0;color:var(--orange)}
   .nx .ic.account{background:#e8f4ff;color:#3a8bff}
   .nx .ic svg{width:18px;height:18px}
   .nx .body .t{font-size:13.5px;font-weight:700;margin:0 0 2px}
-  .nx .body .ms{font-size:12px;color:#5e646b;font-weight:500;line-height:1.45}
+  .nx .body .ms{font-size:12px;color:var(--muted-3);font-weight:500;line-height:1.45}
   .nx .time{font-size:10.5px;color:var(--muted);font-weight:500;white-space:nowrap}
 
   /* Inbox right panel: detail */
-  .nx-detail{background:#f6f7f9;border-radius:16px;padding:18px 18px 22px}
+  .nx-detail{background:var(--chip);border-radius:16px;padding:18px 18px 22px}
   .nx-detail .ic{width:52px;height:52px;border-radius:14px;background:#e7f7ef;color:var(--green);display:grid;place-items:center;margin-bottom:12px}
   .nx-detail .ic svg{width:24px;height:24px}
   .nx-detail h4{font-size:17px;font-weight:700;margin:0 0 6px;letter-spacing:-.005em}
   .nx-detail .time{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:12px}
-  .nx-detail p{font-size:12.5px;color:#3a3f44;line-height:1.55;margin:0 0 14px}
+  .nx-detail p{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin:0 0 14px}
   .nx-detail .btn{
     background:var(--orange);color:#fff;font-weight:600;font-size:13px;
     padding:10px 20px;border-radius:10px;box-shadow:0 10px 18px -10px rgba(243,154,54,.6);
@@ -561,8 +574,8 @@
   /* ============ Analytics page ============ */
   .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
   .stat-card{
-    background:#fff;border-radius:18px;padding:18px 20px;
-    box-shadow:0 0 0 1px #f1f2f4;
+    background:var(--card,#fff);border-radius:18px;padding:18px 20px;
+    box-shadow:0 0 0 1px var(--chip);
   }
   .stat-card .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
   .stat-card .ic{width:36px;height:36px;border-radius:11px;background:#FFF1E0;color:var(--orange);display:grid;place-items:center}
@@ -573,25 +586,25 @@
   .stat-card .l{font-size:11.5px;color:var(--muted);font-weight:500;margin-top:2px}
 
   .chart-card{
-    background:#fff;border-radius:18px;padding:22px 24px;box-shadow:0 0 0 1px #f1f2f4;
+    background:var(--card,#fff);border-radius:18px;padding:22px 24px;box-shadow:0 0 0 1px var(--chip);
   }
   .chart-card .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
   .chart-card h4{font-size:15px;font-weight:700;margin:0;letter-spacing:-.005em}
-  .chart-card .range{display:flex;gap:4px;background:#f4f5f7;padding:3px;border-radius:10px}
-  .chart-card .range button{font-size:11px;font-weight:600;padding:5px 11px;border-radius:7px;color:#5e646b}
-  .chart-card .range button.active{background:#fff;color:var(--ink);box-shadow:0 2px 6px rgba(20,24,28,.08)}
+  .chart-card .range{display:flex;gap:4px;background:var(--chip);padding:3px;border-radius:10px}
+  .chart-card .range button{font-size:11px;font-weight:600;padding:5px 11px;border-radius:7px;color:var(--muted-3)}
+  .chart-card .range button.active{background:var(--card,#fff);color:var(--ink);box-shadow:0 2px 6px rgba(20,24,28,.08)}
   .chart{height:200px;display:flex;align-items:flex-end;gap:14px;padding:0 2px}
   .bar{
     flex:1;background:linear-gradient(180deg,#F8A640,#F08A1F);border-radius:8px 8px 4px 4px;
     position:relative;min-height:8px;
   }
-  .bar.dim{background:#eef0f3}
+  .bar.dim{background:var(--chip)}
   .bar .lab{position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);font-size:10.5px;color:var(--muted);font-weight:500}
   .bar .v{position:absolute;left:50%;top:-22px;transform:translateX(-50%);font-size:10.5px;color:var(--ink);font-weight:700}
 
   .top-items{display:flex;flex-direction:column;gap:10px;margin-top:14px}
   .ti{display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;padding:8px 0}
-  .ti + .ti{border-top:1px solid #f4f5f7}
+  .ti + .ti{border-top:1px solid var(--chip)}
   .ti .pic{width:36px;height:36px;border-radius:50%;background-size:cover;background-position:center}
   .ti .nm{font-size:12.5px;font-weight:700;margin:0 0 2px}
   .ti .ct{font-size:10.5px;color:var(--muted)}
@@ -599,7 +612,7 @@
 
   /* ============ Messages page ============ */
   .msg-search{
-    height:42px;background:#f4f5f7;border-radius:12px;display:flex;align-items:center;gap:10px;padding:0 14px;margin-bottom:14px;
+    height:42px;background:var(--chip);border-radius:12px;display:flex;align-items:center;gap:10px;padding:0 14px;margin-bottom:14px;
   }
   .msg-search svg{width:16px;height:16px;color:var(--muted)}
   .msg-search input{flex:1;border:0;background:transparent;outline:none;font:500 13px/1 'Poppins',sans-serif}
@@ -609,15 +622,15 @@
     display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;
     padding:12px 14px;border-radius:14px;transition:background .12s ease;cursor:pointer;
   }
-  .conv:hover{background:#f6f7f9}
+  .conv:hover{background:var(--chip)}
   .conv.active{background:#FFF1E0}
   .conv .av{width:46px;height:46px;border-radius:50%;background-size:cover;background-position:center;flex-shrink:0;position:relative}
-  .conv .av::after{content:'';position:absolute;right:0;bottom:0;width:11px;height:11px;border-radius:50%;background:#c9ced3;border:2px solid #fff}
+  .conv .av::after{content:'';position:absolute;right:0;bottom:0;width:11px;height:11px;border-radius:50%;background:var(--muted-2);border:2px solid var(--card,#fff)}
   .conv .av.on::after{background:var(--green)}
   .conv .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
   .conv .nm{font-size:13.5px;font-weight:700}
   .conv .tm{font-size:10.5px;color:var(--muted);font-weight:500}
-  .conv .pv{font-size:11.5px;color:#5e646b;font-weight:500;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+  .conv .pv{font-size:11.5px;color:var(--muted-3);font-weight:500;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
   .conv .badge{
     background:var(--orange);color:#fff;font-size:10px;font-weight:700;
     width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
@@ -625,20 +638,20 @@
 
   /* Messages right panel: chat */
   .chat-head{
-    display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid #f0f1f3;margin-bottom:14px;
+    display:flex;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--chip);margin-bottom:14px;
   }
   .chat-head .av{width:42px;height:42px;border-radius:50%;background-size:cover;background-position:center;position:relative}
-  .chat-head .av::after{content:'';position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid #fff}
+  .chat-head .av::after{content:'';position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--card,#fff)}
   .chat-head .nm{font-size:14px;font-weight:700;margin:0 0 2px}
   .chat-head .st{font-size:10.5px;color:var(--green);font-weight:600}
   .chat-stream{flex:1;display:flex;flex-direction:column;gap:8px;overflow-y:auto;padding:4px 2px 8px}
   .bubble{max-width:80%;padding:9px 14px;border-radius:14px;font-size:12.5px;line-height:1.4;font-weight:500}
-  .bubble.them{background:#f4f5f7;color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start}
+  .bubble.them{background:var(--chip);color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start}
   .bubble.me{background:var(--orange);color:#fff;border-bottom-right-radius:4px;align-self:flex-end;box-shadow:0 8px 16px -10px rgba(243,154,54,.5)}
   .chat-time{font-size:9.5px;color:var(--muted);text-align:center;margin:6px 0}
   .chat-input{
     margin-top:12px;display:flex;align-items:center;gap:8px;
-    background:#f4f5f7;border-radius:12px;padding:6px 6px 6px 14px;
+    background:var(--chip);border-radius:12px;padding:6px 6px 6px 14px;
   }
   .chat-input input{flex:1;border:0;background:transparent;outline:none;font:500 12.5px/1 'Poppins',sans-serif;height:36px}
   .chat-input .send{
@@ -653,59 +666,68 @@
   /* Modal */
   .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:9998;backdrop-filter:blur(3px)}
   .overlay.open{display:flex}
-  .mbox{background:#fff;border-radius:22px;padding:30px;width:420px;max-width:calc(100vw - 48px);box-shadow:0 40px 80px -30px rgba(0,0,0,.3)}
+  .mbox{background:var(--card,#fff);border-radius:22px;padding:30px;width:420px;max-width:calc(100vw - 48px);box-shadow:0 40px 80px -30px rgba(0,0,0,.3)}
   .mbox h4{font-size:18px;font-weight:700;margin:0 0 20px;letter-spacing:-.01em}
-  .mfield{display:block;width:100%;height:46px;border:1.5px solid #eef0f2;border-radius:12px;padding:0 14px;font:500 14px 'Poppins',sans-serif;outline:none;color:var(--ink);margin-bottom:10px;transition:border .15s;box-sizing:border-box}
+  .mfield{display:block;width:100%;height:46px;border:1.5px solid var(--chip);border-radius:12px;padding:0 14px;font:500 14px 'Poppins',sans-serif;outline:none;color:var(--ink);background:var(--card,#fff);margin-bottom:10px;transition:border .15s;box-sizing:border-box}
   .mfield:focus{border-color:var(--orange)}
   .mtextarea{height:90px;padding:12px 14px;resize:none;line-height:1.5}
+  .pw-field{position:relative;margin-bottom:10px}
+  .pw-field .mfield{margin-bottom:0;padding-right:46px}
+  .pw-toggle{
+    position:absolute;right:4px;top:50%;transform:translateY(-50%);
+    width:38px;height:38px;border-radius:9px;display:grid;place-items:center;
+    color:var(--muted);cursor:pointer;transition:color .15s;
+  }
+  .pw-toggle:hover{color:var(--ink)}
+  .pw-toggle svg{width:19px;height:19px}
   .mbtns{display:flex;gap:10px;margin-top:20px}
   .mbtns button{flex:1;padding:13px;border-radius:12px;font:600 14px 'Poppins',sans-serif;cursor:pointer;border:0}
   .mprimary{background:var(--orange);color:#fff;box-shadow:0 10px 22px -10px rgba(243,154,54,.6)}
-  .mcancel{background:#f4f5f7;color:#5e646b}
+  .mcancel{background:var(--chip);color:var(--muted-3)}
   /* Custom dropdown — menu is appended to <body> and positioned with fixed
      coords computed from the trigger's position, so it always stays fully
      on-screen even inside a modal that scrolls/transforms. */
   .dd-trigger{
     display:flex;align-items:center;justify-content:space-between;gap:8px;
-    width:100%;height:46px;border:1.5px solid #eef0f2;border-radius:12px;padding:0 14px;
-    font:500 14px 'Poppins',sans-serif;color:var(--ink);background:#fff;
+    width:100%;height:46px;border:1.5px solid var(--chip);border-radius:12px;padding:0 14px;
+    font:500 14px 'Poppins',sans-serif;color:var(--ink);background:var(--card,#fff);
     outline:none;margin-bottom:10px;transition:border .15s;cursor:pointer;text-align:left;
   }
   .dd-trigger.open,.dd-trigger:focus{border-color:var(--orange)}
   .dd-chev{width:15px;height:15px;color:var(--muted);flex-shrink:0;transition:transform .15s}
   .dd-trigger.open .dd-chev{transform:rotate(180deg)}
   .dd-menu{
-    position:fixed;background:#fff;border-radius:12px;
-    box-shadow:0 16px 32px -10px rgba(20,24,28,.35);border:1px solid #eef0f2;
+    position:fixed;background:var(--card,#fff);border-radius:12px;
+    box-shadow:0 16px 32px -10px rgba(20,24,28,.35);border:1px solid var(--chip);
     overflow-y:auto;z-index:9999;padding:6px;
   }
   .dd-opt{padding:10px 12px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--ink);cursor:pointer;transition:background .12s}
-  .dd-opt:hover{background:#f6f7f9}
+  .dd-opt:hover{background:var(--chip)}
   .dd-opt.active{background:#FFF1E0;color:var(--orange-2);font-weight:700}
   /* Tray size picker */
   .size-opt{
-    flex:1;padding:16px 14px;border-radius:14px;border:1.5px solid #eef0f2;
-    background:#fff;text-align:center;cursor:pointer;transition:all .15s ease;
+    flex:1;padding:16px 14px;border-radius:14px;border:1.5px solid var(--chip);
+    background:var(--card,#fff);text-align:center;cursor:pointer;transition:all .15s ease;
   }
-  .size-opt:hover{border-color:#d6d9dd}
+  .size-opt:hover{border-color:var(--chip)}
   .size-opt.active{border-color:var(--orange);background:#FFF8EF;box-shadow:0 0 0 1px var(--orange)}
   .size-opt-lbl{font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:4px}
   .size-opt-price{font-size:16px;font-weight:700;color:var(--green)}
   /* Fulfillment toggle */
   .fulfill-toggle{display:flex;gap:8px;margin-bottom:14px}
   .fulfill-btn{
-    flex:1;padding:10px;border-radius:11px;border:1.5px solid #eef0f2;
-    background:#fff;font-size:12.5px;font-weight:700;color:#5e646b;cursor:pointer;transition:all .15s ease;
+    flex:1;padding:10px;border-radius:11px;border:1.5px solid var(--chip);
+    background:var(--card,#fff);font-size:12.5px;font-weight:700;color:var(--muted-3);cursor:pointer;transition:all .15s ease;
   }
   .fulfill-btn.active{border-color:var(--orange);background:#FFF8EF;color:var(--ink)}
   /* Tracking steps */
   .ttrack{display:flex;flex-direction:column}
   .tstep{display:flex;gap:14px;align-items:flex-start;padding:12px 0}
-  .tstep+.tstep{border-top:1px solid #f4f5f7}
+  .tstep+.tstep{border-top:1px solid var(--chip)}
   .tdot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex-shrink:0}
   .tdot.done{background:#e7f7ef;color:var(--green)}
   .tdot.now{background:var(--orange);color:#fff;box-shadow:0 8px 18px -8px rgba(243,154,54,.6)}
-  .tdot.wait{background:#f4f5f7;color:#c9ced3}
+  .tdot.wait{background:var(--chip);color:var(--muted-2)}
   .tdot svg{width:16px;height:16px}
   .tinfo .tt{font-size:13.5px;font-weight:700;margin:0 0 2px}
   .tinfo .ts{font-size:11px;color:var(--muted);font-weight:500}
@@ -715,7 +737,7 @@
 
   /* ============ Responsive — Mobile ============ */
   @media(max-width:768px){
-    html,body{overflow:hidden;height:100%;background:#fff}
+    html,body{overflow:hidden;height:100%;background:var(--bg)}
     .app{
       width:100%;margin:0;border-radius:0;box-shadow:none;
       display:flex;flex-direction:column;
@@ -802,14 +824,14 @@
     /* mobile tabbar */
     .m-tabbar{
       display:flex;
-      border-top:1px solid #f0f1f3;
+      border-top:1px solid var(--chip);
       padding:10px 4px max(18px,env(safe-area-inset-bottom));
       justify-content:space-around;align-items:center;
-      background:#fff;flex-shrink:0;z-index:200;
+      background:var(--card,#fff);flex-shrink:0;z-index:200;
     }
     .m-tab{
       display:flex;flex-direction:column;align-items:center;gap:3px;
-      color:#9aa1a8;padding:5px 8px;border-radius:10px;
+      color:var(--muted);padding:5px 8px;border-radius:10px;
       font-size:9.5px;font-weight:600;border:0;background:none;cursor:pointer;font-family:inherit;
     }
     .m-tab svg{width:21px;height:21px}
@@ -856,6 +878,10 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.2L3 21l1.8-6.4A8 8 0 1 1 21 12z"/></svg>
     </button>
     <div class="nav-spacer"></div>
+    <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
   </aside>
 
   <div class="pages">
@@ -893,37 +919,46 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <div class="menu-head">
       <h3>Our Menu</h3>
       <div class="menu-tabs" id="menuTabs">
-        <button class="tab active" data-tab="Pizza"><span class="ic" style="background-image:url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=120&q=80')"></span><span>Pizza</span></button>
-        <button class="tab" data-tab="Burger"><span class="ic" style="background-image:url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=120&q=80')"></span><span>Burger</span></button>
-        <button class="tab" data-tab="Fries"><span class="ic" style="background-image:url('https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=120&q=80')"></span><span>Fries</span></button>
-        <button class="tab" data-tab="Pack"><span class="ic" style="background-image:url('https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=120&q=80')"></span><span>Pack</span></button>
+        <button class="tab active" data-tab="Main"><span>Main</span></button>
       </div>
       <a href="#" class="see-all">See All</a>
     </div>
-    <p style="margin:-10px 0 16px;font-size:12px;color:var(--muted);font-weight:500">Every dish comes in a Small or Big Tray — perfect for a quick bite or a group order.</p>
+    <p style="margin:-10px 0 16px;font-size:12px;color:var(--muted);font-weight:500">Every dish comes in a Small or Big Tray — perfect for a quick bite or a group order. More of the menu coming soon!</p>
 
     <!-- Dishes -->
     <div class="dishes">
       <article class="dish">
-        <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=500&q=80')"></div>
+        <div class="photo" style="background-image:url('jollof-rice.jpg')"></div>
         <div>
-          <h4 class="name">Pizza<br/>with Peperoni</h4>
-          <div class="time">14–20 minutes</div>
+          <h4 class="name">Jollof Rice</h4>
+          <div class="time">15–20 minutes</div>
           <div class="price">From CA$12</div>
         </div>
-        <button class="add" data-add="Pizza with Peperoni" data-price-small="12" data-price-big="22" data-img="https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=200&q=80" aria-label="Add">
+        <button class="add" data-add="Jollof Rice" data-price-small="12" data-price-big="22" data-img="jollof-rice.jpg" aria-label="Add">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
         </button>
       </article>
 
       <article class="dish">
-        <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80')"></div>
+        <div class="photo" style="background-image:url('fried-rice.jpg')"></div>
         <div>
-          <h4 class="name">Pizza<br/>with Cheese</h4>
-          <div class="time">16–25 minutes</div>
-          <div class="price">From CA$14</div>
+          <h4 class="name">Fried Rice</h4>
+          <div class="time">15–20 minutes</div>
+          <div class="price">From CA$12</div>
         </div>
-        <button class="add" data-add="Pizza with Cheese" data-price-small="14" data-price-big="25" data-img="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=200&q=80" aria-label="Add">
+        <button class="add" data-add="Fried Rice" data-price-small="12" data-price-big="22" data-img="fried-rice.jpg" aria-label="Add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+      </article>
+
+      <article class="dish">
+        <div class="photo" style="background-image:url('waakye.jpg')"></div>
+        <div>
+          <h4 class="name">Waakye</h4>
+          <div class="time">20–25 minutes</div>
+          <div class="price">From CA$13</div>
+        </div>
+        <button class="add" data-add="Waakye" data-price-small="13" data-price-big="24" data-img="waakye.jpg" aria-label="Add">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
         </button>
       </article>
@@ -960,12 +995,12 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     </div>
 
     <div class="order-list" id="orderList">
-      <div class="order-item" data-id="mushroom" data-price="12">
-        <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=200&q=80')"></div>
+      <div class="order-item" data-id="jollof-rice-big" data-price="22">
+        <div class="pic" style="background-image:url('jollof-rice.jpg')"></div>
         <div class="info">
-          <p class="t">Pizza with Mushrooms</p>
+          <p class="t">Jollof Rice</p>
           <div class="sub">Big Tray</div>
-          <div class="p">CA$12</div>
+          <div class="p">CA$22</div>
         </div>
         <div class="qty">
           <button class="dec" aria-label="decrease">
@@ -978,12 +1013,12 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         </div>
       </div>
 
-      <div class="order-item" data-id="meat" data-price="40">
-        <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=200&q=80')"></div>
+      <div class="order-item" data-id="waakye-big" data-price="24">
+        <div class="pic" style="background-image:url('waakye.jpg')"></div>
         <div class="info">
-          <p class="t">Meat with Potato</p>
+          <p class="t">Waakye</p>
           <div class="sub">Big Tray</div>
-          <div class="p">CA$40</div>
+          <div class="p">CA$24</div>
         </div>
         <div class="qty">
           <button class="dec" aria-label="decrease">
@@ -1180,7 +1215,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div class="tx">
           <div class="ic out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 17 10-10"/><path d="M17 17V7H7"/></svg></div>
           <div>
-            <p class="t">Pizza with Mushrooms</p>
+            <p class="t">Jollof Rice</p>
             <div class="s">Today · 9:24 AM · Order #2845</div>
           </div>
           <div class="amt out">−CA$31.00</div>
@@ -1196,7 +1231,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div class="tx">
           <div class="ic out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 17 10-10"/><path d="M17 17V7H7"/></svg></div>
           <div>
-            <p class="t">Family Pack · Dede's African Kitchen</p>
+            <p class="t">Jollof Rice · Dede's African Kitchen</p>
             <div class="s">May 14 · 7:48 PM · Order #2790</div>
           </div>
           <div class="amt out">−CA$28.00</div>
@@ -1204,7 +1239,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div class="tx">
           <div class="ic out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 17 10-10"/><path d="M17 17V7H7"/></svg></div>
           <div>
-            <p class="t">Chicken Burger · BurgerLab</p>
+            <p class="t">Waakye · Dede's African Kitchen</p>
             <div class="s">May 12 · 1:02 PM · Order #2754</div>
           </div>
           <div class="amt out">−CA$14.50</div>
@@ -1346,7 +1381,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
       <div class="about-card">
         <div class="lg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v6"/><path d="M10 2v6"/><path d="M8 8v14"/><path d="M14 2c-1.5 2-2 4-2 7 0 2.5 2 3 2 3v10"/></svg></div>
-        <h4>Dede's African Kitchen</h4>
+        <h4><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></h4>
         <div class="ver">Version 4.2.1 · May 2026</div>
       </div>
 
@@ -1430,27 +1465,22 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div style="height:18px"></div>
       </section>
 
-      <div class="sec-head"><h3>Top Categories</h3></div>
-      <div class="stats-row" style="grid-template-columns:repeat(4,1fr)">
+      <div class="sec-head"><h3>Top Dishes</h3></div>
+      <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
         <div class="stat-card" style="padding:14px 16px">
           <div class="v" style="font-size:18px">42%</div>
-          <div class="l">Pizza</div>
-          <div style="height:6px;border-radius:99px;background:#f4f5f7;margin-top:8px;overflow:hidden"><div style="width:42%;height:100%;background:var(--orange)"></div></div>
+          <div class="l">Jollof Rice</div>
+          <div style="height:6px;border-radius:99px;background:var(--chip);margin-top:8px;overflow:hidden"><div style="width:42%;height:100%;background:var(--orange)"></div></div>
         </div>
         <div class="stat-card" style="padding:14px 16px">
-          <div class="v" style="font-size:18px">28%</div>
-          <div class="l">Burgers</div>
-          <div style="height:6px;border-radius:99px;background:#f4f5f7;margin-top:8px;overflow:hidden"><div style="width:28%;height:100%;background:#2b2f33"></div></div>
+          <div class="v" style="font-size:18px">33%</div>
+          <div class="l">Waakye</div>
+          <div style="height:6px;border-radius:99px;background:var(--chip);margin-top:8px;overflow:hidden"><div style="width:33%;height:100%;background:#2b2f33"></div></div>
         </div>
         <div class="stat-card" style="padding:14px 16px">
-          <div class="v" style="font-size:18px">18%</div>
-          <div class="l">Sides</div>
-          <div style="height:6px;border-radius:99px;background:#f4f5f7;margin-top:8px;overflow:hidden"><div style="width:18%;height:100%;background:var(--green)"></div></div>
-        </div>
-        <div class="stat-card" style="padding:14px 16px">
-          <div class="v" style="font-size:18px">12%</div>
-          <div class="l">Drinks</div>
-          <div style="height:6px;border-radius:99px;background:#f4f5f7;margin-top:8px;overflow:hidden"><div style="width:12%;height:100%;background:#3a8bff"></div></div>
+          <div class="v" style="font-size:18px">25%</div>
+          <div class="l">Fried Rice</div>
+          <div style="height:6px;border-radius:99px;background:var(--chip);margin-top:8px;overflow:hidden"><div style="width:25%;height:100%;background:var(--green)"></div></div>
         </div>
       </div>
     </main>
@@ -1467,29 +1497,19 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="order-head"><h4>Top Items</h4><a href="#" class="see-all">See All</a></div>
       <div class="top-items">
         <div class="ti">
-          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=200&q=80')"></div>
-          <div><p class="nm">Pizza with Peperoni</p><div class="ct">Ordered 8 times</div></div>
+          <div class="pic" style="background-image:url('jollof-rice.jpg')"></div>
+          <div><p class="nm">Jollof Rice</p><div class="ct">Ordered 8 times</div></div>
           <div class="pct">CA$96</div>
         </div>
         <div class="ti">
-          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=200&q=80')"></div>
-          <div><p class="nm">Meat with Potato</p><div class="ct">Ordered 4 times</div></div>
-          <div class="pct">CA$160</div>
+          <div class="pic" style="background-image:url('waakye.jpg')"></div>
+          <div><p class="nm">Waakye</p><div class="ct">Ordered 6 times</div></div>
+          <div class="pct">CA$144</div>
         </div>
         <div class="ti">
-          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=200&q=80')"></div>
-          <div><p class="nm">Pizza w/ Mushrooms</p><div class="ct">Ordered 6 times</div></div>
-          <div class="pct">CA$72</div>
-        </div>
-        <div class="ti">
-          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=200&q=80')"></div>
-          <div><p class="nm">Chicken Burger</p><div class="ct">Ordered 3 times</div></div>
-          <div class="pct">CA$27</div>
-        </div>
-        <div class="ti">
-          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=200&q=80')"></div>
-          <div><p class="nm">Crispy Fries</p><div class="ct">Ordered 5 times</div></div>
-          <div class="pct">CA$25</div>
+          <div class="pic" style="background-image:url('fried-rice.jpg')"></div>
+          <div><p class="nm">Fried Rice</p><div class="ct">Ordered 5 times</div></div>
+          <div class="pct">CA$60</div>
         </div>
       </div>
     </aside>
@@ -1535,7 +1555,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div class="conv">
           <div class="av" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80')"></div>
           <div>
-            <div class="head"><div class="nm">BurgerLab</div><span class="tm">2h</span></div>
+            <div class="head"><div class="nm">Dede's Rewards</div><span class="tm">2h</span></div>
             <div class="pv">Thanks for the 5★ review! Here's CA$5 off your next order.</div>
           </div>
         </div>
@@ -1663,6 +1683,10 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <button class="m-tab" data-page="wallet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M16 15h2"/></svg><span>Wallet</span></button>
 <button class="m-tab" data-page="messages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.2L3 21l1.8-6.4A8 8 0 1 1 21 12z"/></svg><span>Messages</span></button>
     <button class="m-tab" data-page="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Profile</span></button>
+    <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
   </nav>
 
 </div>
@@ -1702,8 +1726,8 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
   // ---- Cart state ----
   const cart = {
-    mushroom:{name:'Pizza with Mushrooms', sub:'Big Tray', size:'big', price:12, qty:1, img:'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=200&q=80'},
-    meat:    {name:'Meat with Potato',     sub:'Big Tray', size:'big', price:40, qty:1, img:'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=200&q=80'},
+    'jollof-rice-big':{name:'Jollof Rice', sub:'Big Tray', size:'big', price:22, qty:1, img:'jollof-rice.jpg'},
+    'waakye-big':     {name:'Waakye',      sub:'Big Tray', size:'big', price:24, qty:1, img:'waakye.jpg'},
   };
 
   function recalcTotal(){
@@ -1727,7 +1751,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     let sum = 0;
     const entries = Object.entries(cart);
     if(entries.length === 0){
-      list.innerHTML = '<p style="text-align:center;color:#9aa1a8;font-size:14px;padding:28px 0">Your cart is empty</p>';
+      list.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:14px;padding:28px 0">Your cart is empty</p>';
     } else {
       entries.forEach(([id, item])=>{
         sum += item.price * item.qty;
@@ -1993,6 +2017,23 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   function openModal(html){ document.getElementById('mboxInner').innerHTML=html; _ov.classList.add('open'); }
   function closeModal(){ _ov.classList.remove('open'); }
 
+  // ── Show/hide password toggle ───────────────────────────
+  const EYE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYE_OFF_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  function pwFieldHTML(placeholder){
+    return `<div class="pw-field">
+      <input class="mfield" type="password" placeholder="${placeholder}" />
+      <button type="button" class="pw-toggle" onclick="togglePasswordField(this)" aria-label="Show password">${EYE_ICON}</button>
+    </div>`;
+  }
+  function togglePasswordField(btn){
+    const input = btn.previousElementSibling;
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+    btn.innerHTML = showing ? EYE_ICON : EYE_OFF_ICON;
+  }
+
   // ── Custom dropdown (used in place of native <select> everywhere) ──────
   let _ddMenu=null, _ddTrigger=null;
   function ddTriggerHTML(id, options, current){
@@ -2119,7 +2160,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       openModal(`<div style="text-align:center;padding:8px 0">
         <div style="width:64px;height:64px;background:#e7f7ef;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="32" height="32"><path d="M20 6 9 17l-5-5"/></svg></div>
         <h4 style="margin:0 0 8px">Order Placed!</h4>
-        <p style="font-size:13px;color:#5e646b;margin:0 0 22px;line-height:1.55">Order ${shortId} sent to the kitchen.<br/>${etaLine}</p>
+        <p style="font-size:13px;color:var(--muted-3);margin:0 0 22px;line-height:1.55">Order ${shortId} sent to the kitchen.<br/>${etaLine}</p>
         <div class="mbtns"><button class="mprimary" onclick="closeModal();goTo('messages')">Track Order</button><button class="mcancel" onclick="closeModal()">Close</button></div>
       </div>`);
     } finally {
@@ -2204,14 +2245,14 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     b.addEventListener('click', ()=>{
       const lbl=_qLbls[i];
       if(lbl==='Cards') openModal(`<h4>My Cards</h4>
-        <div style="background:#f4f5f7;border-radius:12px;padding:14px;margin-bottom:10px;font-size:13px;font-weight:600">Universal Card •••• 1452 · VISA <span style="color:var(--green);float:right">Default</span></div>
-        <div style="background:#f4f5f7;border-radius:12px;padding:14px;font-size:13px;font-weight:600">Black Mastercard •••• 8839 · MC</div>
+        <div style="background:var(--chip);border-radius:12px;padding:14px;margin-bottom:10px;font-size:13px;font-weight:600">Universal Card •••• 1452 · VISA <span style="color:var(--green);float:right">Default</span></div>
+        <div style="background:var(--chip);border-radius:12px;padding:14px;font-size:13px;font-weight:600">Black Mastercard •••• 8839 · MC</div>
         <div class="mbtns" style="margin-top:16px"><button class="mcancel" onclick="closeModal()">Close</button></div>`);
       else if(lbl==='Scan QR') openModal(`<div style="text-align:center;padding:8px 0">
         <h4 style="margin:0 0 16px">Scan QR</h4>
-        <div style="width:140px;height:140px;border:2px dashed #dde1e5;border-radius:14px;display:grid;place-items:center;margin:0 auto 16px;color:#9aa1a8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="52" height="52" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h3v3h-3z"/></svg></div>
-        <p style="font-size:12px;color:#9aa1a8;margin:0 0 16px">Point camera at QR code to pay</p>
-        <button class="mcancel" style="width:100%;padding:12px;border-radius:12px;font:600 14px Poppins,sans-serif;cursor:pointer;background:#f4f5f7;border:0;color:#5e646b" onclick="closeModal()">Close</button>
+        <div style="width:140px;height:140px;border:2px dashed var(--chip);border-radius:14px;display:grid;place-items:center;margin:0 auto 16px;color:var(--muted)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="52" height="52" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h3v3h-3z"/></svg></div>
+        <p style="font-size:12px;color:var(--muted);margin:0 0 16px">Point camera at QR code to pay</p>
+        <button class="mcancel" style="width:100%;padding:12px;border-radius:12px;font:600 14px Poppins,sans-serif;cursor:pointer;background:var(--chip);border:0;color:var(--muted-3)" onclick="closeModal()">Close</button>
       </div>`);
       else showToast(lbl + ' coming soon');
     });
@@ -2249,9 +2290,9 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <input class="mfield" placeholder="Date of Birth" value="March 14, 1992" />
         <div class="mbtns"><button class="mprimary" onclick="showToast('Information saved');closeModal()">Save</button><button class="mcancel" onclick="closeModal()">Cancel</button></div>`);
       else if(t==='Change Password') openModal(`<h4>Change Password</h4>
-        <input class="mfield" type="password" placeholder="Current Password" />
-        <input class="mfield" type="password" placeholder="New Password" />
-        <input class="mfield" type="password" placeholder="Confirm Password" />
+        ${pwFieldHTML('Current Password')}
+        ${pwFieldHTML('New Password')}
+        ${pwFieldHTML('Confirm Password')}
         <div class="mbtns"><button class="mprimary" onclick="showToast('Password changed');closeModal()">Update</button><button class="mcancel" onclick="closeModal()">Cancel</button></div>`);
       else if(t==='Language') openModal(`<h4>Language</h4>
         ${ddTriggerHTML('langSelect', ['English (US)','Spanish','French','German'], 'English (US)')}
@@ -2259,7 +2300,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       else if(t==='Privacy Policy') window.open('privacy.html', '_blank');
       else if(t==='Terms of Service') window.open('terms.html', '_blank');
       else if(t==='Help Center') openModal(`<h4>Help Center</h4>
-        <p style="font-size:13px;color:#5e646b;line-height:1.6;margin:0 0 16px">Browse FAQs or reach our support team 24/7.</p>
+        <p style="font-size:13px;color:var(--muted-3);line-height:1.6;margin:0 0 16px">Browse FAQs or reach our support team 24/7.</p>
         <div class="mbtns"><button class="mprimary" onclick="showToast('Opening Help Center…');closeModal()">Open</button><button class="mcancel" onclick="closeModal()">Close</button></div>`);
       else if(t==='Contact Us') openModal(`<h4>Contact Us</h4>
         <input class="mfield" placeholder="Subject" />
@@ -2303,7 +2344,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     if(!noRes){
       noRes = document.createElement('p');
       noRes.id = 'menuNoResults';
-      noRes.style.cssText = 'grid-column:1/-1;text-align:center;color:#9aa1a8;font-size:14px;font-weight:500;padding:20px 0';
+      noRes.style.cssText = 'grid-column:1/-1;text-align:center;color:var(--muted);font-size:14px;font-weight:500;padding:20px 0';
       noRes.textContent = 'No dishes found';
       document.querySelector('#page-menu .dishes').appendChild(noRes);
     }
@@ -2320,5 +2361,6 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="mbtns"><button class="mprimary" onclick="showToast('Address saved');closeModal()">Save</button><button class="mcancel" onclick="closeModal()">Cancel</button></div>`);
   });
 </script>
+<script src="js/cookie-consent.js" defer></script>
 </body>
 </html>

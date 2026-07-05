@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<script src="js/theme.js"></script>
 <title>Dede's African Kitchen — Terms of Service</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <link rel="icon" type="image/png" href="favicon-32.png" />
@@ -9,24 +10,35 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
 <style>
   :root{
     --orange:#F39A36; --orange-2:#F08A1F; --ink:#222629; --ink-soft:#3a3f44;
-    --muted:#9aa1a8; --bg:#f4f5f7; --chip:#f1f2f4;
+    --muted:#9aa1a8; --muted-3:#5e646b; --bg:#f4f5f7; --chip:#f1f2f4; --card:#ffffff;
+  }
+  [data-theme="dark"]{
+    --ink:#F2F3F4;
+    --ink-soft:#c7cbcf;
+    --muted:#9aa1a8;
+    --muted-3:#9aa1a8;
+    --bg:#121316;
+    --chip:#2a2d32;
+    --card:#1c1e22;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:#fff;font-family:'Poppins',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  html,body{margin:0;padding:0;background:var(--card);font-family:'Poppins',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
   a{color:inherit}
   .nav{
     display:flex;align-items:center;justify-content:space-between;
-    padding:16px 8vw;border-bottom:1px solid #f0f1f3;
+    padding:16px 8vw;border-bottom:1px solid var(--chip);
   }
   .brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700;text-decoration:none}
   .brand .logo{width:38px;height:38px;border-radius:11px;background:var(--orange);display:grid;place-items:center;color:#fff;flex-shrink:0;overflow:hidden}
   .brand .logo svg{width:19px;height:19px}
   .brand .logo img{width:100%;height:100%;object-fit:cover}
-  .back{font-size:13.5px;font-weight:600;color:#5e646b;text-decoration:none}
+  .back{font-size:13.5px;font-weight:600;color:var(--muted-3);text-decoration:none}
   .back:hover{color:var(--orange)}
+  .nav-cta{display:flex;align-items:center;gap:16px}
 
   main{max-width:720px;margin:0 auto;padding:56px 24px 80px}
   h1{font-size:32px;font-weight:700;margin:0 0 8px;letter-spacing:-.01em}
@@ -37,9 +49,9 @@
   }
   .notice strong{color:#6b4409}
   h2{font-size:18px;font-weight:700;margin:36px 0 10px;letter-spacing:-.005em}
-  p, li{font-size:14px;line-height:1.8;color:#3a3f44}
+  p, li{font-size:14px;line-height:1.8;color:var(--ink-soft)}
   ul{padding-left:20px;margin:8px 0}
-  footer{padding:32px 8vw;border-top:1px solid #f0f1f3;font-size:11.5px;color:var(--muted);text-align:center}
+  footer{padding:32px 8vw;border-top:1px solid var(--chip);font-size:11.5px;color:var(--muted);text-align:center}
 </style>
 </head>
 <body>
@@ -47,9 +59,15 @@
 <nav class="nav">
   <a href="index.html" class="brand">
     <div class="logo"><img src="favicon-180.png" alt="Dede's African Kitchen" /></div>
-    Dede's African Kitchen
+    <span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span>
   </a>
-  <a href="index.html" class="back">← Back to Home</a>
+  <div class="nav-cta">
+    <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a href="index.html" class="back">← Back to Home</a>
+  </div>
 </nav>
 
 <main>
@@ -92,5 +110,6 @@
 
 <footer>© 2026 Dede's African Kitchen. All rights reserved.</footer>
 
+<script src="js/cookie-consent.js" defer></script>
 </body>
 </html>

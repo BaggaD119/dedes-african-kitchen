@@ -2,6 +2,7 @@
 <html lang="en" style="visibility:hidden">
 <head>
 <meta charset="utf-8" />
+<script src="js/theme.js"></script>
 <title>Dede's African Kitchen — Sign In</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <link rel="icon" type="image/png" href="favicon-32.png" />
@@ -9,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/supabase-client.js"></script>
@@ -21,12 +23,23 @@
     --ink-soft:#3a3f44;
     --muted:#9aa1a8;
     --muted-2:#c9ced3;
+    --muted-3:#5e646b;
     --bg:#f4f5f7;
     --card:#ffffff;
     --green:#26C281;
     --chip:#f1f2f4;
     --shadow-card: 0 10px 30px -16px rgba(20,24,28,.18), 0 2px 6px rgba(20,24,28,.04);
     --shadow-soft: 0 8px 22px -14px rgba(20,24,28,.25);
+  }
+  [data-theme="dark"]{
+    --ink:#F2F3F4;
+    --ink-soft:#c7cbcf;
+    --muted:#9aa1a8;
+    --muted-2:#3a3f44;
+    --muted-3:#9aa1a8;
+    --bg:#121316;
+    --card:#1c1e22;
+    --chip:#2a2d32;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);font-family:'Poppins',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100%}
@@ -45,10 +58,12 @@
   .hero::before{content:'';position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;background:rgba(243,154,54,.16)}
   .hero::after{content:'';position:absolute;left:-100px;bottom:-140px;width:300px;height:300px;border-radius:50%;background:rgba(243,154,54,.1)}
   .hero-inner{position:relative;z-index:1;max-width:460px}
+  .hero-brand{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .hero-brand-name{font-size:17px;font-weight:700}
   .logo{
     width:48px;height:48px;border-radius:13px;background:var(--orange);
-    display:grid;place-items:center;color:#fff;margin-bottom:22px;
-    box-shadow:0 12px 22px -10px rgba(243,154,54,.7);overflow:hidden;
+    display:grid;place-items:center;color:#fff;
+    box-shadow:0 12px 22px -10px rgba(243,154,54,.7);overflow:hidden;flex-shrink:0;
   }
   .logo svg{width:24px;height:24px}
   .logo img{width:100%;height:100%;object-fit:cover}
@@ -62,16 +77,28 @@
   /* ---------- Auth panel ---------- */
   .auth{display:flex;align-items:center;justify-content:center;padding:40px 24px}
   .auth-card{width:100%;max-width:400px}
+  .auth-topbar{display:flex;justify-content:flex-end;margin-bottom:14px}
   .auth-tabs{display:flex;gap:6px;background:var(--chip);padding:4px;border-radius:12px;margin-bottom:26px}
-  .auth-tab{flex:1;padding:10px;border-radius:9px;font-weight:600;font-size:13.5px;color:#5e646b;transition:all .15s ease}
-  .auth-tab.active{background:#fff;color:var(--ink);box-shadow:var(--shadow-soft)}
+  .auth-tab{flex:1;padding:10px;border-radius:9px;font-weight:600;font-size:13.5px;color:var(--muted-3);transition:all .15s ease}
+  .auth-tab.active{background:var(--card,#fff);color:var(--ink);box-shadow:var(--shadow-soft)}
 
   .auth-card h2{font-size:21px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em}
   .auth-card .sub{font-size:12.5px;color:var(--muted);font-weight:500;margin:0 0 22px;line-height:1.6}
 
   .field-lbl{font-size:12px;font-weight:600;color:var(--ink-soft);margin:0 0 6px;display:block}
-  .mfield{display:block;width:100%;height:46px;border:1.5px solid #eef0f2;border-radius:12px;padding:0 14px;font:500 14px 'Poppins',sans-serif;outline:none;color:var(--ink);margin-bottom:14px;transition:border .15s;box-sizing:border-box}
+  .mfield{display:block;width:100%;height:46px;border:1.5px solid var(--chip);border-radius:12px;padding:0 14px;font:500 14px 'Poppins',sans-serif;outline:none;color:var(--ink);background:var(--card,#fff);margin-bottom:14px;transition:border .15s,background .15s;box-sizing:border-box}
   .mfield:focus{border-color:var(--orange)}
+  .mfield::placeholder{color:var(--muted)}
+
+  .pw-field{position:relative;margin-bottom:14px}
+  .pw-field .mfield{margin-bottom:0;padding-right:46px}
+  .pw-toggle{
+    position:absolute;right:4px;top:50%;transform:translateY(-50%);
+    width:38px;height:38px;border-radius:9px;display:grid;place-items:center;
+    color:var(--muted);cursor:pointer;transition:color .15s;
+  }
+  .pw-toggle:hover{color:var(--ink)}
+  .pw-toggle svg{width:19px;height:19px}
 
   .mprimary{width:100%;padding:14px;border-radius:12px;font:600 14.5px 'Poppins',sans-serif;cursor:pointer;border:0;background:var(--orange);color:#fff;box-shadow:0 14px 26px -12px rgba(243,154,54,.7);transition:all .15s ease}
   .mprimary:hover{background:var(--orange-2);transform:translateY(-1px)}
@@ -100,9 +127,12 @@
 <div class="shell">
   <section class="hero">
     <div class="hero-inner">
-      <a href="index.html" class="logo" aria-label="Back to home">
-        <img src="favicon-180.png" alt="Dede's African Kitchen" />
-      </a>
+      <div class="hero-brand">
+        <a href="index.html" class="logo" aria-label="Back to home">
+          <img src="favicon-180.png" alt="Dede's African Kitchen" />
+        </a>
+        <span class="hero-brand-name"><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></span>
+      </div>
       <h1>Great food,<br/>delivered <span>your way</span></h1>
       <p>Order from your favorite local kitchen and track it every step of the way — from the stove to your door.</p>
       <div class="hero-stats">
@@ -115,6 +145,12 @@
 
   <section class="auth">
     <div class="auth-card">
+      <div class="auth-topbar">
+        <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
       <div class="auth-tabs">
         <button class="auth-tab active" id="tabLogin">Log In</button>
         <button class="auth-tab" id="tabSignup">Sign Up</button>
@@ -130,7 +166,12 @@
           <label class="field-lbl" for="loginEmail">Email</label>
           <input class="mfield" id="loginEmail" type="email" autocomplete="email" required placeholder="you@example.com" />
           <label class="field-lbl" for="loginPassword">Password</label>
-          <input class="mfield" id="loginPassword" type="password" autocomplete="current-password" required placeholder="••••••••" />
+          <div class="pw-field">
+            <input class="mfield" id="loginPassword" type="password" autocomplete="current-password" required placeholder="••••••••" />
+            <button type="button" class="pw-toggle" onclick="togglePasswordField(this)" aria-label="Show password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
           <a href="#" class="forgot" id="forgotLink">Forgot password?</a>
           <button class="mprimary" id="loginSubmit" type="submit">Log In</button>
         </form>
@@ -148,7 +189,12 @@
           <label class="field-lbl" for="suEmail">Email</label>
           <input class="mfield" id="suEmail" type="email" autocomplete="email" required placeholder="you@example.com" />
           <label class="field-lbl" for="suPassword">Password</label>
-          <input class="mfield" id="suPassword" type="password" autocomplete="new-password" required minlength="6" placeholder="At least 6 characters" />
+          <div class="pw-field">
+            <input class="mfield" id="suPassword" type="password" autocomplete="new-password" required minlength="6" placeholder="At least 6 characters" />
+            <button type="button" class="pw-toggle" onclick="togglePasswordField(this)" aria-label="Show password">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
           <button class="mprimary" id="signupSubmit" type="submit">Create Account</button>
         </form>
         <p class="vendor-note">By creating an account, you agree to our <a href="terms.html" style="color:var(--orange);font-weight:600">Terms</a> and <a href="privacy.html" style="color:var(--orange);font-weight:600">Privacy Policy</a>.</p>
@@ -185,6 +231,17 @@
     const el = document.getElementById(id);
     el.textContent = msg;
     el.classList.toggle('show', !!msg);
+  }
+
+  // ── Show/hide password toggle ──────────────────────────
+  const EYE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYE_OFF_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  function togglePasswordField(btn){
+    const input = btn.previousElementSibling;
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+    btn.innerHTML = showing ? EYE_ICON : EYE_OFF_ICON;
   }
   function setNotice(id, msg){
     const el = document.getElementById(id);
@@ -258,5 +315,6 @@
     }
   });
 </script>
+<script src="js/cookie-consent.js" defer></script>
 </body>
 </html>

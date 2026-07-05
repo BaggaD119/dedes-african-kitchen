@@ -2,6 +2,7 @@
 <html lang="en" style="visibility:hidden">
 <head>
 <meta charset="utf-8" />
+<script src="js/theme.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <link rel="icon" type="image/png" href="favicon-32.png" />
 <link rel="apple-touch-icon" href="favicon-180.png" />
@@ -9,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/supabase-client.js"></script>
@@ -17,12 +19,24 @@
   :root{
     --orange:#F39A36;--orange-2:#F08A1F;--orange-soft:#FFF1E0;
     --ink:#222629;--muted:#9aa1a8;--bg:#f4f5f7;--green:#26C281;
+    --card:#ffffff;--chip:#f1f2f4;--ink-soft:#3a3f44;--muted-2:#c9ced3;--muted-3:#5e646b;
+  }
+  [data-theme="dark"]{
+    --ink:#F2F3F4;
+    --ink-soft:#c7cbcf;
+    --muted:#9aa1a8;
+    --muted-2:#3a3f44;
+    --muted-3:#9aa1a8;
+    --bg:#121316;
+    --card:#1c1e22;
+    --chip:#2a2d32;
+    --orange-soft:#3a2a18;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;font-family:'Poppins',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;background:#fff;overflow:hidden}
+  html,body{height:100%;font-family:'Poppins',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;background:var(--card,#fff);overflow:hidden}
   button{font-family:inherit;border:0;background:none;cursor:pointer;color:inherit;padding:0}
 
-  .app{position:fixed;inset:0;display:flex;flex-direction:column;background:#fff}
+  .app{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--card,#fff)}
 
   /* screens */
   .screen{display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0}
@@ -32,19 +46,19 @@
   .scroll{scrollbar-width:none;-ms-overflow-style:none}
 
   /* topbar */
-  .topbar{display:flex;align-items:center;gap:14px;padding:16px 20px 14px;background:#fff;flex-shrink:0}
-  .icon-btn{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:#2b2f33;flex-shrink:0}
+  .topbar{display:flex;align-items:center;gap:14px;padding:16px 20px 14px;background:var(--card,#fff);flex-shrink:0}
+  .icon-btn{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--ink,#2b2f33);flex-shrink:0}
   .icon-btn svg{width:22px;height:22px}
   .left{flex:1}
   .hi{font-size:11px;color:var(--muted);font-weight:500;line-height:1.2}
   .wb{font-size:16px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
   .avatar{width:38px;height:38px;border-radius:50%;background-size:cover;background-position:center;background-color:#dde1e5;flex-shrink:0}
   .bell{position:relative}
-  .bell::after{content:'';position:absolute;top:6px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--orange);border:2px solid #fff}
+  .bell::after{content:'';position:absolute;top:6px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--orange);border:2px solid var(--card,#fff)}
   .screen-title{flex:1;text-align:center;font-size:16px;font-weight:700;letter-spacing:-.01em}
 
   /* search */
-  .search{margin:0 20px 18px;height:44px;background:#eef0f3;border-radius:12px;display:flex;align-items:center;gap:10px;padding:0 14px;flex-shrink:0}
+  .search{margin:0 20px 18px;height:44px;background:var(--chip,#eef0f3);border-radius:12px;display:flex;align-items:center;gap:10px;padding:0 14px;flex-shrink:0}
   .search svg{width:16px;height:16px;color:#9aa1a8;flex-shrink:0}
   .search input{flex:1;border:0;background:transparent;outline:none;font:500 13px/1 'Poppins',sans-serif;color:var(--ink)}
   .search input::placeholder{color:#9aa1a8}
@@ -64,35 +78,35 @@
 
   /* categories */
   .cats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 20px 16px;flex-shrink:0}
-  .cat{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px 10px;border-radius:14px;background:#fff;transition:all .15s ease}
+  .cat{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px 10px;border-radius:14px;background:var(--card,#fff);transition:all .15s ease}
   .cat .em{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:24px}
-  .cat .lbl{font-size:11.5px;font-weight:600;color:#5e646b}
+  .cat .lbl{font-size:11.5px;font-weight:600;color:var(--muted-3,#5e646b)}
   .cat.active{background:var(--orange-soft)}
   .cat.active .lbl{color:var(--orange);font-weight:700}
 
   /* dish cards */
   .dishes{display:flex;flex-direction:column;gap:14px;padding:0 20px 18px}
-  .dish{background:#fff;border-radius:18px;box-shadow:0 12px 26px -18px rgba(20,24,28,.22),0 0 0 1px #f1f2f4;display:grid;grid-template-columns:130px 1fr;align-items:center;gap:6px;padding:12px 14px 12px 0;position:relative}
+  .dish{background:var(--card,#fff);border-radius:18px;box-shadow:0 12px 26px -18px rgba(20,24,28,.22),0 0 0 1px var(--chip,#f1f2f4);display:grid;grid-template-columns:130px 1fr;align-items:center;gap:6px;padding:12px 14px 12px 0;position:relative}
   .dish .photo{width:130px;height:130px;border-radius:50%;background-size:cover;background-position:center;margin-left:-18px;box-shadow:0 14px 22px -14px rgba(20,24,28,.4)}
   .dish .name{font-size:17px;line-height:1.15;font-weight:700;margin:0 0 6px;letter-spacing:-.01em}
   .dish .time{font-size:10.5px;color:var(--muted);font-weight:500;margin-bottom:4px}
   .dish .price{font-size:16px;color:var(--green);font-weight:700}
-  .dish .add{position:absolute;right:14px;bottom:14px;width:34px;height:34px;border-radius:10px;background:#fff;box-shadow:0 6px 16px -8px rgba(20,24,28,.3),0 0 0 1px #f0f1f3 inset;display:grid;place-items:center;color:var(--ink)}
+  .dish .add{position:absolute;right:14px;bottom:14px;width:34px;height:34px;border-radius:10px;background:var(--card,#fff);box-shadow:0 6px 16px -8px rgba(20,24,28,.3),0 0 0 1px var(--chip,#f0f1f3) inset;display:grid;place-items:center;color:var(--ink)}
   .dish .add svg{width:16px;height:16px}
 
   /* popular */
   .pop{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 18px}
-  .pop-item{background:#f4f5f7;border-radius:14px;padding:10px;display:flex;align-items:center;gap:8px;position:relative}
+  .pop-item{background:var(--bg,#f4f5f7);border-radius:14px;padding:10px;display:flex;align-items:center;gap:8px;position:relative}
   .pop-item .pic{width:46px;height:46px;border-radius:50%;background-size:cover;background-position:center;flex-shrink:0;box-shadow:0 4px 10px -6px rgba(20,24,28,.3)}
   .pop-item .info{flex:1;min-width:0}
   .pop-item .t{font-size:11px;font-weight:700;line-height:1.15;margin:0 0 2px}
   .pop-item .sub{font-size:9px;color:var(--muted);font-weight:500}
   .pop-item .p{font-size:11px;color:var(--green);font-weight:700;margin-top:1px}
-  .pop-item .add{width:24px;height:24px;border-radius:7px;background:#fff;display:grid;place-items:center;color:var(--ink);box-shadow:0 0 0 1px #e7e9ec inset;flex-shrink:0}
+  .pop-item .add{width:24px;height:24px;border-radius:7px;background:var(--card,#fff);display:grid;place-items:center;color:var(--ink);box-shadow:0 0 0 1px var(--chip,#e7e9ec) inset;flex-shrink:0}
   .pop-item .add svg{width:12px;height:12px}
 
   /* tabbar */
-  .tabbar{border-top:1px solid #f0f1f3;padding:10px 12px max(22px,env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:center;background:#fff;flex-shrink:0}
+  .tabbar{border-top:1px solid var(--chip,#f0f1f3);padding:10px 12px max(22px,env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:center;background:var(--card,#fff);flex-shrink:0}
   .tab{display:flex;flex-direction:column;align-items:center;gap:3px;color:#9aa1a8;padding:6px 10px;border-radius:10px;font-size:10.5px;font-weight:600}
   .tab svg{width:20px;height:20px}
   .tab.active{color:var(--orange)}
@@ -113,16 +127,16 @@
   .order-head{display:flex;align-items:center;justify-content:space-between;padding:0 20px 14px;flex-shrink:0}
   .order-head h4{font-size:15px;font-weight:700;margin:0;letter-spacing:-.01em}
   .order-list{display:flex;flex-direction:column;gap:12px;padding:0 20px 18px}
-  .order-item{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:12px;background:#f4f5f7;border-radius:16px;padding:10px 14px 10px 10px}
+  .order-item{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:12px;background:var(--bg,#f4f5f7);border-radius:16px;padding:10px 14px 10px 10px}
   .order-item .pic{width:54px;height:54px;border-radius:50%;background-size:cover;background-position:center;background-color:#e5e8eb;box-shadow:0 6px 14px -8px rgba(20,24,28,.25)}
   .order-item .info .t{font-size:13px;font-weight:700;margin:0 0 2px;line-height:1.15}
   .order-item .info .sub{font-size:10px;color:var(--muted);font-weight:500}
   .order-item .info .p{font-size:12px;color:var(--green);font-weight:700;margin-top:2px}
   .qty{display:flex;align-items:center;gap:8px;font-weight:600;font-size:12px}
-  .qty button{width:22px;height:22px;border-radius:7px;background:#fff;display:grid;place-items:center;color:#5e646b;box-shadow:0 0 0 1px #e7e9ec inset}
+  .qty button{width:22px;height:22px;border-radius:7px;background:var(--card,#fff);display:grid;place-items:center;color:var(--muted-3,#5e646b);box-shadow:0 0 0 1px var(--chip,#e7e9ec) inset}
   .qty .n{min-width:18px;text-align:center;font-variant-numeric:tabular-nums}
-  .totals{margin:6px 20px 12px;padding:18px 4px 6px;border-top:1px solid #ebedf0;display:flex;flex-direction:column;gap:10px;font-size:13.5px}
-  .totals .ln{display:flex;justify-content:space-between;color:#3a3f44;font-weight:500}
+  .totals{margin:6px 20px 12px;padding:18px 4px 6px;border-top:1px solid var(--chip,#ebedf0);display:flex;flex-direction:column;gap:10px;font-size:13.5px}
+  .totals .ln{display:flex;justify-content:space-between;color:var(--ink-soft,#3a3f44);font-weight:500}
   .totals .ln.disc{color:var(--orange);font-weight:600}
   .totals .ln .v{font-variant-numeric:tabular-nums}
   .grand{display:flex;align-items:baseline;justify-content:space-between;margin:10px 20px 12px;padding-top:6px}
@@ -133,14 +147,14 @@
   /* chip row */
   .chip-row{display:flex;gap:8px;padding:0 20px 16px;overflow-x:auto;scroll-behavior:smooth;flex-shrink:0;scrollbar-width:none;-ms-overflow-style:none}
   .chip-row::after{content:'';flex:0 0 4px}
-  .chip{flex:0 0 auto;padding:8px 16px;border-radius:999px;background:#f4f5f7;font-size:12px;font-weight:600;color:#5e646b;white-space:nowrap;transition:all .15s ease}
+  .chip{flex:0 0 auto;padding:8px 16px;border-radius:999px;background:var(--bg,#f4f5f7);font-size:12px;font-weight:600;color:var(--muted-3,#5e646b);white-space:nowrap;transition:all .15s ease}
   .chip.active{background:var(--orange);color:#fff;box-shadow:0 8px 18px -8px rgba(243,154,54,.6)}
 
   /* menu grid */
   .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px 18px}
-  .gcard{background:#fff;border-radius:18px;padding:14px 12px 12px;box-shadow:0 12px 22px -16px rgba(20,24,28,.25),0 0 0 1px #f1f2f4;position:relative}
+  .gcard{background:var(--card,#fff);border-radius:18px;padding:14px 12px 12px;box-shadow:0 12px 22px -16px rgba(20,24,28,.25),0 0 0 1px var(--chip,#f1f2f4);position:relative}
   .gcard .pic{width:90px;height:90px;border-radius:50%;margin:0 auto 10px;background-size:cover;background-position:center;box-shadow:0 10px 18px -10px rgba(20,24,28,.35)}
-  .gcard .heart{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#c9ced3}
+  .gcard .heart{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:var(--muted-2,#c9ced3)}
   .gcard .heart svg{width:14px;height:14px}
   .gcard .heart.on{color:#ef4f5e}
   .gcard .t{font-size:13px;font-weight:700;line-height:1.2;margin:0 0 4px;text-align:center;letter-spacing:-.005em}
@@ -151,12 +165,12 @@
   .gcard .add svg{width:14px;height:14px}
 
   /* orders */
-  .seg{display:flex;margin:0 20px 18px;background:#f4f5f7;border-radius:12px;padding:4px;gap:4px;flex-shrink:0}
-  .seg button{flex:1;padding:9px 0;border-radius:9px;font-size:12px;font-weight:600;color:#5e646b;transition:all .15s ease;display:flex;align-items:center;justify-content:center;gap:6px}
-  .seg button.active{background:#fff;color:var(--ink);box-shadow:0 6px 14px -8px rgba(20,24,28,.18)}
+  .seg{display:flex;margin:0 20px 18px;background:var(--bg,#f4f5f7);border-radius:12px;padding:4px;gap:4px;flex-shrink:0}
+  .seg button{flex:1;padding:9px 0;border-radius:9px;font-size:12px;font-weight:600;color:var(--muted-3,#5e646b);transition:all .15s ease;display:flex;align-items:center;justify-content:center;gap:6px}
+  .seg button.active{background:var(--card,#fff);color:var(--ink);box-shadow:0 6px 14px -8px rgba(20,24,28,.18)}
   .seg .pill{background:var(--orange);color:#fff;font-size:10px;padding:1px 7px;border-radius:99px;font-weight:700}
   .order-stack{display:flex;flex-direction:column;gap:14px;padding:0 20px 18px}
-  .ocard{background:#fff;border-radius:18px;padding:16px;box-shadow:0 14px 26px -18px rgba(20,24,28,.22),0 0 0 1px #f1f2f4}
+  .ocard{background:var(--card,#fff);border-radius:18px;padding:16px;box-shadow:0 14px 26px -18px rgba(20,24,28,.22),0 0 0 1px var(--chip,#f1f2f4)}
   .ocard .ohead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
   .ocard .oid{font-size:13px;font-weight:700;letter-spacing:-.005em}
   .ocard .oid .date{display:block;font-size:10px;color:var(--muted);font-weight:500;margin-top:2px}
@@ -166,15 +180,15 @@
   .pill-status.completed{background:#e7f7ef;color:var(--green)}
   .ocard .obody{display:flex;align-items:center;gap:10px;margin-bottom:14px}
   .ostack-imgs{display:flex}
-  .ostack-imgs .dot{width:36px;height:36px;border-radius:50%;background-size:cover;background-position:center;box-shadow:0 0 0 2px #fff;margin-left:-10px}
+  .ostack-imgs .dot{width:36px;height:36px;border-radius:50%;background-size:cover;background-position:center;box-shadow:0 0 0 2px var(--card,#fff);margin-left:-10px}
   .ostack-imgs .dot:first-child{margin-left:0}
-  .ocard .osum{font-size:11.5px;color:#5e646b;font-weight:500}
+  .ocard .osum{font-size:11.5px;color:var(--muted-3,#5e646b);font-weight:500}
   .ocard .osum strong{color:var(--ink);font-weight:700}
-  .ocard .ofoot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid #f0f1f3}
+  .ocard .ofoot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--chip,#f0f1f3)}
   .ocard .total-mini{font-size:11px;color:var(--muted);font-weight:500}
   .ocard .total-mini b{display:block;color:var(--green);font-size:16px;font-weight:700;margin-top:2px}
   .o-action{background:var(--orange);color:#fff;font-weight:600;font-size:12px;padding:9px 18px;border-radius:10px;box-shadow:0 10px 18px -10px rgba(243,154,54,.6)}
-  .o-action.ghost{background:#fff;color:var(--ink);box-shadow:0 0 0 1px #e7e9ec inset}
+  .o-action.ghost{background:var(--card,#fff);color:var(--ink);box-shadow:0 0 0 1px var(--chip,#e7e9ec) inset}
 
   /* profile */
   .profile-hero{margin:6px 20px 18px;background:linear-gradient(135deg,#F8A640,#F08A1F);border-radius:22px;padding:22px;color:#fff;position:relative;overflow:hidden;flex-shrink:0}
@@ -192,11 +206,11 @@
   .ph-stat .l{font-size:10px;opacity:.9;font-weight:500;margin-top:4px}
   .row-list{padding:0 20px 8px;display:flex;flex-direction:column;gap:6px}
   .row-link{display:flex;align-items:center;gap:14px;padding:12px 10px;border-radius:12px;transition:background .12s ease;text-align:left;width:100%}
-  .row-link:active{background:#f6f7f9}
+  .row-link:active{background:var(--chip,#f6f7f9)}
   .row-link .ic{width:38px;height:38px;border-radius:11px;background:var(--orange-soft);color:var(--orange);display:grid;place-items:center;flex-shrink:0}
   .row-link .ic svg{width:18px;height:18px}
   .row-link .lbl{flex:1;font-size:13.5px;font-weight:600;color:var(--ink)}
-  .row-link .chev{color:#c9ced3}
+  .row-link .chev{color:var(--muted-2,#c9ced3)}
   .row-link .chev svg{width:16px;height:16px}
   .row-link.danger .ic{background:#fde7e7;color:#e54848}
   .row-link.danger .lbl{color:#e54848}
@@ -218,6 +232,10 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <div class="topbar">
       <button class="icon-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M3 12h12"/><path d="M3 18h18"/></svg></button>
       <div class="left"><p class="hi">Hello, John</p><p class="wb">Welcome Back</p></div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <button class="icon-btn bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
       <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80')"></div>
     </div>
@@ -230,37 +248,34 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <h2>Make Your<br/>First Order<br/>and Get<br/><span class="pct">50% Off</span></h2>
         <p>Order from the city's best kitchens and have a hot meal delivered in minutes.</p>
         <button class="cta" id="promoBtn">Order Now</button>
-        <div class="pizza" style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=80')"></div>
+        <div class="pizza" style="background-image:url('ai-hero.jpg')"></div>
       </section>
       <div class="menu-head"><h3>Our Menu</h3><a class="see-all" href="#">See All</a></div>
       <div class="cats" id="cats">
-        <button class="cat active" data-c="Pizza"><div class="em">🍕</div><div class="lbl">Pizza</div></button>
-        <button class="cat" data-c="Burger"><div class="em">🍔</div><div class="lbl">Burger</div></button>
-        <button class="cat" data-c="Fries"><div class="em">🍟</div><div class="lbl">Fries</div></button>
-        <button class="cat" data-c="Pack"><div class="em">🥡</div><div class="lbl">Pack</div></button>
+        <button class="cat active" data-c="Main"><div class="em">🍚</div><div class="lbl">Main</div></button>
       </div>
       <div class="dishes">
         <article class="dish">
-          <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=500&q=80')"></div>
-          <div><h4 class="name">Pizza<br/>with Peperoni</h4><div class="time">14–20 minutes</div><div class="price">From CA$12</div></div>
+          <div class="photo" style="background-image:url('jollof-rice.jpg')"></div>
+          <div><h4 class="name">Jollof Rice</h4><div class="time">15–20 minutes</div><div class="price">From CA$12</div></div>
           <button class="add" data-nav="cart" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
         </article>
         <article class="dish">
-          <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=500&q=80')"></div>
-          <div><h4 class="name">Pizza<br/>with Cheese</h4><div class="time">16–25 minutes</div><div class="price">From CA$14</div></div>
+          <div class="photo" style="background-image:url('fried-rice.jpg')"></div>
+          <div><h4 class="name">Fried Rice</h4><div class="time">15–20 minutes</div><div class="price">From CA$12</div></div>
           <button class="add" data-nav="cart" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
         </article>
       </div>
       <div class="menu-head"><h3>Popular Items</h3><a class="see-all" href="#">See All</a></div>
       <div class="pop">
         <div class="pop-item">
-          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=200&q=80')"></div>
-          <div class="info"><p class="t">Meat with Potato</p><div class="sub">Extra tomato</div><div class="p">CA$40</div></div>
+          <div class="pic" style="background-image:url('waakye.jpg')"></div>
+          <div class="info"><p class="t">Waakye</p><div class="sub">Big Tray</div><div class="p">CA$24</div></div>
           <button class="add" data-nav="cart" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
         </div>
         <div class="pop-item">
-          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=200&q=80')"></div>
-          <div class="info"><p class="t">Pizza with<br/>Mushrooms</p><div class="sub">Fresh</div><div class="p">CA$12</div></div>
+          <div class="pic" style="background-image:url('jollof-rice.jpg')"></div>
+          <div class="info"><p class="t">Jollof Rice</p><div class="sub">Big Tray</div><div class="p">CA$22</div></div>
           <button class="add" data-nav="cart" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
         </div>
       </div>
@@ -293,18 +308,18 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       </div>
       <div class="order-head"><h4>Order Menu</h4><a class="see-all" href="#">See All</a></div>
       <div class="order-list" id="orderList2">
-        <div class="order-item" data-id="mushroom" data-price="12">
-          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=200&q=80')"></div>
-          <div class="info"><p class="t">Pizza with Mushrooms</p><div class="sub">Fresh</div><div class="p">CA$12</div></div>
+        <div class="order-item" data-id="jollof-rice-big" data-price="22">
+          <div class="pic" style="background-image:url('jollof-rice.jpg')"></div>
+          <div class="info"><p class="t">Jollof Rice</p><div class="sub">Big Tray</div><div class="p">CA$22</div></div>
           <div class="qty">
             <button class="dec" aria-label="Decrease quantity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
             <span class="n">01</span>
             <button class="inc" aria-label="Increase quantity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
           </div>
         </div>
-        <div class="order-item" data-id="meat" data-price="40">
-          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=200&q=80')"></div>
-          <div class="info"><p class="t">Meat with Potato</p><div class="sub">Extra tomato</div><div class="p">CA$40</div></div>
+        <div class="order-item" data-id="waakye-big" data-price="24">
+          <div class="pic" style="background-image:url('waakye.jpg')"></div>
+          <div class="info"><p class="t">Waakye</p><div class="sub">Big Tray</div><div class="p">CA$24</div></div>
           <div class="qty">
             <button class="dec" aria-label="Decrease quantity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
             <span class="n">01</span>
@@ -328,20 +343,21 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <div class="topbar">
       <button class="icon-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M3 12h12"/><path d="M3 18h18"/></svg></button>
       <div class="screen-title">Menu</div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <button class="icon-btn bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
     </div>
     <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input placeholder="Search for meals…" /></label>
     <div class="chip-row" id="menuChips">
-      <button class="chip active">All</button><button class="chip">Pizza</button><button class="chip">Burger</button><button class="chip">Fries</button><button class="chip">Pack</button><button class="chip">Drinks</button><button class="chip">Desserts</button>
+      <button class="chip active">All</button><button class="chip">Main</button>
     </div>
     <div class="scroll">
       <div class="menu-grid">
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Pizza with Peperoni</p><div class="time">14–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart" aria-label="Add to favorites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Pizza with Cheese</p><div class="time">16–25 min</div><div class="foot"><span class="p">CA$14</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Chicken Burger</p><div class="time">10–15 min</div><div class="foot"><span class="p">CA$9</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart" aria-label="Add to favorites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Crispy Fries</p><div class="time">6–10 min</div><div class="foot"><span class="p">CA$5</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart" aria-label="Add to favorites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Meat with Potato</p><div class="time">18–25 min</div><div class="foot"><span class="p">CA$40</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Pizza with Mushrooms</p><div class="time">14–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart" aria-label="Add to favorites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('jollof-rice.jpg')"></div><p class="t">Jollof Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart" aria-label="Add to favorites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('fried-rice.jpg')"></div><p class="t">Fried Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('waakye.jpg')"></div><p class="t">Waakye</p><div class="time">20–25 min</div><div class="foot"><span class="p">CA$13</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
       </div>
       <div style="height:14px"></div>
     </div>
@@ -359,6 +375,10 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <div class="topbar">
       <button class="icon-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M3 12h12"/><path d="M3 18h18"/></svg></button>
       <div class="screen-title">My Orders</div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <button class="icon-btn bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
     </div>
     <div class="seg" id="orderSeg">
@@ -370,17 +390,17 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="order-stack">
         <article class="ocard">
           <div class="ohead"><div class="oid">Order #2845<span class="date">May 17, 2026 · 9:24 AM</span></div><span class="pill-status delivering">On the way</span></div>
-          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=200&q=80')"></div><div class="dot" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=200&q=80')"></div></div><div class="osum"><strong>2 items</strong> · Pizza with Mushrooms, Meat with Potato</div></div>
+          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('jollof-rice.jpg')"></div><div class="dot" style="background-image:url('waakye.jpg')"></div></div><div class="osum"><strong>2 items</strong> · Jollof Rice, Waakye</div></div>
           <div class="ofoot"><div class="total-mini">Total<b>CA$31.00</b></div><button class="o-action">Track Order</button></div>
         </article>
         <article class="ocard">
           <div class="ohead"><div class="oid">Order #2841<span class="date">May 17, 2026 · 8:02 AM</span></div><span class="pill-status preparing">Preparing</span></div>
-          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=200&q=80')"></div><div class="dot" style="background-image:url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=200&q=80')"></div><div class="dot" style="background-image:url('https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=200&q=80')"></div></div><div class="osum"><strong>3 items</strong> · Pizza, Chicken Burger, Fries</div></div>
+          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('jollof-rice.jpg')"></div><div class="dot" style="background-image:url('fried-rice.jpg')"></div><div class="dot" style="background-image:url('waakye.jpg')"></div></div><div class="osum"><strong>3 items</strong> · Jollof Rice, Fried Rice, Waakye</div></div>
           <div class="ofoot"><div class="total-mini">Total<b>CA$26.00</b></div><button class="o-action">Track Order</button></div>
         </article>
         <article class="ocard">
           <div class="ohead"><div class="oid">Order #2790<span class="date">May 12, 2026 · 7:48 PM</span></div><span class="pill-status completed">Delivered</span></div>
-          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=200&q=80')"></div><div class="dot" style="background-image:url('https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=200&q=80')"></div></div><div class="osum"><strong>2 items</strong> · Pizza with Cheese, Family Pack</div></div>
+          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('fried-rice.jpg')"></div><div class="dot" style="background-image:url('jollof-rice.jpg')"></div></div><div class="osum"><strong>2 items</strong> · Fried Rice, Jollof Rice</div></div>
           <div class="ofoot"><div class="total-mini">Total<b>CA$28.00</b></div><button class="o-action ghost">Reorder</button></div>
         </article>
       </div>
@@ -400,19 +420,20 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <div class="topbar">
       <button class="icon-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M3 12h12"/><path d="M3 18h18"/></svg></button>
       <div class="screen-title">Favorites</div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <button class="icon-btn bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
     </div>
     <div class="chip-row" id="favChips">
-      <button class="chip active">All · 6</button><button class="chip">Pizza · 3</button><button class="chip">Burger</button><button class="chip">Sides</button><button class="chip">Drinks</button>
+      <button class="chip active">All · 3</button><button class="chip">Main · 3</button>
     </div>
     <div class="scroll">
       <div class="menu-grid">
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Pizza with Peperoni</p><div class="time">14–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Pizza with Mushrooms</p><div class="time">14–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Pizza with Cheese</p><div class="time">16–25 min</div><div class="foot"><span class="p">CA$14</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Chicken Burger</p><div class="time">10–15 min</div><div class="foot"><span class="p">CA$9</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Crispy Fries</p><div class="time">6–10 min</div><div class="foot"><span class="p">CA$5</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=300&q=80')"></div><p class="t">Meat with Potato</p><div class="time">18–25 min</div><div class="foot"><span class="p">CA$40</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('jollof-rice.jpg')"></div><p class="t">Jollof Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('fried-rice.jpg')"></div><p class="t">Fried Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('waakye.jpg')"></div><p class="t">Waakye</p><div class="time">20–25 min</div><div class="foot"><span class="p">CA$13</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
       </div>
       <div style="height:14px"></div>
     </div>
@@ -430,6 +451,10 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <div class="topbar">
       <button class="icon-btn" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M3 12h12"/><path d="M3 18h18"/></svg></button>
       <div class="screen-title">Profile</div>
+      <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <button class="icon-btn bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
     </div>
     <div class="scroll">
@@ -666,5 +691,6 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   // ── "See All" links → toast ────────────────────────────
   document.querySelectorAll('.see-all').forEach(a=>a.addEventListener('click', e=>{e.preventDefault();showToast('Full list coming soon');}));
 </script>
+<script src="js/cookie-consent.js" defer></script>
 </body>
 </html>

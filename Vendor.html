@@ -2,6 +2,7 @@
 <html lang="en" style="visibility:hidden">
 <head>
 <meta charset="utf-8"/>
+<script src="js/theme.js"></script>
 <title>Dede's African Kitchen — Vendor Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <link rel="icon" type="image/png" href="favicon-32.png"/>
@@ -9,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/supabase-client.js"></script>
@@ -16,10 +18,24 @@
 <style>
   :root{
     --orange:#F39A36;--orange-2:#F08A1F;--ink:#222629;--ink-soft:#3a3f44;
-    --muted:#9aa1a8;--muted-2:#c9ced3;--bg:#f4f5f7;--card:#fff;
+    --muted:#9aa1a8;--muted-2:#c9ced3;--muted-3:#5e646b;--bg:#f4f5f7;--card:#fff;
     --green:#26C281;--red:#e74c4c;--chip:#f1f2f4;
+    --chip-hover:#e8eaed;--card-hover:#f6f7f9;--surface-2:#f9fafb;
     --shadow-card:0 10px 30px -16px rgba(20,24,28,.18),0 2px 6px rgba(20,24,28,.04);
     --shadow-soft:0 8px 22px -14px rgba(20,24,28,.25);
+  }
+  [data-theme="dark"]{
+    --ink:#F2F3F4;
+    --ink-soft:#c7cbcf;
+    --muted:#9aa1a8;
+    --muted-2:#3a3f44;
+    --muted-3:#9aa1a8;
+    --bg:#121316;
+    --card:#1c1e22;
+    --chip:#2a2d32;
+    --chip-hover:#34383e;
+    --card-hover:#26292e;
+    --surface-2:#202226;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0;background:var(--bg);font-family:'Poppins',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;height:100%;overflow:hidden}
@@ -27,21 +43,21 @@
   img{display:block;max-width:100%}
 
   /* App shell */
-  .app{width:1280px;margin:24px auto;background:#fff;border-radius:24px;
+  .app{width:1280px;margin:24px auto;background:var(--card,#fff);border-radius:24px;
     box-shadow:0 30px 80px -40px rgba(20,24,28,.18);
     display:grid;grid-template-columns:78px 1fr 340px;overflow:hidden;
     height:calc(100vh - 48px)}
 
   /* Sidebar */
   .sidebar{padding:22px 0;display:flex;flex-direction:column;align-items:center;gap:8px;
-    border-right:1px solid #f0f1f3;background:#fff}
+    border-right:1px solid var(--chip);background:var(--card,#fff)}
   .logo{width:40px;height:40px;border-radius:12px;background:var(--orange);
     display:grid;place-items:center;color:#fff;margin-bottom:10px;overflow:hidden}
   .logo svg{width:22px;height:22px}
   .logo img{width:100%;height:100%;object-fit:cover}
   .nav-btn{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
-    color:#b9bec4;background:transparent;position:relative;isolation:isolate;transition:color .15s}
-  .nav-btn::before{content:'';position:absolute;inset:0;border-radius:inherit;background:#f6f7f9;
+    color:var(--muted);background:transparent;position:relative;isolation:isolate;transition:color .15s}
+  .nav-btn::before{content:'';position:absolute;inset:0;border-radius:inherit;background:var(--card-hover);
     opacity:0;transition:opacity .15s;z-index:-1}
   .nav-btn:hover{color:var(--ink)}.nav-btn:hover::before{opacity:1}
   .nav-btn.active{color:#fff;box-shadow:0 8px 18px -8px rgba(243,154,54,.7)}
@@ -50,7 +66,7 @@
   .nav-btn svg{width:22px;height:22px;position:relative;z-index:1}
   .nav-spacer{flex:1}
   .nav-badge{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;
-    background:var(--red);border:2px solid #fff;z-index:2}
+    background:var(--red);border:2px solid var(--card,#fff);z-index:2}
 
   /* Pages */
   .pages{display:contents}
@@ -64,16 +80,16 @@
   .greet h1{font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em}
 
   /* Right panel */
-  .right{padding:28px 26px 32px;background:#fff;border-left:1px solid #f0f1f3;display:flex;flex-direction:column;overflow-y:auto;min-height:0}
+  .right{padding:28px 26px 32px;background:var(--card,#fff);border-left:1px solid var(--chip);display:flex;flex-direction:column;overflow-y:auto;min-height:0}
   .profile{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-  .avatar{width:44px;height:44px;border-radius:50%;background-size:cover;background-position:center;background-color:#dde1e5;flex-shrink:0}
+  .avatar{width:44px;height:44px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--muted-2);flex-shrink:0}
   .name{font-weight:700;font-size:15px;flex:1}
-  .bell{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#f4f5f7;color:var(--muted)}
+  .bell{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--bg);color:var(--muted)}
   .bell:hover{background:var(--chip);color:var(--ink)}
 
   /* Stats row */
   .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-  .stat{background:#fff;border-radius:18px;box-shadow:var(--shadow-card);padding:18px 16px}
+  .stat{background:var(--card,#fff);border-radius:18px;box-shadow:var(--shadow-card);padding:18px 16px}
   .stat .lbl{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:6px}
   .stat .val{font-size:24px;font-weight:700;letter-spacing:-.02em}
   .stat .sub{font-size:11px;color:var(--muted);margin-top:3px}
@@ -88,15 +104,15 @@
   .btn-sm:hover{background:var(--orange-2);transform:translateY(-1px)}
   .btn-sm svg{width:16px;height:16px}
   .btn-sm.ghost{background:var(--chip);color:var(--ink)}
-  .btn-sm.ghost:hover{background:#e8eaed}
+  .btn-sm.ghost:hover{background:var(--chip-hover)}
 
   /* Menu grid */
   .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .item-card{background:#fff;border-radius:18px;box-shadow:var(--shadow-card);
+  .item-card{background:var(--card,#fff);border-radius:18px;box-shadow:var(--shadow-card);
     padding:14px;position:relative;display:flex;flex-direction:column;gap:10px;
     transition:transform .15s,box-shadow .15s}
   .item-card:hover{transform:translateY(-2px);box-shadow:0 20px 38px -22px rgba(20,24,28,.28)}
-  .item-card .photo{width:100%;height:140px;border-radius:12px;background-size:cover;background-position:center;background-color:#f1f2f4}
+  .item-card .photo{width:100%;height:140px;border-radius:12px;background-size:cover;background-position:center;background-color:var(--chip)}
   .item-card .item-name{font-size:15px;font-weight:700;margin:0}
   .item-card .item-cat{font-size:11.5px;color:var(--muted);font-weight:500}
   .item-card .item-footer{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
@@ -108,7 +124,7 @@
   .ic-btn.del{background:#fdecea;color:var(--red)}.ic-btn.del:hover{background:var(--red);color:#fff}
   .ic-btn svg{width:15px;height:15px}
   .avail-toggle{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--muted)}
-  .toggle-track{width:32px;height:18px;border-radius:99px;background:#dde1e5;position:relative;
+  .toggle-track{width:32px;height:18px;border-radius:99px;background:var(--muted-2);position:relative;
     cursor:pointer;transition:background .2s;flex-shrink:0}
   .toggle-track.on{background:var(--green)}
   .toggle-thumb{width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;
@@ -118,29 +134,29 @@
   /* Orders table */
   .orders-table{width:100%;border-collapse:collapse}
   .orders-table th{text-align:left;font-size:12px;font-weight:600;color:var(--muted);
-    padding:0 12px 10px;border-bottom:1px solid #f0f1f3}
-  .orders-table td{padding:12px;border-bottom:1px solid #f0f1f3;font-size:13.5px;vertical-align:middle}
+    padding:0 12px 10px;border-bottom:1px solid var(--chip)}
+  .orders-table td{padding:12px;border-bottom:1px solid var(--chip);font-size:13.5px;vertical-align:middle}
   .orders-table tr:last-child td{border-bottom:0}
-  .orders-table tr:hover td{background:#fafbfc}
+  .orders-table tr:hover td{background:var(--card-hover)}
   .badge-status{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;
     font-size:11.5px;font-weight:600}
   .badge-status.pending{background:#fff4e0;color:#c87a00}
   .badge-status.preparing{background:#e8f4ff;color:#1a6fc4}
   .badge-status.ready{background:#e7f7ef;color:#1a9e5e}
-  .badge-status.delivered{background:#f1f2f4;color:var(--muted)}
+  .badge-status.delivered{background:var(--chip);color:var(--muted)}
   .badge-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
   .order-actions{display:flex;gap:6px}
   .action-btn{padding:5px 12px;border-radius:8px;font-size:12px;font-weight:600;transition:all .15s}
   .action-btn.accept{background:#e7f7ef;color:#1a9e5e}.action-btn.accept:hover{background:var(--green);color:#fff}
   .action-btn.ready{background:#e8f4ff;color:#1a6fc4}.action-btn.ready:hover{background:#2080e0;color:#fff}
-  .action-btn.done{background:#f1f2f4;color:var(--muted);cursor:default}
+  .action-btn.done{background:var(--chip);color:var(--muted);cursor:default}
 
   /* Filter tabs */
   .filter-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
   .ftab{padding:7px 16px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);
-    background:#f1f2f4;border:1px solid transparent;transition:all .15s}
-  .ftab:hover{color:var(--ink);background:#e8eaed}
-  .ftab.active{background:#fff;color:var(--ink);border-color:transparent;box-shadow:var(--shadow-soft)}
+    background:var(--chip);border:1px solid transparent;transition:all .15s}
+  .ftab:hover{color:var(--ink);background:var(--chip-hover)}
+  .ftab.active{background:var(--card,#fff);color:var(--ink);border-color:transparent;box-shadow:var(--shadow-soft)}
 
   /* Right panel widgets */
   .order-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -148,15 +164,15 @@
   .see-all{color:var(--orange);font-weight:600;font-size:13px;text-decoration:none}
   .see-all:hover{color:var(--orange-2)}
 
-  .quick-stat{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:#f9fafb;margin-bottom:10px}
+  .quick-stat{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--surface-2);margin-bottom:10px}
   .qs-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
   .qs-icon svg{width:18px;height:18px}
   .qs-lbl{font-size:12px;color:var(--muted);font-weight:500}
   .qs-val{font-size:16px;font-weight:700}
 
-  .recent-order{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f1f3}
+  .recent-order{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--chip)}
   .recent-order:last-child{border-bottom:0}
-  .ro-pic{width:40px;height:40px;border-radius:11px;background-size:cover;background-position:center;background-color:#f1f2f4;flex-shrink:0}
+  .ro-pic{width:40px;height:40px;border-radius:11px;background-size:cover;background-position:center;background-color:var(--chip);flex-shrink:0}
   .ro-name{font-size:13.5px;font-weight:600;margin-bottom:2px}
   .ro-sub{font-size:11.5px;color:var(--muted);font-weight:500}
   .ro-price{font-size:14px;font-weight:700;color:var(--green);margin-left:auto;white-space:nowrap}
@@ -167,20 +183,20 @@
   .field{display:flex;flex-direction:column;gap:6px}
   .field label{font-size:12px;font-weight:600;color:var(--ink-soft)}
   .field input,.field select,.field textarea{
-    padding:10px 14px;border-radius:12px;border:1.5px solid #eef0f2;
+    padding:10px 14px;border-radius:12px;border:1.5px solid var(--chip);
     font:500 14px/1.4 'Poppins',sans-serif;color:var(--ink);outline:none;
-    background:#fff;transition:border .15s}
+    background:var(--card,#fff);transition:border .15s}
   .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--orange)}
   .field textarea{resize:vertical;min-height:72px}
   .photo-preview{width:100%;height:110px;border-radius:12px;background-size:cover;
-    background-position:center;background-color:#f1f2f4;border:1.5px dashed #dde1e5;
+    background-position:center;background-color:var(--chip);border:1.5px dashed var(--muted-2);
     display:grid;place-items:center;color:var(--muted);font-size:13px;font-weight:500;overflow:hidden}
 
   /* Custom dropdown (category picker) — positioned via fixed coords in JS so it
      always stays on-screen, even inside the scrolling/transformed modal box */
   .dd-trigger{
-    padding:10px 14px;border-radius:12px;border:1.5px solid #eef0f2;
-    font:500 14px/1.4 'Poppins',sans-serif;color:var(--ink);background:#fff;
+    padding:10px 14px;border-radius:12px;border:1.5px solid var(--chip);
+    font:500 14px/1.4 'Poppins',sans-serif;color:var(--ink);background:var(--card,#fff);
     display:flex;align-items:center;justify-content:space-between;gap:8px;
     cursor:pointer;transition:border .15s;width:100%;text-align:left;
   }
@@ -188,34 +204,34 @@
   .dd-chev{width:15px;height:15px;color:var(--muted);flex-shrink:0;transition:transform .15s}
   .dd-trigger.open .dd-chev{transform:rotate(180deg)}
   .dd-menu{
-    position:fixed;background:#fff;border-radius:12px;
-    box-shadow:0 16px 32px -10px rgba(20,24,28,.35);border:1px solid #f0f1f3;
+    position:fixed;background:var(--card,#fff);border-radius:12px;
+    box-shadow:0 16px 32px -10px rgba(20,24,28,.35);border:1px solid var(--chip);
     overflow-y:auto;z-index:9999;padding:6px;
   }
   .dd-opt{padding:10px 12px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--ink);cursor:pointer;transition:background .12s}
-  .dd-opt:hover{background:#f6f7f9}
+  .dd-opt:hover{background:var(--card-hover)}
   .dd-opt.active{background:#FFF1E0;color:var(--orange-2);font-weight:700}
 
   /* Modal */
   .overlay{position:fixed;inset:0;background:rgba(20,24,28,.45);display:grid;
     place-items:center;z-index:900;opacity:0;pointer-events:none;transition:opacity .2s;padding:20px}
   .overlay.open{opacity:1;pointer-events:all}
-  .mbox{background:#fff;border-radius:22px;padding:28px;width:100%;max-width:480px;
+  .mbox{background:var(--card,#fff);border-radius:22px;padding:28px;width:100%;max-width:480px;
     box-shadow:0 40px 80px -30px rgba(0,0,0,.3);transform:translateY(8px);
     transition:transform .2s;max-height:90vh;overflow-y:auto}
   .overlay.open .mbox{transform:none}
   .mbox h4{font-size:17px;font-weight:700;margin:0 0 20px}
-  .mfield{width:100%;padding:10px 14px;border-radius:12px;border:1.5px solid #eef0f2;
+  .mfield{width:100%;padding:10px 14px;border-radius:12px;border:1.5px solid var(--chip);
     font:500 14px/1.4 'Poppins',sans-serif;color:var(--ink);outline:none;margin-bottom:12px;
-    background:#fff;transition:border .15s}
+    background:var(--card,#fff);transition:border .15s}
   .mfield:focus{border-color:var(--orange)}
   .mbtns{display:flex;gap:10px;margin-top:20px}
   .mprimary{flex:1;padding:12px;border-radius:12px;background:var(--orange);color:#fff;
     font:600 14px/1 'Poppins',sans-serif;transition:background .15s}
   .mprimary:hover{background:var(--orange-2)}
-  .mcancel{flex:1;padding:12px;border-radius:12px;background:#f1f2f4;color:var(--ink);
+  .mcancel{flex:1;padding:12px;border-radius:12px;background:var(--chip);color:var(--ink);
     font:600 14px/1 'Poppins',sans-serif;transition:background .15s}
-  .mcancel:hover{background:#e4e6e9}
+  .mcancel:hover{background:var(--chip-hover)}
 
   /* Toast */
   .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(12px);
@@ -228,39 +244,39 @@
   .chart-bar-wrap{display:flex;flex-direction:column;gap:10px;margin-top:4px}
   .chart-bar-row{display:flex;align-items:center;gap:12px}
   .chart-bar-label{font-size:12.5px;font-weight:600;color:var(--ink-soft);width:70px;flex-shrink:0}
-  .chart-bar-track{flex:1;height:10px;border-radius:99px;background:#f1f2f4;overflow:hidden}
+  .chart-bar-track{flex:1;height:10px;border-radius:99px;background:var(--chip);overflow:hidden}
   .chart-bar-fill{height:100%;border-radius:99px;background:var(--orange);transition:width .4s ease}
   .chart-bar-val{font-size:12.5px;font-weight:600;color:var(--ink);width:48px;text-align:right;flex-shrink:0}
 
   /* Earnings summary */
   .earn-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
-  .earn-card{background:#f9fafb;border-radius:16px;padding:16px}
+  .earn-card{background:var(--surface-2);border-radius:16px;padding:16px}
   .earn-card .e-lbl{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:5px}
   .earn-card .e-val{font-size:22px;font-weight:700;letter-spacing:-.02em}
 
   /* Settings page */
-  .settings-section{background:#fff;border-radius:18px;box-shadow:var(--shadow-card);padding:22px;margin-bottom:18px}
+  .settings-section{background:var(--card,#fff);border-radius:18px;box-shadow:var(--shadow-card);padding:22px;margin-bottom:18px}
   .settings-section h4{font-size:15px;font-weight:700;margin:0 0 16px}
   .store-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
   .store-logo{width:72px;height:72px;border-radius:18px;background-size:cover;background-position:center;
-    background-color:#f1f2f4;flex-shrink:0}
+    background-color:var(--chip);flex-shrink:0}
   .store-name-wrap{flex:1}
   .store-name-wrap h2{margin:0 0 4px;font-size:20px;font-weight:700}
   .store-name-wrap p{margin:0;font-size:13px;color:var(--muted);font-weight:500}
-  .hours-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f1f3;font-size:13.5px}
+  .hours-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--chip);font-size:13.5px}
   .hours-row:last-child{border-bottom:0}
   .hours-row .day{font-weight:600}
   .hours-row .time-range{color:var(--muted);font-weight:500}
   .hours-row .closed{color:var(--red);font-weight:600}
   .category-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-  .cat-chip{padding:6px 14px;border-radius:99px;background:#f1f2f4;font-size:12.5px;font-weight:600;
+  .cat-chip{padding:6px 14px;border-radius:99px;background:var(--chip);font-size:12.5px;font-weight:600;
     display:flex;align-items:center;gap:6px}
-  .cat-chip .rm{width:16px;height:16px;border-radius:50%;background:#dde1e5;
+  .cat-chip .rm{width:16px;height:16px;border-radius:50%;background:var(--muted-2);
     display:grid;place-items:center;cursor:pointer;color:var(--muted);font-size:10px;font-weight:700}
   .cat-chip .rm:hover{background:var(--red);color:#fff}
 
   /* Payouts page */
-  .payout-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #f0f1f3}
+  .payout-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--chip)}
   .payout-row:last-child{border-bottom:0}
   .payout-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex-shrink:0}
   .payout-icon svg{width:18px;height:18px}
@@ -279,58 +295,58 @@
   .bank-card .bc-num{font-size:13px;font-weight:600;letter-spacing:.1em;opacity:.7}
 
   /* Notification dropdown */
-  .notif-panel{position:absolute;top:100%;right:0;width:320px;background:#fff;
+  .notif-panel{position:absolute;top:100%;right:0;width:320px;background:var(--card,#fff);
     border-radius:18px;box-shadow:0 20px 50px -15px rgba(20,24,28,.25);
-    border:1px solid #f0f1f3;z-index:500;overflow:hidden;
+    border:1px solid var(--chip);z-index:500;overflow:hidden;
     opacity:0;pointer-events:none;transform:translateY(6px);transition:all .18s;margin-top:8px}
   .notif-panel.open{opacity:1;pointer-events:all;transform:none}
   .notif-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;
-    border-bottom:1px solid #f0f1f3}
+    border-bottom:1px solid var(--chip)}
   .notif-head h5{margin:0;font-size:14px;font-weight:700}
   .notif-head button{font-size:12px;color:var(--orange);font-weight:600}
-  .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-bottom:1px solid #f0f1f3;
+  .notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-bottom:1px solid var(--chip);
     cursor:pointer;transition:background .12s}
   .notif-item:last-child{border-bottom:0}
-  .notif-item:hover{background:#fafbfc}
+  .notif-item:hover{background:var(--card-hover)}
   .notif-item.unread{background:#fffbf6}
   .notif-dot{width:8px;height:8px;border-radius:50%;background:var(--orange);flex-shrink:0;margin-top:5px}
-  .notif-dot.read{background:transparent;border:1.5px solid #dde1e5}
+  .notif-dot.read{background:transparent;border:1.5px solid var(--muted-2)}
   .notif-text{flex:1;font-size:13px;font-weight:500;line-height:1.45;color:var(--ink)}
   .notif-time{font-size:11px;color:var(--muted);margin-top:2px;font-weight:500}
   .bell-wrap{position:relative}
 
   /* ── Messages page ── */
   #page-messages{grid-template-columns:260px 1fr}
-  .vm-convs{border-right:1px solid var(--border);overflow-y:auto;padding:10px 8px;display:flex;flex-direction:column;gap:4px}
+  .vm-convs{border-right:1px solid var(--chip);overflow-y:auto;padding:10px 8px;display:flex;flex-direction:column;gap:4px}
   .vm-conv{display:flex;align-items:center;gap:10px;padding:10px;border-radius:13px;cursor:pointer;transition:background .12s}
-  .vm-conv:hover{background:#f6f7f9}
+  .vm-conv:hover{background:var(--card-hover)}
   .vm-conv.active{background:#fff4e0}
-  .vm-av{width:42px;height:42px;border-radius:50%;background-size:cover;background-position:center;background-color:#dde1e5;flex-shrink:0;position:relative}
-  .vm-av::after{content:'';position:absolute;right:0;bottom:0;width:9px;height:9px;border-radius:50%;background:var(--green);border:2px solid #fff}
-  .vm-av.off::after{background:#c9ced3}
+  .vm-av{width:42px;height:42px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--muted-2);flex-shrink:0;position:relative}
+  .vm-av::after{content:'';position:absolute;right:0;bottom:0;width:9px;height:9px;border-radius:50%;background:var(--green);border:2px solid var(--card,#fff)}
+  .vm-av.off::after{background:var(--muted-2)}
   .vm-ci-info{flex:1;min-width:0}
   .vm-ci-name{font-size:13px;font-weight:700;margin-bottom:2px}
   .vm-ci-prev{font-size:11.5px;color:var(--muted);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .vm-ci-badge{width:18px;height:18px;border-radius:50%;background:var(--orange);color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;flex-shrink:0}
   .vm-chat{display:flex;flex-direction:column;overflow:hidden;height:100%}
-  .vm-chat-head{padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0}
-  .vm-ch-av{width:38px;height:38px;border-radius:50%;background-size:cover;background-position:center;background-color:#dde1e5;flex-shrink:0;position:relative}
-  .vm-ch-av::after{content:'';position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid #fff}
+  .vm-chat-head{padding:13px 20px;border-bottom:1px solid var(--chip);display:flex;align-items:center;gap:12px;flex-shrink:0}
+  .vm-ch-av{width:38px;height:38px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--muted-2);flex-shrink:0;position:relative}
+  .vm-ch-av::after{content:'';position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:50%;background:var(--green);border:2px solid var(--card,#fff)}
   .vm-ch-name{font-size:13.5px;font-weight:700}
   .vm-ch-status{font-size:10.5px;color:var(--green);font-weight:600}
   .vm-ch-order{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--orange);background:#fff4e0;padding:3px 10px;border-radius:8px}
   .vm-messages{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:7px}
   .vm-bubble{max-width:76%;padding:9px 13px;border-radius:15px;font-size:12.5px;line-height:1.5;font-weight:500;word-break:break-word}
-  .vm-bubble.them{background:#f4f5f7;color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start}
+  .vm-bubble.them{background:var(--bg);color:var(--ink);border-bottom-left-radius:4px;align-self:flex-start}
   .vm-bubble.me{background:var(--orange);color:#fff;border-bottom-right-radius:4px;align-self:flex-end;box-shadow:0 5px 14px -7px rgba(243,154,54,.55)}
   .vm-bubble .vbt{display:block;font-size:9px;opacity:.6;margin-top:3px;text-align:right}
   .vm-bubble.them .vbt{text-align:left}
-  .vm-sys{align-self:center;background:#f1f2f4;color:var(--muted);font-size:11px;font-weight:600;padding:4px 12px;border-radius:99px}
-  .vm-footer{padding:12px 18px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0}
-  .vm-input-wrap{flex:1;display:flex;align-items:center;background:#f4f5f7;border-radius:12px;padding:0 6px 0 14px;transition:box-shadow .15s}
+  .vm-sys{align-self:center;background:var(--chip);color:var(--muted);font-size:11px;font-weight:600;padding:4px 12px;border-radius:99px}
+  .vm-footer{padding:12px 18px 14px;border-top:1px solid var(--chip);display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .vm-input-wrap{flex:1;display:flex;align-items:center;background:var(--bg);border-radius:12px;padding:0 6px 0 14px;transition:box-shadow .15s}
   .vm-input-wrap:focus-within{box-shadow:0 0 0 2px rgba(243,154,54,.3)}
   .vm-input-wrap input{flex:1;border:0;background:transparent;outline:none;font:500 13px/1 'Poppins',sans-serif;height:40px;color:var(--ink)}
-  .vm-input-wrap input::placeholder{color:#b5bac0}
+  .vm-input-wrap input::placeholder{color:var(--muted)}
   .vm-send-btn{width:36px;height:36px;border-radius:10px;background:var(--orange);color:#fff;display:grid;place-items:center;flex-shrink:0;box-shadow:0 5px 12px -5px rgba(243,154,54,.5);transition:background .15s,transform .1s}
   .vm-send-btn:hover{background:var(--orange-2);transform:scale(1.05)}
   .vm-send-btn svg{width:15px;height:15px}
@@ -347,11 +363,11 @@
   }
   .m-nav{
     display:none;position:fixed;bottom:0;left:0;right:0;
-    border-top:1px solid #f0f1f3;padding:8px 4px max(14px,env(safe-area-inset-bottom));
-    justify-content:space-around;align-items:center;background:#fff;z-index:200
+    border-top:1px solid var(--chip);padding:8px 4px max(14px,env(safe-area-inset-bottom));
+    justify-content:space-around;align-items:center;background:var(--card,#fff);z-index:200
   }
   .m-tab{display:flex;flex-direction:column;align-items:center;gap:3px;
-    color:#9aa1a8;padding:5px 10px;border-radius:10px;font-size:9.5px;font-weight:600}
+    color:var(--muted);padding:5px 10px;border-radius:10px;font-size:9.5px;font-weight:600}
   .m-tab svg{width:20px;height:20px}
   .m-tab.active{color:var(--orange)}
 </style>
@@ -403,13 +419,19 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
     <main class="center">
       <div class="topbar">
         <div class="greet">
-          <p class="hi">Good morning, Dede's African Kitchen</p>
+          <p class="hi">Good morning, <span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></p>
           <h1>Vendor Dashboard</h1>
         </div>
-        <button class="btn-sm" onclick="openAddItemModal()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-          Add Item
-        </button>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+          <button class="btn-sm" onclick="openAddItemModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            Add Item
+          </button>
+        </div>
       </div>
 
       <div class="stats-row">
@@ -458,7 +480,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
     <aside class="right">
       <div class="profile">
         <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">Dede's African Kitchen</div>
+        <div class="name"><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></div>
         <div class="bell-wrap">
           <button class="bell" id="bellBtn" aria-label="Notifications" onclick="toggleNotifPanel()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
@@ -511,7 +533,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
     <aside class="right">
       <div class="profile">
         <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">Dede's African Kitchen</div>
+        <div class="name"><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></div>
         <button class="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
       </div>
       <div class="order-head"><h4>Categories</h4></div>
@@ -524,7 +546,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
       </div>
       <div class="order-head" style="margin-top:20px"><h4>Quick Stats</h4></div>
       <div class="quick-stat">
-        <div class="qs-icon" style="background:#f1f2f4;color:var(--ink)">
+        <div class="qs-icon" style="background:var(--chip);color:var(--ink)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/></svg>
         </div>
         <div><div class="qs-lbl">Total Items</div><div class="qs-val" id="qsTotal">0</div></div>
@@ -574,7 +596,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
     <aside class="right">
       <div class="profile">
         <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">Dede's African Kitchen</div>
+        <div class="name"><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></div>
         <button class="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
       </div>
       <div class="order-head"><h4>Order Summary</h4></div>
@@ -639,7 +661,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
     <aside class="right">
       <div class="profile">
         <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">Dede's African Kitchen</div>
+        <div class="name"><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></div>
         <button class="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
       </div>
       <div class="order-head"><h4>Best Sellers</h4></div>
@@ -662,22 +684,22 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
         <div class="store-header">
           <div class="store-logo" id="storeLogoPreview" style="background-image:url('favicon-180.png')"></div>
           <div class="store-name-wrap">
-            <h2>Dede's African Kitchen</h2>
-            <p>Italian · Fast Food · Pizza</p>
+            <h2><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></h2>
+            <p>Ghanaian · Home Cooking</p>
           </div>
           <button class="btn-sm ghost" onclick="openChangeLogoModal()">Change Logo</button>
         </div>
         <div class="form-grid">
           <div class="form-row">
             <div class="field"><label for="sName">Store Name</label><input id="sName" value="Dede's African Kitchen"/></div>
-            <div class="field"><label for="sCuisine">Cuisine Type</label><input id="sCuisine" value="Italian, Pizza"/></div>
+            <div class="field"><label for="sCuisine">Cuisine Type</label><input id="sCuisine" value="Ghanaian"/></div>
           </div>
           <div class="form-row">
             <div class="field"><label for="sPhone">Phone</label><input id="sPhone" value="+1 (415) 555-0199"/></div>
             <div class="field"><label for="sEmail">Email</label><input id="sEmail" value="hello@dedesafricankitchen.com"/></div>
           </div>
           <div class="field"><label for="sAddress">Address</label><input id="sAddress" value="123 Main St, San Francisco, CA 94102"/></div>
-          <div class="field"><label for="sDesc">Description</label><textarea id="sDesc">Authentic Italian pizza made with fresh ingredients, delivered hot to your door in under 30 minutes.</textarea></div>
+          <div class="field"><label for="sDesc">Description</label><textarea id="sDesc">Authentic Ghanaian home cooking made with love, delivered hot to your door.</textarea></div>
           <div class="form-row">
             <div class="field"><label for="sMinOrder">Min. Order ($)</label><input id="sMinOrder" type="number" value="10"/></div>
             <div class="field"><label for="sDelivFee">Delivery Fee ($)</label><input id="sDelivFee" type="number" value="2.99"/></div>
@@ -704,7 +726,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
     <aside class="right">
       <div class="profile">
         <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">Dede's African Kitchen</div>
+        <div class="name"><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></div>
         <button class="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
       </div>
       <div class="order-head"><h4>Store Status</h4></div>
@@ -721,7 +743,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
         </div>
       </div>
       <div class="quick-stat" style="margin-top:10px">
-        <div class="qs-icon" style="background:#f1f2f4;color:var(--ink)">
+        <div class="qs-icon" style="background:var(--chip);color:var(--ink)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
         </div>
         <div><div class="qs-lbl">Delivery Radius</div><div class="qs-val">5 km</div></div>
@@ -773,7 +795,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
     <aside class="right">
       <div class="profile">
         <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">Dede's African Kitchen</div>
+        <div class="name"><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></div>
         <button class="bell" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></button>
       </div>
       <div class="order-head"><h4>Linked Bank</h4></div>
@@ -847,22 +869,13 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
 
 <script>
 // ── State ──────────────────────────────────────────────
-const PHOTOS = [
-  'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=500&q=80',
-  'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=500&q=80',
-  'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=500&q=80',
-  'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=80',
-  'https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=500&q=80',
-  'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=500&q=80',
-];
-
+// Real menu — only 3 dishes are entered so far. The owner will add the rest
+// of her menu herself via "Add New Item" (categories below are already set
+// up to match her full menu: Main, Stew & Soups, Plantain, Meat, Extras).
 let menuItems = [
-  {id:1,name:'Pizza with Pepperoni',category:'Pizza',priceSmall:12,priceBig:22,prepTime:'14–20 min',photo:PHOTOS[0],available:true,orders:18},
-  {id:2,name:'Margherita Pizza',category:'Pizza',priceSmall:10,priceBig:18,prepTime:'12–18 min',photo:PHOTOS[1],available:true,orders:12},
-  {id:3,name:'Meat with Potato',category:'Mains',priceSmall:16,priceBig:29,prepTime:'20–28 min',photo:PHOTOS[2],available:true,orders:9},
-  {id:4,name:'Chicken Burger',category:'Burger',priceSmall:11,priceBig:20,prepTime:'10–15 min',photo:PHOTOS[3],available:true,orders:7},
-  {id:5,name:'Crispy Fries',category:'Sides',priceSmall:5,priceBig:9,prepTime:'8–12 min',photo:PHOTOS[4],available:false,orders:14},
-  {id:6,name:'Pizza w/ Mushrooms',category:'Pizza',priceSmall:13,priceBig:24,prepTime:'14–20 min',photo:PHOTOS[5],available:true,orders:11},
+  {id:1,name:'Jollof Rice',category:'Main',priceSmall:12,priceBig:22,prepTime:'15–20 min',photo:'jollof-rice.jpg',available:true,orders:18},
+  {id:2,name:'Fried Rice',category:'Main',priceSmall:12,priceBig:22,prepTime:'15–20 min',photo:'fried-rice.jpg',available:true,orders:12},
+  {id:3,name:'Waakye',category:'Main',priceSmall:13,priceBig:24,prepTime:'20–25 min',photo:'waakye.jpg',available:true,orders:9},
 ];
 let nextItemId = 7;
 
@@ -888,7 +901,7 @@ async function loadOrders(){
   renderDashboard(); renderOrders(); updateOrdersBadge();
 }
 
-let categories = ['Pizza','Burger','Mains','Sides','Drinks'];
+let categories = ['Main','Stew & Soups','Plantain','Meat','Extras'];
 let activeOrderFilter = 'all';
 
 // ── Navigation: defined after all render fns below ─────
@@ -964,7 +977,7 @@ function deleteItem(id){
   const item=menuItems.find(i=>i.id===id);
   openModal(`
     <h4>Delete Item</h4>
-    <p style="font-size:14px;color:#5e646b;margin:0 0 20px">Remove <strong>${item.name}</strong> from your menu? This cannot be undone.</p>
+    <p style="font-size:14px;color:var(--muted-3);margin:0 0 20px">Remove <strong>${item.name}</strong> from your menu? This cannot be undone.</p>
     <div class="mbtns">
       <button class="mprimary" style="background:var(--red)" onclick="confirmDelete(${id})">Delete</button>
       <button class="mcancel" onclick="closeModal()">Cancel</button>
@@ -984,7 +997,7 @@ function openAddItemModal(){
     <h4>Add New Item</h4>
     <div class="form-grid">
       <div class="form-row">
-        <div class="field"><label for="mi-name">Item Name</label><input class="mfield" id="mi-name" placeholder="e.g. Margherita Pizza" style="margin:0"/></div>
+        <div class="field"><label for="mi-name">Item Name</label><input class="mfield" id="mi-name" placeholder="e.g. Jollof Rice" style="margin:0"/></div>
         <div class="field"><label for="mi-cat">Category</label>
           <button type="button" class="dd-trigger" id="mi-cat" data-value="${categories[0]}" onclick="openCatDropdown(this)">
             <span>${categories[0]}</span>
@@ -1079,7 +1092,7 @@ function confirmAddItem(){
   const priceSmall=parseFloat(document.getElementById('mi-price-small').value)||0;
   const priceBig=parseFloat(document.getElementById('mi-price-big').value)||0;
   const time=document.getElementById('mi-time').value.trim()||'10–15 min';
-  const photo=document.getElementById('mi-photo').value.trim()||PHOTOS[Math.floor(Math.random()*PHOTOS.length)];
+  const photo=document.getElementById('mi-photo').value.trim();
   if(!name){showToast('Please enter an item name');return;}
   menuItems.push({id:nextItemId++,name,category:cat,priceSmall,priceBig,prepTime:time,photo,available:true,orders:0});
   closeModal();
@@ -1571,10 +1584,10 @@ const VM_CONVS = [
     id:'sarah', name:'Sarah K.', orderId:'#2843', online:true, live:false, unread:2,
     av:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&q=80',
     mock:[
-      {from:'system',  text:'Order #2843 — Margherita Pizza · CA$10'},
+      {from:'system',  text:'Order #2843 — Jollof Rice (Big Tray) · CA$22'},
       {from:'vendor',  text:'Hi Sarah! Order confirmed ✔', time:'9:46 AM'},
-      {from:'customer',text:'Can I get extra cheese please?', time:'9:47 AM'},
-      {from:'customer',text:'And sauce on the side if possible?', time:'9:47 AM'},
+      {from:'customer',text:'Can I get it extra spicy please?', time:'9:47 AM'},
+      {from:'customer',text:'And a side of coleslaw if possible?', time:'9:47 AM'},
     ]
   },
   {
@@ -1729,5 +1742,6 @@ window.sbClient.channel('orders-changes').on('postgres_changes',
   }
 ).subscribe();
 </script>
+<script src="js/cookie-consent.js" defer></script>
 </body>
 </html>
