@@ -1955,57 +1955,22 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
       if(error){ showToast('Could not place your order — please try again'); return; }
 
-      const checkoutRes = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId: data.id, items, fulfillment, customerEmail: window.__customer?.email }),
-      });
-      const checkoutData = await checkoutRes.json().catch(()=>({}));
-      if(!checkoutRes.ok || !checkoutData.url){
-        showToast('Could not start payment — please try again');
-        return;
-      }
-
       clearCart();
       closeCartDrawer();
-      window.location.href = checkoutData.url;
-    } catch(err){
-      showToast('Could not place your order — please try again');
+      const shortId = '#' + data.id.slice(0, 4).toUpperCase();
+      const etaLine = fulfillment === 'pickup'
+        ? 'Ready for pickup in 20–30 min.'
+        : 'Estimated delivery: 20–30 min.';
+      openModal(`<div style="text-align:center;padding:8px 0">
+        <div style="width:64px;height:64px;background:#e7f7ef;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="32" height="32"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h4 style="margin:0 0 8px">Order Placed!</h4>
+        <p style="font-size:13px;color:var(--muted-3);margin:0 0 22px;line-height:1.55">Order ${shortId} sent to the kitchen.<br/>${etaLine}</p>
+        <div class="mbtns"><button class="mprimary" onclick="closeModal();goTo('messages')">Track Order</button><button class="mcancel" onclick="closeModal()">Close</button></div>
+      </div>`);
     } finally {
       b.disabled = false;
     }
   }));
-
-  // ── Stripe redirect handling (success/cancel) ──────────
-  (function(){
-    const params = new URLSearchParams(window.location.search);
-    const payment = params.get('payment');
-    if(payment === 'success'){
-      const sessionId = params.get('session_id');
-      const orderId = params.get('order');
-      history.replaceState(null, '', window.location.pathname);
-      fetch('/api/verify-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, orderId }),
-      }).then(r=>r.json()).then(result=>{
-        if(result.paid){
-          const shortId = '#' + orderId.slice(0, 4).toUpperCase();
-          openModal(`<div style="text-align:center;padding:8px 0">
-            <div style="width:64px;height:64px;background:#e7f7ef;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="32" height="32"><path d="M20 6 9 17l-5-5"/></svg></div>
-            <h4 style="margin:0 0 8px">Payment Successful!</h4>
-            <p style="font-size:13px;color:var(--muted-3);margin:0 0 22px;line-height:1.55">Order ${shortId} sent to the kitchen.</p>
-            <div class="mbtns"><button class="mprimary" onclick="closeModal();goTo('messages')">Track Order</button><button class="mcancel" onclick="closeModal()">Close</button></div>
-          </div>`);
-        } else {
-          showToast('Payment could not be confirmed — please contact support');
-        }
-      }).catch(()=>{ showToast('Could not confirm payment'); });
-    } else if(payment === 'cancelled'){
-      history.replaceState(null, '', window.location.pathname);
-      showToast('Payment cancelled — your order was not placed');
-    }
-  })();
 
   // ── Edit Profile ───────────────────────────────────────
   document.querySelector('.profile-hero .edit')?.addEventListener('click', ()=>{
