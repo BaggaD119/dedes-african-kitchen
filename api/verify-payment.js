@@ -1,4 +1,5 @@
 const { stripeRequest } = require('../lib/stripe');
+const { sendEmail, customerReceiptHtml, vendorNotificationHtml } = require('../lib/resend');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -28,15 +29,24 @@ module.exports = async function handler(req, res) {
     if (!supabaseUrl || !serviceKey) {
       throw new Error('Supabase service credentials are not configured');
     }
+    const dbHeaders = {
+      apikey: serviceKey,
+      Authorization: `Bearer ${serviceKey}`,
+      'Content-Type': 'application/json',
+    };
+
+    // Fetch current state first so we don't re-send emails on a repeat call
+    // (e.g. the customer refreshes the success page).
+    const getRes = await fetch(`${supabaseUrl}/rest/v1/orders?id=eq.${encodeURIComponent(orderId)}&select=*`, {
+      headers: dbHeaders,
+    });
+    const rows = await getRes.json();
+    const order = rows?.[0];
+    const alreadyPaid = order?.payment_status === 'paid';
 
     const supaRes = await fetch(`${supabaseUrl}/rest/v1/orders?id=eq.${encodeURIComponent(orderId)}`, {
       method: 'PATCH',
-      headers: {
-        apikey: serviceKey,
-        Authorization: `Bearer ${serviceKey}`,
-        'Content-Type': 'application/json',
-        Prefer: 'return=minimal',
-      },
+      headers: { ...dbHeaders, Prefer: 'return=minimal' },
       body: JSON.stringify({ payment_status: paymentStatus }),
     });
 
@@ -45,8 +55,34 @@ module.exports = async function handler(req, res) {
       throw new Error('Failed to update order: ' + errText);
     }
 
+    if (paid && !alreadyPaid && order) {
+      const emailOrder = { ...order, payment_status: 'paid' };
+      const vendorEmail = process.env.VENDOR_EMAIL;
+      const emailJobs = [];
+      if (order.customer_email) {
+        emailJobs.push(sendEmail({
+          to: order.customer_email,
+          subject: "Your Dede's African Kitchen order is confirmed!",
+          html: customerReceiptHtml(emailOrder),
+        }));
+      }
+      if (vendorEmail) {
+        emailJobs.push(sendEmail({
+          to: vendorEmail,
+          subject: `New paid order — ${money_(order.total)}`,
+          html: vendorNotificationHtml(emailOrder),
+        }));
+      }
+      // Don't let email failures break the payment confirmation response.
+      await Promise.allSettled(emailJobs);
+    }
+
     res.status(200).json({ paid });
   } catch (err) {
     res.status(err.status || 500).json({ error: err.message || 'Server error' });
   }
 };
+
+function money_(n) {
+  return 'CA$' + Number(n).toFixed(2);
+}
