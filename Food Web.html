@@ -849,6 +849,8 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   document.querySelectorAll('.profile .name').forEach(el => el.textContent = name);
   document.getElementById('profEmail').textContent    = session.user.email;
   document.getElementById('profValEmail').textContent = session.user.email;
+  const monthEl = document.getElementById('analyticsMonth');
+  if(monthEl) monthEl.textContent = new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'});
 }});
 </script>
 
@@ -912,7 +914,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <h2>Make Your First Order<br/>and Get <span class="pct">50% Off</span></h2>
       <p>Order from the city's best kitchens and have a hot meal delivered to your door in under thirty minutes. New customers get half off their first order.</p>
       <button class="cta">Order Now</button>
-      <div class="pizza" style="background-image:url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=80')"></div>
+      <div class="pizza" style="background-image:url('ai-hero.jpg')"></div>
     </section>
 
     <!-- Our Menu tabs -->
@@ -968,8 +970,8 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   <!-- ============ RIGHT PANEL ============ -->
   <aside class="right">
     <div class="profile">
-      <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80')"></div>
-      <div class="name">John Smith</div>
+      <div class="avatar"></div>
+      <div class="name">Customer</div>
       <button class="bell" aria-label="Notifications">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
       </button>
@@ -980,11 +982,11 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="ccard back"></div>
       <div class="ccard front">
         <div class="row">
-          <div class="brand">Universal Card</div>
+          <div class="brand">No card on file</div>
           <div class="chip"></div>
         </div>
-        <div class="num">5214&nbsp;&nbsp;4587&nbsp;&nbsp;9658&nbsp;&nbsp;1452</div>
-        <div class="foot"><span>John Smith</span><span>12/24</span></div>
+        <div class="num">••••&nbsp;&nbsp;••••&nbsp;&nbsp;••••&nbsp;&nbsp;••••</div>
+        <div class="foot"><span>&nbsp;</span><span>--/--</span></div>
       </div>
     </div>
 
@@ -1061,14 +1063,14 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       </div>
 
       <section class="profile-hero">
-        <div class="av" style="background-image:url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80')"></div>
+        <div class="av"></div>
         <div class="info">
-          <h2 id="profName">John Smith</h2>
-          <div class="em" id="profEmail">john.smith@example.com</div>
+          <h2 id="profName">Customer</h2>
+          <div class="em" id="profEmail"></div>
           <div class="stats">
-            <div class="stat"><b>24</b>Orders</div>
-            <div class="stat"><b>12</b>Favorites</div>
-            <div class="stat"><b>4.8</b>Rating</div>
+            <div class="stat"><b>0</b>Orders</div>
+            <div class="stat"><b>0</b>Favorites</div>
+            <div class="stat"><b>—</b>Rating</div>
           </div>
         </div>
         <button class="edit">Edit Profile</button>
@@ -1078,46 +1080,32 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="info-grid">
         <div class="info-card">
           <div class="lbl">Full Name</div>
-          <div class="val" id="profValName">John Smith</div>
+          <div class="val" id="profValName">Customer</div>
         </div>
         <div class="info-card">
           <div class="lbl">Date of Birth</div>
-          <div class="val">March 14, 1992</div>
+          <div class="val">Not set</div>
         </div>
         <div class="info-card">
           <div class="lbl">Email Address</div>
-          <div class="val row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span id="profValEmail">john.smith@example.com</span></div>
+          <div class="val row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span id="profValEmail"></span></div>
         </div>
         <div class="info-card">
           <div class="lbl">Phone Number</div>
-          <div class="val row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg></span><span id="profValPhone">+1 (415) 555-0142</span></div>
+          <div class="val row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg></span><span id="profValPhone">Not set</span></div>
         </div>
       </div>
 
       <div class="sec-head"><h3>Delivery Addresses</h3><a class="see-all" href="#">+ Add New</a></div>
-      <div class="addresses">
-        <div class="addr">
-          <div class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-          <div class="body">
-            <p class="nm">Home</p>
-            <div class="ad">1428 Valencia Street, Apt 3B, San Francisco, CA 94110</div>
-          </div>
-          <span class="badge">Default</span>
-        </div>
-        <div class="addr">
-          <div class="pin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
-          <div class="body">
-            <p class="nm">Work</p>
-            <div class="ad">680 Folsom Street, Floor 5, San Francisco, CA 94107</div>
-          </div>
-        </div>
+      <div class="addresses" id="addressList">
+        <div style="text-align:center;color:var(--muted);padding:20px 0;font-size:13px">No delivery addresses added yet</div>
       </div>
     </main>
 
     <aside class="right">
       <div class="profile">
-        <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">John Smith</div>
+        <div class="avatar"></div>
+        <div class="name">Customer</div>
         <button class="bell" aria-label="Notifications">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
         </button>
@@ -1125,30 +1113,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
       <div class="order-head"><h4>Payment Methods</h4><a href="#" class="see-all">Manage</a></div>
       <div class="pay-list">
-        <div class="pay-card active">
-          <div class="brand">VISA</div>
-          <div class="body">
-            <p class="nm">Universal Card</p>
-            <div class="nb">•••• 1452 · 12/24</div>
-          </div>
-          <span class="dot"></span>
-        </div>
-        <div class="pay-card">
-          <div class="brand dark">MC</div>
-          <div class="body">
-            <p class="nm">Black Mastercard</p>
-            <div class="nb">•••• 8839 · 09/26</div>
-          </div>
-          <span class="dot"></span>
-        </div>
-        <div class="pay-card">
-          <div class="brand dark">$</div>
-          <div class="body">
-            <p class="nm">Apple Pay</p>
-            <div class="nb">Wallet</div>
-          </div>
-          <span class="dot"></span>
-        </div>
+        <div style="text-align:center;color:var(--muted);padding:14px 0;font-size:13px">No payment methods added yet</div>
       </div>
       <button class="add-card-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="16" height="16"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
@@ -1173,7 +1138,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
       <section class="balance-card">
         <div class="lbl">Available Balance</div>
-        <div class="amt">CA$1,284<small>.50</small></div>
+        <div class="amt">CA$0<small>.00</small></div>
         <div class="row2">
           <button class="primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
@@ -1210,47 +1175,16 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         </button>
       </div>
 
-      <div class="sec-head"><h3>Recent Transactions</h3><a class="see-all" href="#">See All</a></div>
+      <div class="sec-head"><h3>Recent Transactions</h3></div>
       <div class="txlist">
-        <div class="tx">
-          <div class="ic out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 17 10-10"/><path d="M17 17V7H7"/></svg></div>
-          <div>
-            <p class="t">Jollof Rice</p>
-            <div class="s">Today · 9:24 AM · Order #2845</div>
-          </div>
-          <div class="amt out">−CA$31.00</div>
-        </div>
-        <div class="tx">
-          <div class="ic in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 7-10 10"/><path d="M7 7v10h10"/></svg></div>
-          <div>
-            <p class="t">Top Up · Universal Card</p>
-            <div class="s">Yesterday · 6:12 PM</div>
-          </div>
-          <div class="amt in">+CA$200.00</div>
-        </div>
-        <div class="tx">
-          <div class="ic out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 17 10-10"/><path d="M17 17V7H7"/></svg></div>
-          <div>
-            <p class="t">Jollof Rice · Dede's African Kitchen</p>
-            <div class="s">May 14 · 7:48 PM · Order #2790</div>
-          </div>
-          <div class="amt out">−CA$28.00</div>
-        </div>
-        <div class="tx">
-          <div class="ic out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 17 10-10"/><path d="M17 17V7H7"/></svg></div>
-          <div>
-            <p class="t">Waakye · Dede's African Kitchen</p>
-            <div class="s">May 12 · 1:02 PM · Order #2754</div>
-          </div>
-          <div class="amt out">−CA$14.50</div>
-        </div>
+        <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No transactions yet</div>
       </div>
     </main>
 
     <aside class="right">
       <div class="profile">
-        <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">John Smith</div>
+        <div class="avatar"></div>
+        <div class="name">Customer</div>
         <button class="bell" aria-label="Notifications">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
         </button>
@@ -1260,11 +1194,11 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div class="ccard back"></div>
         <div class="ccard front">
           <div class="row">
-            <div class="brand">Universal Card</div>
+            <div class="brand">No card on file</div>
             <div class="chip"></div>
           </div>
-          <div class="num">5214&nbsp;&nbsp;4587&nbsp;&nbsp;9658&nbsp;&nbsp;1452</div>
-          <div class="foot"><span>John Smith</span><span>12/24</span></div>
+          <div class="num">••••&nbsp;&nbsp;••••&nbsp;&nbsp;••••&nbsp;&nbsp;••••</div>
+          <div class="foot"><span>&nbsp;</span><span>--/--</span></div>
         </div>
       </div>
 
@@ -1272,15 +1206,15 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="info-grid" style="grid-template-columns:1fr;gap:10px">
         <div class="info-card">
           <div class="lbl">Total Spent</div>
-          <div class="val" style="font-size:22px;color:#e54848">CA$284.50</div>
+          <div class="val" style="font-size:22px">CA$0.00</div>
         </div>
         <div class="info-card">
           <div class="lbl">Cashback Earned</div>
-          <div class="val" style="font-size:22px;color:var(--green)">+CA$14.20</div>
+          <div class="val" style="font-size:22px">CA$0.00</div>
         </div>
         <div class="info-card">
           <div class="lbl">Most Used</div>
-          <div class="val">Universal Card · 18×</div>
+          <div class="val">—</div>
         </div>
       </div>
     </aside>
@@ -1372,8 +1306,8 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
     <aside class="right">
       <div class="profile">
-        <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">John Smith</div>
+        <div class="avatar"></div>
+        <div class="name">Customer</div>
         <button class="bell" aria-label="Notifications">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
         </button>
@@ -1408,7 +1342,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <main class="center">
       <div class="topbar">
         <div class="greet">
-          <p class="hi">May 2026</p>
+          <p class="hi" id="analyticsMonth"></p>
           <h1>Analytics</h1>
         </div>
         <label class="search">
@@ -1421,25 +1355,22 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div class="stat-card">
           <div class="head">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg></div>
-            <span class="delta">+12.4%</span>
           </div>
-          <div class="v">CA$284.50</div>
+          <div class="v">CA$0.00</div>
           <div class="l">Total Spent</div>
         </div>
         <div class="stat-card">
           <div class="head">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10a2 2 0 0 1 2 2v16l-7-3-7 3V5a2 2 0 0 1 2-2z"/></svg></div>
-            <span class="delta">+3</span>
           </div>
-          <div class="v">24</div>
+          <div class="v">0</div>
           <div class="l">Orders Placed</div>
         </div>
         <div class="stat-card">
           <div class="head">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m12 7 1.4 3 3.4.3-2.5 2.3.7 3.4L12 14.2 9 16l.7-3.4-2.5-2.3 3.4-.3z"/></svg></div>
-            <span class="delta down">−2 min</span>
           </div>
-          <div class="v">21 min</div>
+          <div class="v">—</div>
           <div class="l">Avg Delivery</div>
         </div>
       </div>
@@ -1454,41 +1385,26 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
           </div>
         </div>
         <div class="chart">
-          <div class="bar" style="height:55%"><span class="lab">Mon</span></div>
-          <div class="bar" style="height:38%"><span class="lab">Tue</span></div>
-          <div class="bar" style="height:72%"><span class="lab">Wed</span></div>
-          <div class="bar" style="height:48%"><span class="lab">Thu</span></div>
-          <div class="bar dim" style="height:88%"><span class="lab">Fri</span><span class="v">CA$58</span></div>
-          <div class="bar" style="height:64%"><span class="lab">Sat</span></div>
-          <div class="bar" style="height:42%"><span class="lab">Sun</span></div>
+          <div class="bar" style="height:0%"><span class="lab">Mon</span></div>
+          <div class="bar" style="height:0%"><span class="lab">Tue</span></div>
+          <div class="bar" style="height:0%"><span class="lab">Wed</span></div>
+          <div class="bar" style="height:0%"><span class="lab">Thu</span></div>
+          <div class="bar" style="height:0%"><span class="lab">Fri</span></div>
+          <div class="bar" style="height:0%"><span class="lab">Sat</span></div>
+          <div class="bar" style="height:0%"><span class="lab">Sun</span></div>
         </div>
+        <div style="text-align:center;color:var(--muted);padding:8px 0 0;font-size:13px">No spending data yet</div>
         <div style="height:18px"></div>
       </section>
 
       <div class="sec-head"><h3>Top Dishes</h3></div>
-      <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
-        <div class="stat-card" style="padding:14px 16px">
-          <div class="v" style="font-size:18px">42%</div>
-          <div class="l">Jollof Rice</div>
-          <div style="height:6px;border-radius:99px;background:var(--chip);margin-top:8px;overflow:hidden"><div style="width:42%;height:100%;background:var(--orange)"></div></div>
-        </div>
-        <div class="stat-card" style="padding:14px 16px">
-          <div class="v" style="font-size:18px">33%</div>
-          <div class="l">Waakye</div>
-          <div style="height:6px;border-radius:99px;background:var(--chip);margin-top:8px;overflow:hidden"><div style="width:33%;height:100%;background:#2b2f33"></div></div>
-        </div>
-        <div class="stat-card" style="padding:14px 16px">
-          <div class="v" style="font-size:18px">25%</div>
-          <div class="l">Fried Rice</div>
-          <div style="height:6px;border-radius:99px;background:var(--chip);margin-top:8px;overflow:hidden"><div style="width:25%;height:100%;background:var(--green)"></div></div>
-        </div>
-      </div>
+      <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No orders yet — your favorite dishes will show up here</div>
     </main>
 
     <aside class="right">
       <div class="profile">
-        <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80')"></div>
-        <div class="name">John Smith</div>
+        <div class="avatar"></div>
+        <div class="name">Customer</div>
         <button class="bell" aria-label="Notifications">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
         </button>
@@ -1496,21 +1412,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
       <div class="order-head"><h4>Top Items</h4><a href="#" class="see-all">See All</a></div>
       <div class="top-items">
-        <div class="ti">
-          <div class="pic" style="background-image:url('jollof-rice.jpg')"></div>
-          <div><p class="nm">Jollof Rice</p><div class="ct">Ordered 8 times</div></div>
-          <div class="pct">CA$96</div>
-        </div>
-        <div class="ti">
-          <div class="pic" style="background-image:url('waakye.jpg')"></div>
-          <div><p class="nm">Waakye</p><div class="ct">Ordered 6 times</div></div>
-          <div class="pct">CA$144</div>
-        </div>
-        <div class="ti">
-          <div class="pic" style="background-image:url('fried-rice.jpg')"></div>
-          <div><p class="nm">Fried Rice</p><div class="ct">Ordered 5 times</div></div>
-          <div class="pct">CA$60</div>
-        </div>
+        <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No orders yet — your favorite dishes will show up here</div>
       </div>
     </aside>
   </div><!-- /page-analytics -->
@@ -1520,7 +1422,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <main class="center">
       <div class="topbar">
         <div class="greet">
-          <p class="hi" id="msgsHi">5 conversations</p>
+          <p class="hi" id="msgsHi">1 conversation</p>
           <h1>Messages</h1>
         </div>
         <label class="search">
@@ -1530,47 +1432,18 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       </div>
 
       <div class="inbox-tabs" id="msgsTabs">
-        <button class="active">Chats <span class="num">5</span></button>
-        <button>Notifications <span class="num">3</span></button>
+        <button class="active">Chats <span class="num">1</span></button>
+        <button>Notifications</button>
       </div>
 
       <!-- Chats section -->
       <div id="msgsChats">
       <div class="conv-list" id="convList">
         <div class="conv active">
-          <div class="av on" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80')"></div>
+          <div class="av"></div>
           <div>
-            <div class="head"><div class="nm">Daniel · Courier</div><span class="tm">just now</span></div>
-            <div class="pv">I'm 6 minutes away — meeting you at the lobby entrance.</div>
-          </div>
-          <span class="badge">2</span>
-        </div>
-        <div class="conv">
-          <div class="av on" style="background-image:url('https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&q=80')"></div>
-          <div>
-            <div class="head"><div class="nm">Dede's Support</div><span class="tm">12m</span></div>
-            <div class="pv">Your order has been confirmed and is being prepared. Thank you!</div>
-          </div>
-        </div>
-        <div class="conv">
-          <div class="av" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80')"></div>
-          <div>
-            <div class="head"><div class="nm">Dede's Rewards</div><span class="tm">2h</span></div>
-            <div class="pv">Thanks for the 5★ review! Here's CA$5 off your next order.</div>
-          </div>
-        </div>
-        <div class="conv">
-          <div class="av on" style="background-image:url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80')"></div>
-          <div>
-            <div class="head"><div class="nm">Dede's Concierge</div><span class="tm">Yesterday</span></div>
-            <div class="pv">Quick question about your last order — did everything arrive okay?</div>
-          </div>
-        </div>
-        <div class="conv">
-          <div class="av" style="background-image:url('https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=200&q=80')"></div>
-          <div>
-            <div class="head"><div class="nm">Maria · Courier</div><span class="tm">May 12</span></div>
-            <div class="pv">Order delivered. Enjoy your meal! 👋</div>
+            <div class="head"><div class="nm">Dede's African Kitchen</div><span class="tm"></span></div>
+            <div class="pv">Message the restaurant about your order</div>
           </div>
         </div>
       </div>
@@ -1579,46 +1452,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <!-- Notifications section -->
       <div id="msgsNotifs" style="display:none">
         <div class="inbox-list">
-          <div class="nx unread">
-            <div class="ic delivery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
-            <div class="body">
-              <p class="t">Your order is on the way!</p>
-              <div class="ms">Order #2845 — your courier Daniel is 6 minutes away. Track in real time.</div>
-            </div>
-            <div class="time">just now</div>
-          </div>
-          <div class="nx unread">
-            <div class="ic promo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6l-2 4v8h16z"/><path d="M2 8v12"/><path d="M22 8v12"/><path d="M7 19v-3"/><path d="M17 19v-3"/></svg></div>
-            <div class="body">
-              <p class="t">50% off your next pizza</p>
-              <div class="ms">Limited offer for the rest of the week. Use code <strong>PIZZA50</strong> at checkout.</div>
-            </div>
-            <div class="time">2h</div>
-          </div>
-          <div class="nx unread">
-            <div class="ic account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6z"/></svg></div>
-            <div class="body">
-              <p class="t">New sign-in to your account</p>
-              <div class="ms">A new device signed in from San Francisco. If this wasn't you, secure your account.</div>
-            </div>
-            <div class="time">5h</div>
-          </div>
-          <div class="nx">
-            <div class="ic delivery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-            <div class="body">
-              <p class="t">Order delivered</p>
-              <div class="ms">How was your meal? Rate Dede's African Kitchen and your courier.</div>
-            </div>
-            <div class="time">Yesterday</div>
-          </div>
-          <div class="nx">
-            <div class="ic promo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg></div>
-            <div class="body">
-              <p class="t">You earned CA$5 in cashback</p>
-              <div class="ms">Your reward from last week's orders has been added to your wallet.</div>
-            </div>
-            <div class="time">May 14</div>
-          </div>
+          <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No notifications yet</div>
         </div>
       </div><!-- /msgsNotifs -->
     </main>
@@ -1627,25 +1461,17 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <!-- Chat panel (shown when Chats tab active) -->
       <div id="msgsChat" style="display:flex;flex-direction:column;flex:1;min-height:0">
         <div class="chat-head">
-          <div class="av" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80')"></div>
+          <div class="av"></div>
           <div style="flex:1">
-            <p class="nm">Daniel</p>
-            <div class="st">● Online · Courier</div>
+            <p class="nm">Dede's African Kitchen</p>
+            <div class="st">Restaurant</div>
           </div>
           <button class="bell" aria-label="Call">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg>
           </button>
         </div>
 
-        <div class="chat-stream" id="chatStream">
-          <div class="chat-time">Today, 9:24 AM</div>
-          <div class="bubble them">Hi John! I just picked up your order from Dede's African Kitchen.</div>
-          <div class="bubble me">Great! How long until you get here?</div>
-          <div class="bubble them">About 12 minutes — traffic is light right now.</div>
-          <div class="bubble me">Perfect. I'll meet you at the lobby entrance.</div>
-          <div class="bubble them">Sounds good. I'm 6 minutes away.</div>
-          <div class="bubble them">See you soon 👋</div>
-        </div>
+        <div class="chat-stream" id="chatStream"></div>
 
         <div class="chat-input">
           <input placeholder="Type a message…" id="chatBox" />
@@ -1658,19 +1484,14 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <!-- Notification detail panel (shown when Notifications tab active) -->
       <div id="msgsNxDetail" style="display:none;flex-direction:column;flex:1;overflow-y:auto;padding:28px 26px">
         <div class="profile">
-          <div class="avatar" style="background-image:url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80')"></div>
-          <div class="name">John Smith</div>
+          <div class="avatar"></div>
+          <div class="name">Customer</div>
           <button class="bell" aria-label="Notifications">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
           </button>
         </div>
         <div class="nx-detail">
-          <div class="ic delivery"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
-          <h4>Your order is on the way!</h4>
-          <div class="time">Today · 9:34 AM</div>
-          <p>Order #2845 has left Dede's African Kitchen and is heading your way. Your courier <strong>Daniel</strong> is approximately 6 minutes from your delivery address.</p>
-          <p style="color:var(--muted);font-size:11.5px;margin:0 0 16px">2 items · CA$31.00 · paid with Universal Card •••• 1452</p>
-          <button class="btn">Track Order</button>
+          <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No notifications yet</div>
         </div>
       </div><!-- /msgsNxDetail -->
     </aside>
@@ -1931,7 +1752,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       document.getElementById('msgsNotifs').style.display    = isChats ? 'none' : '';
       document.getElementById('msgsChat').style.display      = isChats ? 'flex' : 'none';
       document.getElementById('msgsNxDetail').style.display  = isChats ? 'none' : 'flex';
-      document.getElementById('msgsHi').textContent = isChats ? '5 conversations' : '3 unread';
+      document.getElementById('msgsHi').textContent = isChats ? '1 conversation' : 'No notifications';
     });
   });
 
@@ -1953,14 +1774,9 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   function _cNow(){ return new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}); }
   function _cGet(){ try{ return JSON.parse(localStorage.getItem(_CHAT_KEY)||'null'); }catch(e){ return null; } }
   function _cSet(d){ localStorage.setItem(_CHAT_KEY, JSON.stringify(d)); }
-  // seed initial messages if first time
+  // start with a genuinely empty thread if none exists yet
   if(!_cGet()){
-    _cSet({messages:[
-      {from:'vendor',  text:'Hi John! Your order is confirmed. 🍕', time:'9:24 AM'},
-      {from:'customer',text:'How long will it take?',               time:'9:25 AM'},
-      {from:'vendor',  text:'About 20 minutes! Our chef is on it.', time:'9:25 AM'},
-      {from:'customer',text:'Perfect, thanks!',                     time:'9:26 AM'},
-    ]});
+    _cSet({messages:[]});
   }
   // incoming vendor replies from Vendor.html
   window.addEventListener('storage', e=>{
@@ -2089,18 +1905,6 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   window.addEventListener('scroll', ()=>closeDropdown(), true);
   window.addEventListener('resize', closeDropdown);
 
-  // ── Track order modal ──────────────────────────────────
-  function showTrackModal(){
-    openModal(`<h4>Track Order #2845</h4>
-      <div class="ttrack">
-        <div class="tstep"><div class="tdot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="tinfo"><p class="tt">Order Confirmed</p><p class="ts">9:24 AM · Dede's African Kitchen received your order</p></div></div>
-        <div class="tstep"><div class="tdot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="tinfo"><p class="tt">Being Prepared</p><p class="ts">9:28 AM · Kitchen preparing your food</p></div></div>
-        <div class="tstep"><div class="tdot now"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="tinfo"><p class="tt">On the Way</p><p class="ts">Daniel is 6 minutes away</p></div></div>
-        <div class="tstep"><div class="tdot wait"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></div><div class="tinfo"><p class="tt">Delivered</p><p class="ts">Estimated 9:44 AM</p></div></div>
-      </div>
-      <div class="mbtns"><button class="mcancel" onclick="closeModal()">Close</button></div>`);
-  }
-
   // ── Promo CTA ──────────────────────────────────────────
   document.querySelector('#page-menu .cta')?.addEventListener('click', ()=>showToast('50% off your first order — browse below!'));
 
@@ -2115,7 +1919,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     document.getElementById('msgsNotifs').style.display   = '';
     document.getElementById('msgsChat').style.display     = 'none';
     document.getElementById('msgsNxDetail').style.display = 'flex';
-    document.getElementById('msgsHi').textContent = '3 unread';
+    document.getElementById('msgsHi').textContent = 'No notifications';
   }));
 
   // ── Pickup / Delivery ───────────────────────────────────
@@ -2151,22 +1955,57 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
       if(error){ showToast('Could not place your order — please try again'); return; }
 
+      const checkoutRes = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: data.id, items, fulfillment, customerEmail: window.__customer?.email }),
+      });
+      const checkoutData = await checkoutRes.json().catch(()=>({}));
+      if(!checkoutRes.ok || !checkoutData.url){
+        showToast('Could not start payment — please try again');
+        return;
+      }
+
       clearCart();
       closeCartDrawer();
-      const shortId = '#' + data.id.slice(0, 4).toUpperCase();
-      const etaLine = fulfillment === 'pickup'
-        ? 'Ready for pickup in 20–30 min.'
-        : 'Estimated delivery: 20–30 min.';
-      openModal(`<div style="text-align:center;padding:8px 0">
-        <div style="width:64px;height:64px;background:#e7f7ef;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="32" height="32"><path d="M20 6 9 17l-5-5"/></svg></div>
-        <h4 style="margin:0 0 8px">Order Placed!</h4>
-        <p style="font-size:13px;color:var(--muted-3);margin:0 0 22px;line-height:1.55">Order ${shortId} sent to the kitchen.<br/>${etaLine}</p>
-        <div class="mbtns"><button class="mprimary" onclick="closeModal();goTo('messages')">Track Order</button><button class="mcancel" onclick="closeModal()">Close</button></div>
-      </div>`);
+      window.location.href = checkoutData.url;
+    } catch(err){
+      showToast('Could not place your order — please try again');
     } finally {
       b.disabled = false;
     }
   }));
+
+  // ── Stripe redirect handling (success/cancel) ──────────
+  (function(){
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get('payment');
+    if(payment === 'success'){
+      const sessionId = params.get('session_id');
+      const orderId = params.get('order');
+      history.replaceState(null, '', window.location.pathname);
+      fetch('/api/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, orderId }),
+      }).then(r=>r.json()).then(result=>{
+        if(result.paid){
+          const shortId = '#' + orderId.slice(0, 4).toUpperCase();
+          openModal(`<div style="text-align:center;padding:8px 0">
+            <div style="width:64px;height:64px;background:#e7f7ef;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="32" height="32"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <h4 style="margin:0 0 8px">Payment Successful!</h4>
+            <p style="font-size:13px;color:var(--muted-3);margin:0 0 22px;line-height:1.55">Order ${shortId} sent to the kitchen.</p>
+            <div class="mbtns"><button class="mprimary" onclick="closeModal();goTo('messages')">Track Order</button><button class="mcancel" onclick="closeModal()">Close</button></div>
+          </div>`);
+        } else {
+          showToast('Payment could not be confirmed — please contact support');
+        }
+      }).catch(()=>{ showToast('Could not confirm payment'); });
+    } else if(payment === 'cancelled'){
+      history.replaceState(null, '', window.location.pathname);
+      showToast('Payment cancelled — your order was not placed');
+    }
+  })();
 
   // ── Edit Profile ───────────────────────────────────────
   document.querySelector('.profile-hero .edit')?.addEventListener('click', ()=>{
@@ -2221,7 +2060,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   document.querySelector('.balance-card .primary')?.addEventListener('click', ()=>{
     openModal(`<h4>Top Up Wallet</h4>
       <input class="mfield" placeholder="Amount ($)" type="number" />
-      ${ddTriggerHTML('topupCard', ['Universal Card •••• 1452','Black Mastercard •••• 8839'], 'Universal Card •••• 1452')}
+      ${ddTriggerHTML('topupCard', ['Add a card first'], 'Add a card first')}
       <div class="mbtns"><button class="mprimary" onclick="showToast('Wallet topped up!');closeModal()">Top Up</button><button class="mcancel" onclick="closeModal()">Cancel</button></div>`);
   });
   const _wb = document.querySelectorAll('.balance-card .row2 button');
@@ -2245,8 +2084,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     b.addEventListener('click', ()=>{
       const lbl=_qLbls[i];
       if(lbl==='Cards') openModal(`<h4>My Cards</h4>
-        <div style="background:var(--chip);border-radius:12px;padding:14px;margin-bottom:10px;font-size:13px;font-weight:600">Universal Card •••• 1452 · VISA <span style="color:var(--green);float:right">Default</span></div>
-        <div style="background:var(--chip);border-radius:12px;padding:14px;font-size:13px;font-weight:600">Black Mastercard •••• 8839 · MC</div>
+        <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No cards added yet</div>
         <div class="mbtns" style="margin-top:16px"><button class="mcancel" onclick="closeModal()">Close</button></div>`);
       else if(lbl==='Scan QR') openModal(`<div style="text-align:center;padding:8px 0">
         <h4 style="margin:0 0 16px">Scan QR</h4>
@@ -2259,7 +2097,8 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   });
 
   // ── Analytics range ────────────────────────────────────
-  const _rD={Week:[45,30,72,58,88,64,42],Month:[55,38,72,48,88,64,42],Year:[40,55,68,72,60,80,50]};
+  // No real per-customer order history exists yet, so every range shows a zero/empty state.
+  const _rD={Week:[0,0,0,0,0,0,0],Month:[0,0,0,0,0,0,0],Year:[0,0,0,0,0,0,0]};
   const _rL={Week:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],Month:['W1','W2','W3','W4','W5','W6','W7'],Year:['Jan','Mar','May','Jul','Aug','Oct','Dec']};
   document.querySelectorAll('.chart-card .range button').forEach(b=>{
     b.addEventListener('click', ()=>{
@@ -2270,9 +2109,9 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       document.querySelectorAll('.chart .bar').forEach((bar,i)=>{
         bar.querySelector('.v')?.remove();
         bar.classList.remove('dim');
-        bar.style.height=(vals[i]/mx*88)+'%';
+        bar.style.height = mx > 0 ? (vals[i]/mx*88)+'%' : '0%';
         const labEl=bar.querySelector('.lab'); if(labEl) labEl.textContent=labs[i];
-        if(vals[i]===mx){ bar.classList.add('dim'); const v=document.createElement('span'); v.className='v'; v.textContent='CA$'+vals[i]; bar.appendChild(v); }
+        if(mx>0 && vals[i]===mx){ bar.classList.add('dim'); const v=document.createElement('span'); v.className='v'; v.textContent='CA$'+vals[i]; bar.appendChild(v); }
       });
     });
   });
@@ -2284,10 +2123,10 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     row.addEventListener('click', ()=>{
       const t=row.querySelector('.t')?.textContent?.trim();
       if(t==='Personal Information') openModal(`<h4>Personal Information</h4>
-        <input class="mfield" placeholder="Full Name" value="John Smith" />
-        <input class="mfield" placeholder="Email" value="john.smith@example.com" />
-        <input class="mfield" placeholder="Phone" value="+1 (415) 555-0142" />
-        <input class="mfield" placeholder="Date of Birth" value="March 14, 1992" />
+        <input class="mfield" placeholder="Full Name" value="${window.__customer?.name||''}" />
+        <input class="mfield" placeholder="Email" value="${window.__customer?.email||''}" />
+        <input class="mfield" placeholder="Phone" value="" />
+        <input class="mfield" placeholder="Date of Birth" value="" />
         <div class="mbtns"><button class="mprimary" onclick="showToast('Information saved');closeModal()">Save</button><button class="mcancel" onclick="closeModal()">Cancel</button></div>`);
       else if(t==='Change Password') openModal(`<h4>Change Password</h4>
         ${pwFieldHTML('Current Password')}
@@ -2312,20 +2151,12 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   });
 
   // ── Inbox list → update detail panel ──────────────────
-  const _ixD=[
-    {cls:'delivery',ico:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,h:'Your order is on the way!',t:'Today · 9:34 AM',b:"Order #2845 left Dede's African Kitchen. Courier <strong>Daniel</strong> is ~6 min from your address.",s:'2 items · CA$31.00 · Universal Card •••• 1452',btn:'Track Order',act:'showTrackModal()'},
-    {cls:'promo',ico:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6l-2 4v8h16z"/><path d="M2 8v12"/><path d="M22 8v12"/><path d="M7 19v-3"/><path d="M17 19v-3"/></svg>`,h:'50% off your next pizza',t:'Today · 7:14 AM',b:'Use code <strong>PIZZA50</strong> at checkout. Valid until Sunday midnight.',s:'Promotion · Expires May 19',btn:'Order Now',act:`goTo('menu')`},
-    {cls:'account',ico:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6z"/></svg>`,h:'New sign-in to your account',t:'Today · 4:08 AM',b:'Device signed in from <strong>San Francisco</strong> via Chrome/macOS. Not you? Secure your account.',s:'Security alert · IP 198.51.100.42',btn:'Secure Account',act:`showToast('Account secured')`},
-    {cls:'delivery',ico:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`,h:'Order delivered',t:'Yesterday · 7:52 PM',b:"Your order from Dede's African Kitchen was delivered. Rate your experience!",s:'2 items · CA$28.00 · Order #2790',btn:'Rate & Review',act:`showToast('Thanks for your review!')`},
-    {cls:'promo',ico:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>`,h:'You earned CA$5 in cashback',t:'May 14 · 6:00 PM',b:"<strong>CA$5.00</strong> cashback from last week has been added to your Dede's Wallet.",s:'Reward · Balance: CA$1,284.50',btn:'View Wallet',act:`goTo('wallet')`},
-  ];
-  const _nxDet=document.querySelector('#msgsNxDetail .nx-detail');
-  document.querySelectorAll('#msgsNotifs .inbox-list .nx').forEach((nx,i)=>{
+  // (no real notifications system exists yet — nothing to wire up here;
+  // #msgsNotifs currently has no .nx items to click)
+  document.querySelectorAll('#msgsNotifs .inbox-list .nx').forEach(nx=>{
     nx.style.cursor='pointer';
     nx.addEventListener('click', ()=>{
       document.querySelectorAll('#msgsNotifs .inbox-list .nx').forEach(x=>x.classList.remove('unread'));
-      const d=_ixD[i]; if(!d||!_nxDet) return;
-      _nxDet.innerHTML=`<div class="ic ${d.cls}">${d.ico}</div><h4>${d.h}</h4><div class="time">${d.t}</div><p>${d.b}</p><p style="color:var(--muted);font-size:11.5px;margin:0 0 16px">${d.s}</p><button class="btn" onclick="${d.act}">${d.btn}</button>`;
     });
   });
 
