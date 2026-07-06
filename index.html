@@ -126,6 +126,7 @@
   .menu-section{background:var(--bg)}
   .dish-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
   .dish-card{
+    display:block;text-decoration:none;color:inherit;cursor:pointer;
     background:var(--card,#fff);border-radius:20px;box-shadow:var(--shadow-card);overflow:hidden;
     transition:transform .15s ease, box-shadow .15s ease;
   }
@@ -224,27 +225,27 @@
     <p>A taste of what's cooking — the full menu (with all the extras) is waiting for you right after you log in.</p>
   </div>
   <div class="dish-grid">
-    <div class="dish-card">
+    <a class="dish-card" href="login.html">
       <div class="photo" style="background-image:url('jollof-rice.jpg')"></div>
       <div class="body">
         <h4>Jollof Rice</h4>
         <div class="meta"><span>15–20 min</span><span class="price">CA$12</span></div>
       </div>
-    </div>
-    <div class="dish-card">
+    </a>
+    <a class="dish-card" href="login.html">
       <div class="photo" style="background-image:url('fried-rice.jpg')"></div>
       <div class="body">
         <h4>Fried Rice</h4>
         <div class="meta"><span>15–20 min</span><span class="price">CA$12</span></div>
       </div>
-    </div>
-    <div class="dish-card">
+    </a>
+    <a class="dish-card" href="login.html">
       <div class="photo" style="background-image:url('waakye.jpg')"></div>
       <div class="body">
         <h4>Waakye</h4>
         <div class="meta"><span>20–25 min</span><span class="price">CA$13</span></div>
       </div>
-    </div>
+    </a>
   </div>
   <div class="menu-cta">
     <a href="login.html" class="btn btn-primary btn-lg">See Full Menu &amp; Order</a>
