@@ -352,24 +352,57 @@
   .vm-send-btn svg{width:15px;height:15px}
 
   @media(max-width:900px){
-    .app{width:100%;margin:0;border-radius:0;grid-template-columns:1fr}
+    html,body{overflow:auto;height:auto}
+    .app{width:100%;margin:0;border-radius:0;grid-template-columns:1fr;height:auto;min-height:100vh}
     .sidebar{display:none}
-    .page.active{grid-column:1;grid-template-columns:1fr}
+    .page{grid-template-columns:1fr}
+    .page.active{grid-column:1;grid-template-columns:1fr;grid-template-rows:none;overflow:visible}
+    .center{overflow-y:visible;padding:18px 16px 24px}
     .right{display:none}
     .stats-row{grid-template-columns:1fr 1fr}
     .menu-grid{grid-template-columns:1fr}
-    body{padding-bottom:66px}
+    .earn-grid{grid-template-columns:1fr 1fr}
+    body{padding-bottom:74px}
     .m-nav{display:flex!important}
+    .topbar{flex-wrap:wrap;gap:12px}
+    .store-header{flex-wrap:wrap}
+    .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px}
+    .orders-table{min-width:680px}
+    .overlay{padding:14px}
+    .mbox{padding:22px;max-height:85vh}
+    .notif-panel{width:min(320px,calc(100vw - 28px))}
+
+    /* Messages: #page-messages's own grid-template-columns (260px 1fr) beats the
+       .page.active rule above on specificity, so it needs its own override —
+       collapse to a single column and toggle between the conversation list and
+       the open chat via a .chat-open class (see vmSwitch()/back button). */
+    #page-messages{grid-template-columns:1fr;height:calc(100vh - 62px - env(safe-area-inset-bottom))}
+    .vm-convs{display:flex}
+    .vm-chat{display:none}
+    #page-messages.chat-open .vm-convs{display:none}
+    #page-messages.chat-open .vm-chat{display:flex}
+    .vm-back{display:inline-flex!important}
   }
+  @media(max-width:480px){
+    .stats-row,.earn-grid{grid-template-columns:1fr}
+    .form-row{grid-template-columns:1fr}
+  }
+  .table-scroll{overflow-x:visible}
   .m-nav{
     display:none;position:fixed;bottom:0;left:0;right:0;
-    border-top:1px solid var(--chip);padding:8px 4px max(14px,env(safe-area-inset-bottom));
-    justify-content:space-around;align-items:center;background:var(--card,#fff);z-index:200
+    border-top:1px solid var(--chip);padding:6px 4px max(10px,env(safe-area-inset-bottom));
+    justify-content:space-around;align-items:center;background:var(--card,#fff);z-index:200;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;gap:2px
   }
-  .m-tab{display:flex;flex-direction:column;align-items:center;gap:3px;
-    color:var(--muted);padding:5px 10px;border-radius:10px;font-size:9.5px;font-weight:600}
-  .m-tab svg{width:20px;height:20px}
+  .m-tab{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;min-width:44px;
+    color:var(--muted);padding:5px 6px;border-radius:10px;font-size:8.5px;font-weight:600;position:relative}
+  .m-tab svg{width:19px;height:19px}
   .m-tab.active{color:var(--orange)}
+  .m-tab .nav-badge{position:absolute;top:2px;right:2px}
+  .vm-back{display:none;width:32px;height:32px;border-radius:10px;align-items:center;justify-content:center;
+    color:var(--ink);flex-shrink:0;margin-right:2px}
+  .vm-back:hover{background:var(--chip)}
+  .vm-back svg{width:18px;height:18px}
 </style>
 </head>
 <body>
@@ -461,6 +494,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
         <h3>Recent Orders</h3>
         <button class="btn-sm ghost" onclick="goTo('orders')">View All</button>
       </div>
+      <div class="table-scroll">
       <table class="orders-table" id="dashOrdersTable">
         <thead>
           <tr>
@@ -475,6 +509,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
         </thead>
         <tbody id="dashOrdersBody"></tbody>
       </table>
+      </div>
     </main>
 
     <aside class="right">
@@ -576,6 +611,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
         <button class="ftab" data-filter="ready">Ready</button>
         <button class="ftab" data-filter="delivered">Delivered</button>
       </div>
+      <div class="table-scroll">
       <table class="orders-table">
         <thead>
           <tr>
@@ -591,6 +627,7 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
         </thead>
         <tbody id="ordersBody"></tbody>
       </table>
+      </div>
     </main>
 
     <aside class="right">
@@ -695,10 +732,10 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
             <div class="field"><label for="sCuisine">Cuisine Type</label><input id="sCuisine" value="Ghanaian"/></div>
           </div>
           <div class="form-row">
-            <div class="field"><label for="sPhone">Phone</label><input id="sPhone" value="+1 (415) 555-0199"/></div>
-            <div class="field"><label for="sEmail">Email</label><input id="sEmail" value="hello@dedesafricankitchen.com"/></div>
+            <div class="field"><label for="sPhone">Phone</label><input id="sPhone" value="+1 (519) 477-4701"/></div>
+            <div class="field"><label for="sEmail">Email</label><input id="sEmail" value="dedeshito@yahoo.com"/></div>
           </div>
-          <div class="field"><label for="sAddress">Address</label><input id="sAddress" value="123 Main St, San Francisco, CA 94102"/></div>
+          <div class="field"><label for="sAddress">Address</label><input id="sAddress" value="" placeholder="Street address, City, Province, Postal Code"/></div>
           <div class="field"><label for="sDesc">Description</label><textarea id="sDesc">Authentic Ghanaian home cooking made with love, delivered hot to your door.</textarea></div>
           <div class="form-row">
             <div class="field"><label for="sMinOrder">Min. Order ($)</label><input id="sMinOrder" type="number" value="10"/></div>
@@ -852,7 +889,17 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
   </button>
   <button class="m-tab" data-page="orders">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+    <span class="nav-badge" id="ordersBadgeMobile" style="display:none"></span>
     Orders
+  </button>
+  <button class="m-tab" data-page="analytics">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M21 12A9 9 0 0 0 12 3v9z" fill="currentColor" stroke="none" opacity=".25"/></svg>
+    Analytics
+  </button>
+  <button class="m-tab" data-page="messages">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.2L3 21l1.8-6.4A8 8 0 1 1 21 12z"/></svg>
+    <span class="nav-badge" id="msgsBadgeMobile" style="display:none"></span>
+    Messages
   </button>
   <button class="m-tab" data-page="payouts">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>
@@ -869,15 +916,31 @@ FoodieAuth.guardPage({ allowRoles:['vendor'], onAuthorized(profile, session){
 
 <script>
 // ── State ──────────────────────────────────────────────
-// Real menu — only 3 dishes are entered so far. The owner will add the rest
-// of her menu herself via "Add New Item" (categories below are already set
-// up to match her full menu: Main, Stew & Soups, Plantain, Meat, Extras).
-let menuItems = [
-  {id:1,name:'Jollof Rice',category:'Main',priceSmall:12,priceBig:22,prepTime:'15–20 min',photo:'jollof-rice.jpg',available:true,orders:0},
-  {id:2,name:'Fried Rice',category:'Main',priceSmall:12,priceBig:22,prepTime:'15–20 min',photo:'fried-rice.jpg',available:true,orders:0},
-  {id:3,name:'Waakye',category:'Main',priceSmall:13,priceBig:24,prepTime:'20–25 min',photo:'waakye.jpg',available:true,orders:0},
-];
-let nextItemId = 7;
+// Real menu, backed by the Supabase `menu_items` table (see
+// supabase-menu-items.sql) — items and their photos persist for real and
+// feed directly into the real customer-facing menu on food-web.html.
+let menuItems = [];
+
+function mapMenuRow(row){
+  return {
+    id: row.id,
+    name: row.name,
+    category: row.category,
+    priceSmall: row.price_small,
+    priceBig: row.price_big,
+    prepTime: row.prep_time || '',
+    photo: row.photo_url || '',
+    available: row.available,
+  };
+}
+
+async function loadMenuItems(){
+  const { data, error } = await window.sbClient
+    .from('menu_items').select('*').order('created_at', { ascending:true });
+  if(!error && data) menuItems = data.map(mapMenuRow);
+  syncCategoriesWithMenu();
+  renderMenu(); updateStats();
+}
 
 let orders = [];
 
@@ -920,7 +983,11 @@ async function loadOrders(){
   renderDashboard(); renderOrders(); updateOrdersBadge();
 }
 
-let categories = ['Main','Stew & Soups','Plantain','Meat','Extras'];
+const STARTER_CATEGORIES = ['Main','Stew & Soups','Plantain','Meat','Extras'];
+let categories = [...STARTER_CATEGORIES];
+function syncCategoriesWithMenu(){
+  menuItems.forEach(i=>{ if(i.category && !categories.includes(i.category)) categories.push(i.category); });
+}
 let activeOrderFilter = 'all';
 
 // ── Navigation: defined after all render fns below ─────
@@ -957,16 +1024,16 @@ function renderMenu(){
       <div class="item-footer">
         <div class="price">Small CA$${item.priceSmall} · Big CA$${item.priceBig}</div>
         <div class="item-actions">
-          <button class="ic-btn edit" onclick="openEditItemModal(${item.id})" title="Edit" aria-label="Edit ${item.name}">
+          <button class="ic-btn edit" onclick="openEditItemModal('${item.id}')" title="Edit" aria-label="Edit ${item.name}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4z"/></svg>
           </button>
-          <button class="ic-btn del" onclick="deleteItem(${item.id})" title="Delete" aria-label="Delete ${item.name}">
+          <button class="ic-btn del" onclick="deleteItem('${item.id}')" title="Delete" aria-label="Delete ${item.name}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/></svg>
           </button>
         </div>
       </div>
       <div class="avail-toggle">
-        <div class="toggle-track ${item.available?'on':''}" onclick="toggleAvailable(${item.id})"><div class="toggle-thumb"></div></div>
+        <div class="toggle-track ${item.available?'on':''}" onclick="toggleAvailable('${item.id}')"><div class="toggle-thumb"></div></div>
         <span>${item.available?'Available':'Unavailable'}</span>
       </div>
     </div>
@@ -984,26 +1051,32 @@ function renderCatChips(){
   `).join('');
 }
 
-function toggleAvailable(id){
+async function toggleAvailable(id){
   const item=menuItems.find(i=>i.id===id);
   if(!item) return;
-  item.available=!item.available;
+  const next=!item.available;
+  const { error } = await window.sbClient.from('menu_items').update({available:next}).eq('id',id);
+  if(error){ showToast('Could not update — please try again'); return; }
+  item.available=next;
   renderMenu();
   showToast(`${item.name} marked as ${item.available?'available':'unavailable'}`);
 }
 
 function deleteItem(id){
   const item=menuItems.find(i=>i.id===id);
+  if(!item) return;
   openModal(`
     <h4>Delete Item</h4>
     <p style="font-size:14px;color:var(--muted-3);margin:0 0 20px">Remove <strong>${item.name}</strong> from your menu? This cannot be undone.</p>
     <div class="mbtns">
-      <button class="mprimary" style="background:var(--red)" onclick="confirmDelete(${id})">Delete</button>
+      <button class="mprimary" style="background:var(--red)" onclick="confirmDelete('${id}')">Delete</button>
       <button class="mcancel" onclick="closeModal()">Cancel</button>
     </div>
   `);
 }
-function confirmDelete(id){
+async function confirmDelete(id){
+  const { error } = await window.sbClient.from('menu_items').delete().eq('id',id);
+  if(error){ showToast('Could not delete — please try again'); return; }
   menuItems=menuItems.filter(i=>i.id!==id);
   closeModal();
   renderMenu();
@@ -1012,6 +1085,7 @@ function confirmDelete(id){
 
 // ── Add Item Modal ─────────────────────────────────────
 function openAddItemModal(){
+  _pendingPhotoUrls.mi = '';
   openModal(`
     <h4>Add New Item</h4>
     <div class="form-grid">
@@ -1028,11 +1102,12 @@ function openAddItemModal(){
         <div class="field"><label for="mi-price-small">Small Tray Price ($)</label><input class="mfield" id="mi-price-small" type="number" placeholder="0.00" min="0" style="margin:0"/></div>
         <div class="field"><label for="mi-price-big">Big Tray Price ($)</label><input class="mfield" id="mi-price-big" type="number" placeholder="0.00" min="0" style="margin:0"/></div>
       </div>
-      <div class="form-row" style="margin-top:0">
-        <div class="field"><label for="mi-time">Prep Time</label><input class="mfield" id="mi-time" placeholder="e.g. 10–15 min" style="margin:0"/></div>
-        <div class="field"><label for="mi-photo">Photo URL</label><input class="mfield" id="mi-photo" placeholder="https://..." oninput="previewPhoto('mi-photo','mi-preview')" style="margin:0"/></div>
+      <div class="field" style="margin-top:0"><label for="mi-time">Prep Time</label><input class="mfield" id="mi-time" placeholder="e.g. 10–15 min" style="margin:0"/></div>
+      <div class="field" style="margin-top:0">
+        <label>Photo</label>
+        <div class="photo-preview" id="mi-preview" onclick="document.getElementById('mi-photo-file').click()" style="cursor:pointer">Tap to choose a photo</div>
+        <input type="file" id="mi-photo-file" accept="image/*" style="display:none" onchange="handlePhotoSelect(event,'mi-preview','mi')"/>
       </div>
-      <div class="photo-preview" id="mi-preview">No photo</div>
     </div>
     <div class="mbtns">
       <button class="mprimary" onclick="confirmAddItem()">Add Item</button>
@@ -1041,11 +1116,31 @@ function openAddItemModal(){
   `);
 }
 
-function previewPhoto(inputId, previewId){
-  const url=document.getElementById(inputId).value.trim();
-  const prev=document.getElementById(previewId);
-  if(url){prev.style.backgroundImage=`url('${url}')`;prev.textContent='';}
-  else{prev.style.backgroundImage='';prev.textContent='No photo';}
+// ── Photo upload (tap the preview → pick from gallery/camera → uploads to
+// Supabase Storage's public "menu-photos" bucket) ──────────────────────
+let _pendingPhotoUrls = { mi:'', ei:'' };
+
+async function handlePhotoSelect(event, previewId, prefix){
+  const file = event.target.files[0];
+  if(!file) return;
+  const preview = document.getElementById(previewId);
+  const localUrl = URL.createObjectURL(file);
+  preview.style.backgroundImage = `url('${localUrl}')`;
+  preview.textContent = 'Uploading…';
+  try{
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await window.sbClient.storage.from('menu-photos').upload(path, file, { cacheControl:'3600' });
+    if(error) throw error;
+    const { data } = window.sbClient.storage.from('menu-photos').getPublicUrl(path);
+    _pendingPhotoUrls[prefix] = data.publicUrl;
+    preview.textContent = '';
+  }catch(e){
+    showToast('Photo upload failed — please try again');
+    preview.style.backgroundImage = '';
+    preview.textContent = 'Tap to choose a photo';
+    _pendingPhotoUrls[prefix] = '';
+  }
 }
 
 // ── Custom category dropdown ───────────────────────────
@@ -1105,15 +1200,21 @@ document.addEventListener('click', e=>{
 window.addEventListener('scroll', ()=>closeCatDropdown(), true);
 window.addEventListener('resize', closeCatDropdown);
 
-function confirmAddItem(){
+async function confirmAddItem(){
   const name=document.getElementById('mi-name').value.trim();
   const cat=document.getElementById('mi-cat').dataset.value;
   const priceSmall=parseFloat(document.getElementById('mi-price-small').value)||0;
   const priceBig=parseFloat(document.getElementById('mi-price-big').value)||0;
   const time=document.getElementById('mi-time').value.trim()||'10–15 min';
-  const photo=document.getElementById('mi-photo').value.trim();
+  const photo=_pendingPhotoUrls.mi||'';
   if(!name){showToast('Please enter an item name');return;}
-  menuItems.push({id:nextItemId++,name,category:cat,priceSmall,priceBig,prepTime:time,photo,available:true,orders:0});
+  const { data, error } = await window.sbClient.from('menu_items').insert({
+    name, category:cat, price_small:priceSmall, price_big:priceBig,
+    prep_time:time, photo_url:photo, available:true,
+  }).select().single();
+  if(error){ showToast('Could not save item — please try again'); return; }
+  menuItems.push(mapMenuRow(data));
+  if(!categories.includes(cat)) categories.push(cat);
   closeModal();
   renderMenu();
   updateStats();
@@ -1124,6 +1225,7 @@ function confirmAddItem(){
 function openEditItemModal(id){
   const item=menuItems.find(i=>i.id===id);
   if(!item) return;
+  _pendingPhotoUrls.ei = item.photo||'';
   openModal(`
     <h4>Edit Item</h4>
     <div class="form-grid">
@@ -1140,30 +1242,38 @@ function openEditItemModal(id){
         <div class="field"><label for="ei-price-small">Small Tray Price ($)</label><input class="mfield" id="ei-price-small" type="number" value="${item.priceSmall}" min="0" style="margin:0"/></div>
         <div class="field"><label for="ei-price-big">Big Tray Price ($)</label><input class="mfield" id="ei-price-big" type="number" value="${item.priceBig}" min="0" style="margin:0"/></div>
       </div>
-      <div class="form-row" style="margin-top:0">
-        <div class="field"><label for="ei-time">Prep Time</label><input class="mfield" id="ei-time" value="${item.prepTime}" style="margin:0"/></div>
-        <div class="field"><label for="ei-photo">Photo URL</label><input class="mfield" id="ei-photo" value="${item.photo}" oninput="previewPhoto('ei-photo','ei-preview')" style="margin:0"/></div>
+      <div class="field" style="margin-top:0"><label for="ei-time">Prep Time</label><input class="mfield" id="ei-time" value="${item.prepTime}" style="margin:0"/></div>
+      <div class="field" style="margin-top:0">
+        <label>Photo</label>
+        <div class="photo-preview" id="ei-preview" onclick="document.getElementById('ei-photo-file').click()" style="cursor:pointer;background-image:url('${item.photo}')">${item.photo?'':'Tap to choose a photo'}</div>
+        <input type="file" id="ei-photo-file" accept="image/*" style="display:none" onchange="handlePhotoSelect(event,'ei-preview','ei')"/>
       </div>
-      <div class="photo-preview" id="ei-preview" style="background-image:url('${item.photo}')"></div>
     </div>
     <div class="mbtns">
-      <button class="mprimary" onclick="confirmEditItem(${id})">Save Changes</button>
+      <button class="mprimary" onclick="confirmEditItem('${id}')">Save Changes</button>
       <button class="mcancel" onclick="closeModal()">Cancel</button>
     </div>
   `);
 }
 
-function confirmEditItem(id){
+async function confirmEditItem(id){
   const item=menuItems.find(i=>i.id===id);
   if(!item) return;
   const name=document.getElementById('ei-name').value.trim();
   if(!name){showToast('Name cannot be empty');return;}
-  item.name=name;
-  item.category=document.getElementById('ei-cat').dataset.value;
-  item.priceSmall=parseFloat(document.getElementById('ei-price-small').value)||item.priceSmall;
-  item.priceBig=parseFloat(document.getElementById('ei-price-big').value)||item.priceBig;
-  item.prepTime=document.getElementById('ei-time').value.trim()||item.prepTime;
-  item.photo=document.getElementById('ei-photo').value.trim()||item.photo;
+  const category=document.getElementById('ei-cat').dataset.value;
+  const priceSmall=parseFloat(document.getElementById('ei-price-small').value)||item.priceSmall;
+  const priceBig=parseFloat(document.getElementById('ei-price-big').value)||item.priceBig;
+  const prepTime=document.getElementById('ei-time').value.trim()||item.prepTime;
+  const photo=_pendingPhotoUrls.ei||item.photo;
+  const { error } = await window.sbClient.from('menu_items').update({
+    name, category, price_small:priceSmall, price_big:priceBig,
+    prep_time:prepTime, photo_url:photo,
+  }).eq('id', id);
+  if(error){ showToast('Could not save changes — please try again'); return; }
+  item.name=name; item.category=category; item.priceSmall=priceSmall;
+  item.priceBig=priceBig; item.prepTime=prepTime; item.photo=photo;
+  if(!categories.includes(category)) categories.push(category);
   closeModal();
   renderMenu();
   updateStats();
@@ -1525,8 +1635,9 @@ document.addEventListener('click',e=>{
 // ── Order nav badge ─────────────────────────────────────
 function updateOrdersBadge(){
   const pending=orders.filter(o=>o.status==='pending').length;
-  const b=document.getElementById('ordersBadge');
-  if(b) b.style.display=pending?'block':'none';
+  const shown=pending?'block':'none';
+  const b=document.getElementById('ordersBadge'); if(b) b.style.display=shown;
+  const bm=document.getElementById('ordersBadgeMobile'); if(bm) bm.style.display=shown;
 }
 
 // ── Global stat update ──────────────────────────────────
@@ -1609,12 +1720,19 @@ function vmRenderHead(){
   const conv = VM_CONVS.find(c=>c.id===vmActiveId);
   if(!conv) return;
   document.getElementById('vmChatHead').innerHTML = `
+    <button class="vm-back" aria-label="Back to conversations" onclick="vmCloseChat()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
     <div class="vm-ch-av${conv.online?'':' off'}" style="background-image:url('${conv.av}')"></div>
     <div>
       <div class="vm-ch-name">${conv.name}</div>
       <div class="vm-ch-status">${conv.online?'● Online':'○ Offline'}</div>
     </div>
-    <div class="vm-ch-order">${conv.orderId}</div>`;
+    ${conv.orderId ? `<div class="vm-ch-order">${conv.orderId}</div>` : ''}`;
+}
+
+function vmCloseChat(){
+  document.getElementById('page-messages')?.classList.remove('chat-open');
 }
 
 function vmRenderMessages(){
@@ -1643,6 +1761,7 @@ function vmSwitch(id){
   const conv = VM_CONVS.find(c=>c.id===id);
   if(conv) conv.unread = 0;
   vmRender();
+  document.getElementById('page-messages')?.classList.add('chat-open');
 }
 
 function vmSend(){
@@ -1669,13 +1788,13 @@ document.getElementById('vmInput')?.addEventListener('keydown', e=>{
 
 function vmClearBadge(){
   vmNewMsgCount = 0;
-  const b = document.getElementById('msgsBadge');
-  if(b) b.style.display = 'none';
+  const b = document.getElementById('msgsBadge'); if(b) b.style.display = 'none';
+  const bm = document.getElementById('msgsBadgeMobile'); if(bm) bm.style.display = 'none';
 }
 
 function escStr(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// Listen for customer messages from Food Web.html
+// Listen for customer messages from food-web.html
 window.addEventListener('storage', e=>{
   if(e.key !== CHAT_KEY) return;
   const d = JSON.parse(e.newValue||'null');
@@ -1684,8 +1803,8 @@ window.addEventListener('storage', e=>{
   if(!last || last.from !== 'customer') return;
   // show badge on nav button
   vmNewMsgCount++;
-  const b = document.getElementById('msgsBadge');
-  if(b) b.style.display = 'block';
+  const b = document.getElementById('msgsBadge'); if(b) b.style.display = 'block';
+  const bm = document.getElementById('msgsBadgeMobile'); if(bm) bm.style.display = 'block';
   // if messages page is open, re-render
   const onMessages = document.getElementById('page-messages')?.classList.contains('active');
   if(onMessages && vmActiveId==='john'){ vmRenderConvList(); vmRenderMessages(); }
@@ -1699,11 +1818,17 @@ document.querySelectorAll('.nav-btn[data-page]').forEach(b=>{
 });
 
 // ── Init ───────────────────────────────────────────────
-renderMenu();
+loadMenuItems();
 renderPayouts();
 renderNotifications();
 vmRender();
 loadOrders();
+
+// Live-sync the menu if it changes elsewhere (e.g. edited on another device).
+window.sbClient.channel('menu-items-changes').on('postgres_changes',
+  { event:'*', schema:'public', table:'menu_items' },
+  () => loadMenuItems()
+).subscribe();
 
 // Live push the instant a new order comes in (requires the orders table to
 // have realtime replication enabled — see supabase-orders.sql).

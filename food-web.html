@@ -851,6 +851,8 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   document.getElementById('profValEmail').textContent = session.user.email;
   const monthEl = document.getElementById('analyticsMonth');
   if(monthEl) monthEl.textContent = new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'});
+  const greetEl = document.getElementById('homeGreeting');
+  if(greetEl) greetEl.textContent = 'Hello, ' + name.split(' ')[0];
 }});
 </script>
 
@@ -894,7 +896,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
     <div class="topbar">
       <div class="greet">
-        <p class="hi">Hello John</p>
+        <p class="hi" id="homeGreeting">Hello</p>
         <h1>Welcome Back</h1>
       </div>
       <div class="topbar-right">
@@ -920,51 +922,12 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <!-- Our Menu tabs -->
     <div class="menu-head">
       <h3>Our Menu</h3>
-      <div class="menu-tabs" id="menuTabs">
-        <button class="tab active" data-tab="Main"><span>Main</span></button>
-      </div>
-      <a href="#" class="see-all">See All</a>
+      <div class="menu-tabs" id="menuTabs"></div>
     </div>
-    <p style="margin:-10px 0 16px;font-size:12px;color:var(--muted);font-weight:500">Every dish comes in a Small or Big Tray — perfect for a quick bite or a group order. More of the menu coming soon!</p>
+    <p style="margin:-10px 0 16px;font-size:12px;color:var(--muted);font-weight:500">Every dish comes in a Small or Big Tray — perfect for a quick bite or a group order.</p>
 
     <!-- Dishes -->
-    <div class="dishes">
-      <article class="dish">
-        <div class="photo" style="background-image:url('jollof-rice.jpg')"></div>
-        <div>
-          <h4 class="name">Jollof Rice</h4>
-          <div class="time">15–20 minutes</div>
-          <div class="price">From CA$12</div>
-        </div>
-        <button class="add" data-add="Jollof Rice" data-price-small="12" data-price-big="22" data-img="jollof-rice.jpg" aria-label="Add">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        </button>
-      </article>
-
-      <article class="dish">
-        <div class="photo" style="background-image:url('fried-rice.jpg')"></div>
-        <div>
-          <h4 class="name">Fried Rice</h4>
-          <div class="time">15–20 minutes</div>
-          <div class="price">From CA$12</div>
-        </div>
-        <button class="add" data-add="Fried Rice" data-price-small="12" data-price-big="22" data-img="fried-rice.jpg" aria-label="Add">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        </button>
-      </article>
-
-      <article class="dish">
-        <div class="photo" style="background-image:url('waakye.jpg')"></div>
-        <div>
-          <h4 class="name">Waakye</h4>
-          <div class="time">20–25 minutes</div>
-          <div class="price">From CA$13</div>
-        </div>
-        <button class="add" data-add="Waakye" data-price-small="13" data-price-big="24" data-img="waakye.jpg" aria-label="Add">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        </button>
-      </article>
-    </div>
+    <div class="dishes" id="dishesGrid"></div>
   </main>
 
   <!-- ============ RIGHT PANEL ============ -->
@@ -996,43 +959,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <a href="#" class="see-all">See All</a>
     </div>
 
-    <div class="order-list" id="orderList">
-      <div class="order-item" data-id="jollof-rice-big" data-price="22">
-        <div class="pic" style="background-image:url('jollof-rice.jpg')"></div>
-        <div class="info">
-          <p class="t">Jollof Rice</p>
-          <div class="sub">Big Tray</div>
-          <div class="p">CA$22</div>
-        </div>
-        <div class="qty">
-          <button class="dec" aria-label="decrease">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg>
-          </button>
-          <span class="n">01</span>
-          <button class="inc" aria-label="increase">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <div class="order-item" data-id="waakye-big" data-price="24">
-        <div class="pic" style="background-image:url('waakye.jpg')"></div>
-        <div class="info">
-          <p class="t">Waakye</p>
-          <div class="sub">Big Tray</div>
-          <div class="p">CA$24</div>
-        </div>
-        <div class="qty">
-          <button class="dec" aria-label="decrease">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg>
-          </button>
-          <span class="n">01</span>
-          <button class="inc" aria-label="increase">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-          </button>
-        </div>
-      </div>
-    </div>
+    <div class="order-list" id="orderList"></div>
 
     <div class="fulfill-toggle" data-fulfill-toggle>
       <button type="button" class="fulfill-btn" data-fulfill="delivery">🚚 Delivery</button>
@@ -1538,18 +1465,88 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 </div>
 
 <script>
-  // ---- Tab switching ----
-  const tabs = document.querySelectorAll('#menuTabs .tab');
-  tabs.forEach(t => t.addEventListener('click', () => {
-    tabs.forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-  }));
+  // ---- Real menu (Supabase-backed, managed by the vendor) ----
+  function escAttr(s){ return String(s).replace(/"/g,'&quot;'); }
+
+  let realMenu = [];
+  let activeMenuCategory = 'All';
+
+  async function loadRealMenu(){
+    const { data, error } = await window.sbClient
+      .from('menu_items').select('*').eq('available', true).order('created_at', { ascending:true });
+    if(!error && data){
+      realMenu = data.map(row => ({
+        name: row.name, category: row.category,
+        priceSmall: row.price_small, priceBig: row.price_big,
+        prepTime: row.prep_time || '15–20 minutes', photo: row.photo_url || '',
+      }));
+    }
+    renderMenuTabs();
+    renderDishes();
+  }
+
+  function renderMenuTabs(){
+    const cats = [];
+    realMenu.forEach(i=>{ if(i.category && !cats.includes(i.category)) cats.push(i.category); });
+    const tabsEl = document.getElementById('menuTabs');
+    tabsEl.innerHTML = ['All', ...cats].map(c =>
+      `<button class="tab${c===activeMenuCategory?' active':''}" data-tab="${escAttr(c)}"><span>${c}</span></button>`
+    ).join('');
+    tabsEl.querySelectorAll('.tab').forEach(t=>{
+      t.addEventListener('click', ()=>{
+        activeMenuCategory = t.dataset.tab;
+        tabsEl.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        renderDishes();
+      });
+    });
+  }
+
+  function renderDishes(){
+    const wrap = document.getElementById('dishesGrid');
+    const items = activeMenuCategory === 'All' ? realMenu : realMenu.filter(i=>i.category===activeMenuCategory);
+    if(items.length === 0){
+      wrap.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:14px;font-weight:500;padding:30px 0">${realMenu.length===0 ? 'No dishes available yet — check back soon!' : 'No dishes in this category yet.'}</p>`;
+      return;
+    }
+    wrap.innerHTML = items.map(item => `
+      <article class="dish">
+        <div class="photo" style="background-image:url('${item.photo}')"></div>
+        <div>
+          <h4 class="name">${item.name}</h4>
+          <div class="time">${item.prepTime}</div>
+          <div class="price">From CA$${item.priceSmall}</div>
+        </div>
+        <button class="add" data-add="${escAttr(item.name)}" data-price-small="${item.priceSmall}" data-price-big="${item.priceBig}" data-img="${escAttr(item.photo)}" aria-label="Add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+        </button>
+      </article>
+    `).join('');
+    wireAddButtons();
+  }
+
+  function wireAddButtons(){
+    document.querySelectorAll('.dish .add').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        openSizeModal(btn.dataset.add, parseFloat(btn.dataset.priceSmall), parseFloat(btn.dataset.priceBig), btn.dataset.img);
+        btn.animate(
+          [{transform:'scale(1)'},{transform:'scale(.85)'},{transform:'scale(1)'}],
+          {duration:220, easing:'ease-out'}
+        );
+      });
+    });
+  }
+
+  loadRealMenu();
+
+  // Live-sync the menu if the vendor changes it while a customer has this open.
+  window.sbClient.channel('menu-items-changes-customer').on('postgres_changes',
+    { event:'*', schema:'public', table:'menu_items' },
+    () => loadRealMenu()
+  ).subscribe();
 
   // ---- Cart state ----
-  const cart = {
-    'jollof-rice-big':{name:'Jollof Rice', sub:'Big Tray', size:'big', price:22, qty:1, img:'jollof-rice.jpg'},
-    'waakye-big':     {name:'Waakye',      sub:'Big Tray', size:'big', price:24, qty:1, img:'waakye.jpg'},
-  };
+  const cart = {};
 
   function recalcTotal(){
     const sum = Object.values(cart).reduce((s,i)=> s + i.price*i.qty, 0);
@@ -1614,19 +1611,6 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   function renderItem(el, item){
     el.querySelector('.n').textContent = pad(item.qty);
   }
-
-  document.querySelectorAll('.order-item').forEach(el=>{
-    const id = el.dataset.id;
-    el.querySelector('.inc').addEventListener('click', ()=>{
-      cart[id].qty = Math.min(99, cart[id].qty + 1);
-      renderItem(el, cart[id]); recalcTotal();
-    });
-    el.querySelector('.dec').addEventListener('click', ()=>{
-      if(cart[id].qty > 1){
-        cart[id].qty--; renderItem(el, cart[id]); recalcTotal();
-      }
-    });
-  });
 
   // ---- Add to cart (shared by dish cards + size modal) ----
   function addToCart(name, size, price, qty, img){
@@ -1706,17 +1690,6 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     addToCart(name, size, price, qty, img);
     closeModal();
   }
-
-  // ---- Add buttons on dish cards ----
-  document.querySelectorAll('.dish .add').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      openSizeModal(btn.dataset.add, parseFloat(btn.dataset.priceSmall), parseFloat(btn.dataset.priceBig), btn.dataset.img);
-      btn.animate(
-        [{transform:'scale(1)'},{transform:'scale(.85)'},{transform:'scale(1)'}],
-        {duration:220, easing:'ease-out'}
-      );
-    });
-  });
 
   recalcTotal(); // also calls updateCartBadge() to initialise the badge
 
@@ -1964,7 +1937,10 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       openModal(`<div style="text-align:center;padding:8px 0">
         <div style="width:64px;height:64px;background:#e7f7ef;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="32" height="32"><path d="M20 6 9 17l-5-5"/></svg></div>
         <h4 style="margin:0 0 8px">Order Placed!</h4>
-        <p style="font-size:13px;color:var(--muted-3);margin:0 0 22px;line-height:1.55">Order ${shortId} sent to the kitchen.<br/>${etaLine}</p>
+        <p style="font-size:13px;color:var(--muted-3);margin:0 0 16px;line-height:1.55">Order ${shortId} sent to the kitchen.<br/>${etaLine}</p>
+        <p style="font-size:13px;background:var(--chip);border-radius:12px;padding:12px 14px;margin:0 0 22px;line-height:1.5">
+          Please call <a href="tel:+15194774701" style="color:var(--orange-2);font-weight:700">+1 (519) 477-4701</a> to confirm your order and arrange payment.
+        </p>
         <div class="mbtns"><button class="mprimary" onclick="closeModal();goTo('messages')">Track Order</button><button class="mcancel" onclick="closeModal()">Close</button></div>
       </div>`);
     } finally {

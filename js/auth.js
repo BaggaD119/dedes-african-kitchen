@@ -1,6 +1,6 @@
 window.FoodieAuth = {
   isMobile(){ return window.matchMedia('(max-width:768px)').matches; },
-  customerHome(){ return this.isMobile() ? 'Food Mobile.html' : 'Food Web.html'; },
+  customerHome(){ return this.isMobile() ? 'food-mobile.html' : 'food-web.html'; },
 
   async guardPage({ allowRoles, onAuthorized }){
     try{
