@@ -1672,7 +1672,7 @@ function goTo(page){
   if(page==='orders') renderOrders();
   if(page==='analytics') renderAnalytics();
   if(page==='payouts') renderPayouts();
-  if(page==='messages'){ vmRender(); vmClearBadge(); }
+  if(page==='messages'){ loadMessages().then(()=>{ if(vmActiveCustomerId) vmSwitch(vmActiveCustomerId); }); }
 }
 
 // ── Mobile nav ─────────────────────────────────────────
@@ -1680,43 +1680,56 @@ document.querySelectorAll('.m-tab[data-page]').forEach(b=>{
   b.addEventListener('click',()=>goTo(b.dataset.page));
 });
 
-// ── Vendor Messages (localStorage cross-page sync) ─────
-const CHAT_KEY = 'foodie_chat_v1';
-function vmNow(){ return new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}); }
-function vmGet(){ try{ return JSON.parse(localStorage.getItem(CHAT_KEY)||'null'); }catch(e){ return null; } }
-function vmSet(d){ localStorage.setItem(CHAT_KEY, JSON.stringify(d)); }
+// ── Vendor Messages (real, Supabase-backed — works across devices) ─────
+let vmConversations = []; // [{customerId,name,email,messages:[],unread}]
+let vmActiveCustomerId = null;
 
-const VM_CONVS = [
-  {
-    id:'john', name:'Customer Chat', orderId:'', online:true, live:true, unread:0,
-    av:'',
-    mock:[]
-  },
-];
-let vmActiveId = 'john';
-let vmNewMsgCount = 0;
+function escStr(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-function vmGetMessages(){
-  const conv = VM_CONVS.find(c=>c.id===vmActiveId);
-  if(conv?.live){
-    const d = vmGet();
-    return d?.messages || [];
-  }
-  return conv?.mock || [];
+async function loadMessages(){
+  const { data, error } = await window.sbClient
+    .from('messages').select('*').order('created_at', { ascending:true });
+  if(error || !data) return;
+  const map = {};
+  data.forEach(m=>{
+    if(!map[m.customer_id]){
+      map[m.customer_id] = { customerId:m.customer_id, name:m.customer_name||'Customer', email:m.customer_email||'', messages:[], unread:0 };
+    }
+    map[m.customer_id].messages.push(m);
+    if(m.sender==='customer' && !m.read) map[m.customer_id].unread++;
+  });
+  vmConversations = Object.values(map).sort((a,b)=>{
+    const at = a.messages.at(-1)?.created_at || '';
+    const bt = b.messages.at(-1)?.created_at || '';
+    return bt.localeCompare(at);
+  });
+  if(!vmActiveCustomerId && vmConversations.length) vmActiveCustomerId = vmConversations[0].customerId;
+  vmRender();
+  updateMsgsBadgeFromConvs();
+}
+
+function updateMsgsBadgeFromConvs(){
+  const totalUnread = vmConversations.reduce((s,c)=>s+c.unread,0);
+  const shown = totalUnread>0 ? 'block' : 'none';
+  const b = document.getElementById('msgsBadge'); if(b) b.style.display = shown;
+  const bm = document.getElementById('msgsBadgeMobile'); if(bm) bm.style.display = shown;
 }
 
 function vmRenderConvList(){
   const el = document.getElementById('vmConvList');
-  el.innerHTML = VM_CONVS.map(conv=>{
-    const isActive = conv.id === vmActiveId;
-    const msgs = conv.live ? (vmGet()?.messages||[]) : conv.mock;
-    const last = msgs.filter(m=>m.from!=='system').at(-1);
+  if(vmConversations.length === 0){
+    el.innerHTML = `<div style="text-align:center;color:var(--muted);padding:24px 12px;font-size:13px">No messages yet</div>`;
+    return;
+  }
+  el.innerHTML = vmConversations.map(conv=>{
+    const isActive = conv.customerId === vmActiveCustomerId;
+    const last = conv.messages.at(-1);
     const preview = last ? last.text : 'No messages yet';
     return `
-      <div class="vm-conv${isActive?' active':''}" onclick="vmSwitch('${conv.id}')">
-        <div class="vm-av${conv.online?'':' off'}" style="background-image:url('${conv.av}')"></div>
+      <div class="vm-conv${isActive?' active':''}" onclick="vmSwitch('${conv.customerId}')">
+        <div class="vm-av"></div>
         <div class="vm-ci-info">
-          <div class="vm-ci-name">${conv.name}</div>
+          <div class="vm-ci-name">${escStr(conv.name)}</div>
           <div class="vm-ci-prev">${escStr(preview.slice(0,40))}</div>
         </div>
         ${conv.unread>0?`<span class="vm-ci-badge">${conv.unread}</span>`:''}
@@ -1725,18 +1738,18 @@ function vmRenderConvList(){
 }
 
 function vmRenderHead(){
-  const conv = VM_CONVS.find(c=>c.id===vmActiveId);
-  if(!conv) return;
-  document.getElementById('vmChatHead').innerHTML = `
+  const conv = vmConversations.find(c=>c.customerId===vmActiveCustomerId);
+  const head = document.getElementById('vmChatHead');
+  if(!conv){ head.innerHTML = ''; return; }
+  head.innerHTML = `
     <button class="vm-back" aria-label="Back to conversations" onclick="vmCloseChat()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
     </button>
-    <div class="vm-ch-av${conv.online?'':' off'}" style="background-image:url('${conv.av}')"></div>
+    <div class="vm-ch-av"></div>
     <div>
-      <div class="vm-ch-name">${conv.name}</div>
-      <div class="vm-ch-status">${conv.online?'● Online':'○ Offline'}</div>
-    </div>
-    ${conv.orderId ? `<div class="vm-ch-order">${conv.orderId}</div>` : ''}`;
+      <div class="vm-ch-name">${escStr(conv.name)}</div>
+      <div class="vm-ch-status">${escStr(conv.email)}</div>
+    </div>`;
 }
 
 function vmCloseChat(){
@@ -1744,16 +1757,13 @@ function vmCloseChat(){
 }
 
 function vmRenderMessages(){
-  const msgs = vmGetMessages();
+  const conv = vmConversations.find(c=>c.customerId===vmActiveCustomerId);
   const el = document.getElementById('vmMessages');
-  el.innerHTML = msgs.map(m=>{
-    if(m.from==='system') return `<div class="vm-sys">${escStr(m.text)}</div>`;
-    const isMe = m.from==='vendor';
-    const tick = isMe ? (m.read?'✓✓':'<span style="opacity:.45">✓</span>') : '';
-    return `<div class="vm-bubble ${isMe?'me':'them'}">
-      ${escStr(m.text)}
-      <span class="vbt">${m.time||''}${isMe?` ${tick}`:''}</span>
-    </div>`;
+  if(!conv){ el.innerHTML = ''; return; }
+  el.innerHTML = conv.messages.map(m=>{
+    const isMe = m.sender === 'vendor';
+    const time = new Date(m.created_at).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+    return `<div class="vm-bubble ${isMe?'me':'them'}">${escStr(m.text)}<span class="vbt">${time}</span></div>`;
   }).join('');
   el.scrollTop = el.scrollHeight;
 }
@@ -1764,61 +1774,60 @@ function vmRender(){
   vmRenderMessages();
 }
 
-function vmSwitch(id){
-  vmActiveId = id;
-  const conv = VM_CONVS.find(c=>c.id===id);
-  if(conv) conv.unread = 0;
+async function vmSwitch(customerId){
+  vmActiveCustomerId = customerId;
+  const conv = vmConversations.find(c=>c.customerId===customerId);
   vmRender();
   document.getElementById('page-messages')?.classList.add('chat-open');
+  if(conv && conv.unread > 0){
+    const unreadIds = conv.messages.filter(m=>m.sender==='customer' && !m.read).map(m=>m.id);
+    conv.messages.forEach(m=>{ if(m.sender==='customer') m.read = true; });
+    conv.unread = 0;
+    vmRenderConvList();
+    updateMsgsBadgeFromConvs();
+    if(unreadIds.length) await window.sbClient.from('messages').update({read:true}).in('id', unreadIds);
+  }
 }
 
-function vmSend(){
+async function vmSend(){
   const input = document.getElementById('vmInput');
   const text = input.value.trim();
-  if(!text) return;
+  if(!text || !vmActiveCustomerId) return;
   input.value = '';
-  const conv = VM_CONVS.find(c=>c.id===vmActiveId);
+  const conv = vmConversations.find(c=>c.customerId===vmActiveCustomerId);
   if(!conv) return;
-  if(conv.live){
-    const d = vmGet() || {messages:[]};
-    d.messages.push({from:'vendor', text, time:vmNow(), read:false});
-    vmSet(d);
+  const { data, error } = await window.sbClient.from('messages').insert({
+    customer_id: vmActiveCustomerId,
+    customer_name: conv.name,
+    customer_email: conv.email,
+    sender: 'vendor',
+    text,
+  }).select().single();
+  if(!error && data){
+    conv.messages.push(data);
+    vmRenderMessages();
+    vmRenderConvList();
   } else {
-    conv.mock.push({from:'vendor', text, time:vmNow(), read:false});
+    showToast('Could not send message — please try again');
   }
-  vmRender();
-  input.focus();
 }
 
 document.getElementById('vmInput')?.addEventListener('keydown', e=>{
   if(e.key==='Enter'){ e.preventDefault(); vmSend(); }
 });
 
-function vmClearBadge(){
-  vmNewMsgCount = 0;
-  const b = document.getElementById('msgsBadge'); if(b) b.style.display = 'none';
-  const bm = document.getElementById('msgsBadgeMobile'); if(bm) bm.style.display = 'none';
-}
-
-function escStr(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-// Listen for customer messages from food-web.html
-window.addEventListener('storage', e=>{
-  if(e.key !== CHAT_KEY) return;
-  const d = JSON.parse(e.newValue||'null');
-  if(!d) return;
-  const last = d.messages?.at(-1);
-  if(!last || last.from !== 'customer') return;
-  // show badge on nav button
-  vmNewMsgCount++;
-  const b = document.getElementById('msgsBadge'); if(b) b.style.display = 'block';
-  const bm = document.getElementById('msgsBadgeMobile'); if(bm) bm.style.display = 'block';
-  // if messages page is open, re-render
-  const onMessages = document.getElementById('page-messages')?.classList.contains('active');
-  if(onMessages && vmActiveId==='john'){ vmRenderConvList(); vmRenderMessages(); }
-  else { VM_CONVS.find(c=>c.id==='john').unread++; vmRenderConvList(); }
-  showToast('New customer message');
-});
+// Realtime: refresh whenever a customer sends a new message
+window.sbClient.channel('messages-vendor-changes').on('postgres_changes',
+  { event:'INSERT', schema:'public', table:'messages' },
+  payload => {
+    if(payload.new.sender !== 'customer') return; // vendor's own sends are already handled locally
+    loadMessages().then(()=>{
+      showToast('New customer message');
+      const onMessages = document.getElementById('page-messages')?.classList.contains('active');
+      if(onMessages && vmActiveCustomerId === payload.new.customer_id) vmSwitch(payload.new.customer_id);
+    });
+  }
+).subscribe();
 
 // ── Desktop nav ────────────────────────────────────────
 document.querySelectorAll('.nav-btn[data-page]').forEach(b=>{
@@ -1829,7 +1838,7 @@ document.querySelectorAll('.nav-btn[data-page]').forEach(b=>{
 loadMenuItems();
 renderPayouts();
 renderNotifications();
-vmRender();
+loadMessages();
 loadOrders();
 
 // Live-sync the menu if it changes elsewhere (e.g. edited on another device).

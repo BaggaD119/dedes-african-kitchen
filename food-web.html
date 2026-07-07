@@ -861,6 +861,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   if(monthEl) monthEl.textContent = new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'});
   const greetEl = document.getElementById('homeGreeting');
   if(greetEl) greetEl.textContent = 'Hello, ' + name.split(' ')[0];
+  window.dispatchEvent(new CustomEvent('customerReady'));
 }});
 </script>
 
@@ -1745,53 +1746,77 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     });
   });
 
-  // ---- Chat send ----
+  // ---- Chat send (real, Supabase-backed — works across devices) ----
   const chatBox = document.getElementById('chatBox');
   const chatStream = document.getElementById('chatStream');
   const sendBtn = document.getElementById('sendBtn');
 
-  // ── LocalStorage sync with Vendor.html ──────────────────
-  const _CHAT_KEY = 'foodie_chat_v1';
-  function _cNow(){ return new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}); }
-  function _cGet(){ try{ return JSON.parse(localStorage.getItem(_CHAT_KEY)||'null'); }catch(e){ return null; } }
-  function _cSet(d){ localStorage.setItem(_CHAT_KEY, JSON.stringify(d)); }
-  // start with a genuinely empty thread if none exists yet
-  if(!_cGet()){
-    _cSet({messages:[]});
-  }
-  // incoming vendor replies from Vendor.html
-  window.addEventListener('storage', e=>{
-    if(e.key !== _CHAT_KEY) return;
-    const d = JSON.parse(e.newValue||'null');
-    if(!d) return;
-    const last = d.messages?.at(-1);
-    if(!last || last.from !== 'vendor') return;
-    const b = document.createElement('div');
-    b.className = 'bubble them';
-    b.textContent = last.text;
-    chatStream.appendChild(b);
-    chatStream.scrollTop = chatStream.scrollHeight;
-    showToast("New message from Dede's African Kitchen 🍕");
-  });
+  let chatMessages = [];
+  function escChat(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  function sendMsg(){
-    const v = chatBox.value.trim();
-    if(!v) return;
-    const b = document.createElement('div');
-    b.className = 'bubble me';
-    b.textContent = v;
-    chatStream.appendChild(b);
-    chatBox.value = '';
+  function renderChatStream(){
+    chatStream.innerHTML = chatMessages.map(m=>{
+      const isMe = m.sender === 'customer';
+      return `<div class="bubble ${isMe?'me':'them'}">${escChat(m.text)}</div>`;
+    }).join('');
     chatStream.scrollTop = chatStream.scrollHeight;
-    // persist so vendor sees it in Vendor.html
-    const d = _cGet() || {messages:[]};
-    d.messages.push({from:'customer', text:v, time:_cNow()});
-    _cSet(d);
+  }
+
+  async function loadChatMessages(){
+    if(!window.__customer?.id) return;
+    const { data, error } = await window.sbClient
+      .from('messages').select('*').eq('customer_id', window.__customer.id).order('created_at', { ascending:true });
+    if(!error && data) chatMessages = data;
+    renderChatStream();
+    const last = chatMessages.at(-1);
+    const prevEl = document.querySelector('#convList .conv .pv');
+    if(prevEl && last) prevEl.textContent = escChat(last.text).slice(0,50);
+    const unreadIds = chatMessages.filter(m=>m.sender==='vendor' && !m.read).map(m=>m.id);
+    if(unreadIds.length) await window.sbClient.from('messages').update({read:true}).in('id', unreadIds);
+  }
+
+  async function sendMsg(){
+    const v = chatBox.value.trim();
+    if(!v || !window.__customer?.id) return;
+    chatBox.value = '';
+    const { data, error } = await window.sbClient.from('messages').insert({
+      customer_id: window.__customer.id,
+      customer_name: window.__customer.name,
+      customer_email: window.__customer.email,
+      sender: 'customer',
+      text: v,
+    }).select().single();
+    if(!error && data){
+      chatMessages.push(data);
+      renderChatStream();
+      const prevEl = document.querySelector('#convList .conv .pv');
+      if(prevEl) prevEl.textContent = escChat(data.text).slice(0,50);
+    } else {
+      showToast('Could not send message — please try again');
+    }
   }
   if(sendBtn){
     sendBtn.addEventListener('click', sendMsg);
     chatBox.addEventListener('keydown', e=>{ if(e.key === 'Enter') sendMsg(); });
   }
+
+  function initChat(){
+    loadChatMessages();
+    window.sbClient.channel('messages-customer-'+window.__customer.id).on('postgres_changes',
+      { event:'INSERT', schema:'public', table:'messages', filter:`customer_id=eq.${window.__customer.id}` },
+      payload => {
+        if(payload.new.sender !== 'vendor') return; // our own sends are already added locally
+        chatMessages.push(payload.new);
+        renderChatStream();
+        const prevEl = document.querySelector('#convList .conv .pv');
+        if(prevEl) prevEl.textContent = escChat(payload.new.text).slice(0,50);
+        showToast("New message from Dede's African Kitchen 🍕");
+        window.sbClient.from('messages').update({read:true}).eq('id', payload.new.id).then(()=>{});
+      }
+    ).subscribe();
+  }
+  if(window.__customer) initChat();
+  else window.addEventListener('customerReady', initChat);
 
   // ── Toast ──────────────────────────────────────────────
   const _toast = document.createElement('div');
