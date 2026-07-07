@@ -101,7 +101,15 @@
   .center{padding:28px 28px 36px;overflow-y:auto;min-height:0}
   .topbar{
     display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:22px;
+    position:sticky;top:0;z-index:5;background:var(--card,#fff);padding-top:2px;margin-top:-2px;
   }
+
+  /* Slim, pill-shaped scrollbar (matches the seftonprofintech dashboard reference) */
+  ::-webkit-scrollbar{width:7px;height:7px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--muted-2);border-radius:5px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+  *{scrollbar-width:thin;scrollbar-color:var(--muted-2) transparent}
   .greet .hi{color:var(--muted);font-size:14px;font-weight:500;margin:0 0 4px}
   .greet h1{font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em}
   .search{
