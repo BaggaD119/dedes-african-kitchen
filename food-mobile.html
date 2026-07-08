@@ -218,11 +218,11 @@
 </head>
 <body>
 <script>
-FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
+FoodieAuth.guardPage({ allowRoles:['customer'], allowGuest:true, onAuthorized(profile, session){
   const first = (profile.full_name || 'Customer').split(' ')[0];
   const hi = document.querySelector('#screen-home .hi'); if(hi) hi.textContent = 'Hello, ' + first;
   const nm = document.querySelector('#screen-profile .nm'); if(nm) nm.textContent = profile.full_name || 'Customer';
-  const em = document.querySelector('#screen-profile .em'); if(em) em.textContent = session.user.email;
+  const em = document.querySelector('#screen-profile .em'); if(em) em.textContent = session.user.email || 'Guest account';
 }});
 </script>
 <div class="app">
@@ -256,12 +256,12 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       </div>
       <div class="dishes">
         <article class="dish">
-          <div class="photo" style="background-image:url('jollof-rice.jpg')"></div>
+          <div class="photo" style="background-image:url('jollof-333.jpg')"></div>
           <div><h4 class="name">Jollof Rice</h4><div class="time">15–20 minutes</div><div class="price">From CA$12</div></div>
           <button class="add" data-nav="cart" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
         </article>
         <article class="dish">
-          <div class="photo" style="background-image:url('fried-rice.jpg')"></div>
+          <div class="photo" style="background-image:url('friedrice-new.jpg')"></div>
           <div><h4 class="name">Fried Rice</h4><div class="time">15–20 minutes</div><div class="price">From CA$12</div></div>
           <button class="add" data-nav="cart" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
         </article>
@@ -274,7 +274,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
           <button class="add" data-nav="cart" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
         </div>
         <div class="pop-item">
-          <div class="pic" style="background-image:url('jollof-rice.jpg')"></div>
+          <div class="pic" style="background-image:url('jollof-333.jpg')"></div>
           <div class="info"><p class="t">Jollof Rice</p><div class="sub">Big Tray</div><div class="p">CA$22</div></div>
           <button class="add" data-nav="cart" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
         </div>
@@ -309,7 +309,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="order-head"><h4>Order Menu</h4><a class="see-all" href="#">See All</a></div>
       <div class="order-list" id="orderList2">
         <div class="order-item" data-id="jollof-rice-big" data-price="22">
-          <div class="pic" style="background-image:url('jollof-rice.jpg')"></div>
+          <div class="pic" style="background-image:url('jollof-333.jpg')"></div>
           <div class="info"><p class="t">Jollof Rice</p><div class="sub">Big Tray</div><div class="p">CA$22</div></div>
           <div class="qty">
             <button class="dec" aria-label="Decrease quantity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
@@ -355,8 +355,8 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     </div>
     <div class="scroll">
       <div class="menu-grid">
-        <article class="gcard"><button class="heart" aria-label="Add to favorites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('jollof-rice.jpg')"></div><p class="t">Jollof Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart" aria-label="Add to favorites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('fried-rice.jpg')"></div><p class="t">Fried Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart" aria-label="Add to favorites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('jollof-333.jpg')"></div><p class="t">Jollof Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart" aria-label="Add to favorites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('friedrice-new.jpg')"></div><p class="t">Fried Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
         <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('waakye.jpg')"></div><p class="t">Waakye</p><div class="time">20–25 min</div><div class="foot"><span class="p">CA$13</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
       </div>
       <div style="height:14px"></div>
@@ -390,17 +390,17 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="order-stack">
         <article class="ocard">
           <div class="ohead"><div class="oid">Order #2845<span class="date">May 17, 2026 · 9:24 AM</span></div><span class="pill-status delivering">On the way</span></div>
-          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('jollof-rice.jpg')"></div><div class="dot" style="background-image:url('waakye.jpg')"></div></div><div class="osum"><strong>2 items</strong> · Jollof Rice, Waakye</div></div>
+          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('jollof-333.jpg')"></div><div class="dot" style="background-image:url('waakye.jpg')"></div></div><div class="osum"><strong>2 items</strong> · Jollof Rice, Waakye</div></div>
           <div class="ofoot"><div class="total-mini">Total<b>CA$31.00</b></div><button class="o-action">Track Order</button></div>
         </article>
         <article class="ocard">
           <div class="ohead"><div class="oid">Order #2841<span class="date">May 17, 2026 · 8:02 AM</span></div><span class="pill-status preparing">Preparing</span></div>
-          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('jollof-rice.jpg')"></div><div class="dot" style="background-image:url('fried-rice.jpg')"></div><div class="dot" style="background-image:url('waakye.jpg')"></div></div><div class="osum"><strong>3 items</strong> · Jollof Rice, Fried Rice, Waakye</div></div>
+          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('jollof-333.jpg')"></div><div class="dot" style="background-image:url('friedrice-new.jpg')"></div><div class="dot" style="background-image:url('waakye.jpg')"></div></div><div class="osum"><strong>3 items</strong> · Jollof Rice, Fried Rice, Waakye</div></div>
           <div class="ofoot"><div class="total-mini">Total<b>CA$26.00</b></div><button class="o-action">Track Order</button></div>
         </article>
         <article class="ocard">
           <div class="ohead"><div class="oid">Order #2790<span class="date">May 12, 2026 · 7:48 PM</span></div><span class="pill-status completed">Delivered</span></div>
-          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('fried-rice.jpg')"></div><div class="dot" style="background-image:url('jollof-rice.jpg')"></div></div><div class="osum"><strong>2 items</strong> · Fried Rice, Jollof Rice</div></div>
+          <div class="obody"><div class="ostack-imgs"><div class="dot" style="background-image:url('friedrice-new.jpg')"></div><div class="dot" style="background-image:url('jollof-333.jpg')"></div></div><div class="osum"><strong>2 items</strong> · Fried Rice, Jollof Rice</div></div>
           <div class="ofoot"><div class="total-mini">Total<b>CA$28.00</b></div><button class="o-action ghost">Reorder</button></div>
         </article>
       </div>
@@ -431,8 +431,8 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     </div>
     <div class="scroll">
       <div class="menu-grid">
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('jollof-rice.jpg')"></div><p class="t">Jollof Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
-        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('fried-rice.jpg')"></div><p class="t">Fried Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('jollof-333.jpg')"></div><p class="t">Jollof Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
+        <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('friedrice-new.jpg')"></div><p class="t">Fried Rice</p><div class="time">15–20 min</div><div class="foot"><span class="p">CA$12</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
         <article class="gcard"><button class="heart on" aria-label="Remove from favorites"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6C19 16.5 12 21 12 21z"/></svg></button><div class="pic" style="background-image:url('waakye.jpg')"></div><p class="t">Waakye</p><div class="time">20–25 min</div><div class="foot"><span class="p">CA$13</span><button class="add" aria-label="Add to cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button></div></article>
       </div>
       <div style="height:14px"></div>

@@ -10,6 +10,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
 <link rel="stylesheet" href="css/common.css">
 <style>
   :root{
@@ -154,6 +158,48 @@
   .feature-card p{font-size:13px;color:var(--muted-3);line-height:1.7;margin:0}
   @media(max-width:900px){ .feature-grid{grid-template-columns:1fr} }
 
+  /* ---------- About ---------- */
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .about-art{position:relative}
+  .about-art img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:24px;box-shadow:var(--shadow-card)}
+  .about-copy .eyebrow{color:var(--orange-2);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px;display:block}
+  .about-copy h2{font-size:30px;font-weight:700;margin-bottom:16px}
+  .about-copy p{font-size:14.5px;line-height:1.8;color:var(--muted-3);margin:0 0 16px}
+  .about-stats{display:flex;gap:36px;margin-top:24px}
+  .about-stats .stat b{display:block;font-size:22px;font-weight:700}
+  .about-stats .stat span{font-size:11.5px;color:var(--muted);font-weight:500}
+  @media(max-width:900px){
+    .about{grid-template-columns:1fr;gap:32px}
+    .about-art{order:-1}
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-list{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  .faq-item{background:var(--card,#fff);border-radius:16px;box-shadow:0 0 0 1px var(--chip);padding:4px 22px}
+  .faq-item summary{
+    padding:18px 0;font-size:14.5px;font-weight:600;cursor:pointer;list-style:none;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+  }
+  .faq-item summary::-webkit-details-marker{display:none}
+  .faq-item summary::after{
+    content:'+';font-size:20px;font-weight:400;color:var(--orange-2);flex-shrink:0;transition:transform .15s ease;
+  }
+  .faq-item[open] summary::after{transform:rotate(45deg)}
+  .faq-item p{margin:0 0 18px;font-size:13.5px;line-height:1.7;color:var(--muted-3)}
+
+  /* ---------- Contact ---------- */
+  .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .contact-card{padding:28px 24px;border-radius:20px;box-shadow:0 0 0 1px var(--chip);text-align:center}
+  .contact-card .ic{
+    width:46px;height:46px;border-radius:13px;background:#FFF1E0;color:var(--orange);
+    display:grid;place-items:center;margin:0 auto 16px;
+  }
+  .contact-card .ic svg{width:20px;height:20px}
+  .contact-card h4{font-size:15px;font-weight:700;margin-bottom:8px}
+  .contact-card p{font-size:13px;color:var(--muted-3);line-height:1.7;margin:0}
+  .contact-card a{color:var(--orange-2);font-weight:600}
+  @media(max-width:900px){ .contact-grid{grid-template-columns:1fr} }
+
   /* ---------- CTA banner ---------- */
   .cta-banner{
     margin:0 8vw 0;border-radius:28px;background:#2b2f33;color:#fff;
@@ -196,14 +242,17 @@
   <div class="nav-links">
     <a href="#menu">Menu</a>
     <a href="#why-us">Why Us</a>
-    <a href="#order">Order Online</a>
+    <a href="#about">About</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Contact</a>
   </div>
   <div class="nav-cta">
     <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
-    <a href="login.html" class="btn btn-primary">Log In / Sign Up</a>
+    <a href="login.html" class="btn btn-ghost">Log In</a>
+    <a href="food-web.html" class="btn btn-primary order-link">Order Now</a>
   </div>
 </nav>
 
@@ -213,7 +262,7 @@
     <h1>Great food,<br/>delivered <span>your way</span></h1>
     <p>Order from your favorite local kitchen and track it every step of the way — from the stove to your door, in as little as 15 minutes.</p>
     <div class="hero-ctas">
-      <a href="login.html" class="btn btn-primary btn-lg">Order Now</a>
+      <a href="food-web.html" class="btn btn-primary btn-lg order-link">Order Now</a>
       <a href="#menu" class="btn btn-ghost btn-lg">View Menu</a>
     </div>
     <div class="hero-stats">
@@ -236,24 +285,24 @@
   <div class="sec-head">
     <span class="eyebrow">Our Menu</span>
     <h2>Crowd Favorites</h2>
-    <p>A taste of what's cooking — the full menu (with all the extras) is waiting for you right after you log in.</p>
+    <p>A taste of what's cooking — browse the full menu and order online, no account needed.</p>
   </div>
   <div class="dish-grid">
-    <a class="dish-card" href="login.html">
-      <div class="photo" style="background-image:url('jollof-rice.jpg')"></div>
+    <a class="dish-card order-link" href="food-web.html">
+      <div class="photo" style="background-image:url('jollof-333.jpg')"></div>
       <div class="body">
         <h4>Jollof Rice</h4>
         <div class="meta"><span>15–20 min</span><span class="price">CA$12</span></div>
       </div>
     </a>
-    <a class="dish-card" href="login.html">
-      <div class="photo" style="background-image:url('fried-rice.jpg')"></div>
+    <a class="dish-card order-link" href="food-web.html">
+      <div class="photo" style="background-image:url('friedrice-new.jpg')"></div>
       <div class="body">
         <h4>Fried Rice</h4>
         <div class="meta"><span>15–20 min</span><span class="price">CA$12</span></div>
       </div>
     </a>
-    <a class="dish-card" href="login.html">
+    <a class="dish-card order-link" href="food-web.html">
       <div class="photo" style="background-image:url('waakye.jpg')"></div>
       <div class="body">
         <h4>Waakye</h4>
@@ -262,7 +311,7 @@
     </a>
   </div>
   <div class="menu-cta">
-    <a href="login.html" class="btn btn-primary btn-lg">See Full Menu &amp; Order</a>
+    <a href="food-web.html" class="btn btn-primary btn-lg order-link">See Full Menu &amp; Order</a>
   </div>
 </section>
 
@@ -291,11 +340,84 @@
   </div>
 </section>
 
+<section id="about">
+  <div class="about">
+    <div class="about-art">
+      <img src="waakye.jpg" alt="Home-cooked Ghanaian dishes at Dede's African Kitchen" />
+    </div>
+    <div class="about-copy">
+      <span class="eyebrow">About Us</span>
+      <h2>Home-cooked Ghanaian food, made with love</h2>
+      <p>Dede's African Kitchen started with a simple idea: bring the taste of real, home-cooked Ghanaian food to anyone craving it. Every dish is made fresh to order, in small batches, using the same recipes and care you'd find in a Ghanaian home kitchen.</p>
+      <p>No shortcuts, no mass prep — just Jollof, Waakye, and more, cooked the right way and delivered hot to your door.</p>
+      <div class="about-stats">
+        <div class="stat"><b>100%</b><span>Made Fresh to Order</span></div>
+        <div class="stat"><b>4.8★</b><span>Customer Rating</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="sec-head">
+    <span class="eyebrow">FAQ</span>
+    <h2>Common Questions</h2>
+    <p>Everything you need to know before you order.</p>
+  </div>
+  <div class="faq-list">
+    <details class="faq-item">
+      <summary>Do I need an account to order?</summary>
+      <p>No — you can browse the full menu and place an order right away. Creating an account is optional and only useful if you want your order history saved across visits.</p>
+    </details>
+    <details class="faq-item">
+      <summary>How long does delivery take?</summary>
+      <p>Most orders arrive in 15–30 minutes, depending on how busy the kitchen is and your distance from us.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Can I pick up my order instead of delivery?</summary>
+      <p>Yes — choose Pickup instead of Delivery at checkout and we'll have it ready for you at the kitchen.</p>
+    </details>
+    <details class="faq-item">
+      <summary>How do I pay for my order?</summary>
+      <p>After you place an order online, we'll call or message you to confirm the order and arrange payment. You can also call us directly at <a href="tel:+15194774701">+1 (519) 477-4701</a> to order and pay by phone.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Can I change or cancel an order after placing it?</summary>
+      <p>Call us as soon as possible at <a href="tel:+15194774701">+1 (519) 477-4701</a> — we'll do our best to update or cancel it before the kitchen starts preparing your food.</p>
+    </details>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="sec-head">
+    <span class="eyebrow">Contact</span>
+    <h2>Get In Touch</h2>
+    <p>Questions about an order, delivery area, or anything else? Reach out any time.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-card">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+      <h4>Call Us</h4>
+      <p><a href="tel:+15194774701">+1 (519) 477-4701</a><br/>For orders, questions, or changes</p>
+    </div>
+    <div class="contact-card">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg></div>
+      <h4>Email Us</h4>
+      <p><a href="mailto:dedeshito@yahoo.com">dedeshito@yahoo.com</a><br/>We'll get back to you soon</p>
+    </div>
+    <div class="contact-card">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11.8A8 8 0 0 0 4 10.2C4 17.5 12 22 12 22z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <h4>Order Online</h4>
+      <p><a href="food-web.html" class="order-link">Browse the menu</a><br/>No account needed to order</p>
+    </div>
+  </div>
+</section>
+
 <section id="order">
   <div class="cta-banner">
     <h2>Hungry? Let's fix that.</h2>
-    <p>Create your free account and place your first order in under a minute.</p>
-    <a href="login.html?tab=signup" class="btn btn-primary btn-lg">Create Account</a>
+    <p>Browse the full menu and place your order online in under a minute — no account needed.</p>
+    <a href="food-web.html" class="btn btn-primary btn-lg order-link">Order Online</a>
     <p style="position:relative;z-index:1;margin:22px 0 0;font-size:13px;color:#c9ced3">
       Prefer to order by phone? Call <a href="tel:+15194774701" style="color:#fff;font-weight:700;text-decoration:underline">+1 (519) 477-4701</a> to confirm your order and arrange payment.
     </p>
@@ -314,14 +436,15 @@
     <div class="foot-col">
       <h5>Explore</h5>
       <a href="#menu">Menu</a>
-      <a href="#why-us">Why Us</a>
-      <a href="login.html">Log In</a>
-      <a href="login.html?tab=signup">Sign Up</a>
+      <a href="#about">About</a>
+      <a href="#faq">FAQ</a>
+      <a href="food-web.html" class="order-link">Order Online</a>
     </div>
     <div class="foot-col">
       <h5>Contact</h5>
       <a href="tel:+15194774701">+1 (519) 477-4701</a>
       <a href="mailto:dedeshito@yahoo.com">dedeshito@yahoo.com</a>
+      <a href="login.html">Log In</a>
     </div>
     <div class="foot-col">
       <h5>Legal</h5>
@@ -338,6 +461,9 @@
   </div>
 </footer>
 
+<script>
+  document.querySelectorAll('.order-link').forEach(a => { a.href = FoodieAuth.customerHome(); });
+</script>
 <script src="js/cookie-consent.js" defer></script>
 </body>
 </html>

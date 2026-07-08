@@ -14,6 +14,7 @@
 <script src="js/supabase-config.js"></script>
 <script src="js/supabase-client.js"></script>
 <script src="js/auth.js"></script>
+<script src="js/i18n.js"></script>
 <link rel="stylesheet" href="css/common.css">
 <style>
   :root{
@@ -849,14 +850,15 @@
 </head>
 <body>
 <script>
-FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
+FoodieAuth.guardPage({ allowRoles:['customer'], allowGuest:true, onAuthorized(profile, session){
   const name = profile.full_name || 'Customer';
-  window.__customer = { id: session.user.id, name, email: session.user.email };
+  const email = session.user.email || '';
+  window.__customer = { id: session.user.id, name, email, isGuest: !!session.user.is_anonymous };
   document.getElementById('profName').textContent    = name;
   document.getElementById('profValName').textContent = name;
   document.querySelectorAll('.profile .name').forEach(el => el.textContent = name);
-  document.getElementById('profEmail').textContent    = session.user.email;
-  document.getElementById('profValEmail').textContent = session.user.email;
+  document.getElementById('profEmail').textContent    = email || 'Guest account';
+  document.getElementById('profValEmail').textContent = email || 'Guest account';
   const monthEl = document.getElementById('analyticsMonth');
   if(monthEl) monthEl.textContent = new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'});
   const greetEl = document.getElementById('homeGreeting');
@@ -872,26 +874,26 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <div class="logo" title="Dede's African Kitchen">
       <img src="favicon-180.png" alt="Dede's African Kitchen" />
     </div>
-    <button class="nav-btn active" data-page="menu" title="Menu" aria-label="Menu">
+    <button class="nav-btn active" data-page="menu" title="Menu" aria-label="Menu" data-i18n-title="nav.menu" data-i18n-aria="nav.menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg>
     </button>
-    <button class="nav-btn" data-page="profile" title="Profile" aria-label="Profile">
+    <button class="nav-btn" data-page="profile" title="Profile" aria-label="Profile" data-i18n-title="nav.profile" data-i18n-aria="nav.profile">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
     </button>
-    <button class="nav-btn" data-page="wallet" title="Wallet" aria-label="Wallet">
+    <button class="nav-btn" data-page="wallet" title="Wallet" aria-label="Wallet" data-i18n-title="nav.wallet" data-i18n-aria="nav.wallet">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M16 15h2"/></svg>
     </button>
-    <button class="nav-btn" data-page="settings" title="Settings" aria-label="Settings">
+    <button class="nav-btn" data-page="settings" title="Settings" aria-label="Settings" data-i18n-title="nav.settings" data-i18n-aria="nav.settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
     </button>
-    <button class="nav-btn" data-page="analytics" title="Analytics" aria-label="Analytics">
+    <button class="nav-btn" data-page="analytics" title="Analytics" aria-label="Analytics" data-i18n-title="nav.analytics" data-i18n-aria="nav.analytics">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M21 12A9 9 0 0 0 12 3v9z" fill="currentColor" stroke="none" opacity=".25"/></svg>
     </button>
-    <button class="nav-btn" data-page="messages" title="Messages" aria-label="Messages">
+    <button class="nav-btn" data-page="messages" title="Messages" aria-label="Messages" data-i18n-title="nav.messages" data-i18n-aria="nav.messages">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.2L3 21l1.8-6.4A8 8 0 1 1 21 12z"/></svg>
     </button>
     <div class="nav-spacer"></div>
-    <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+    <button class="theme-toggle" aria-label="Toggle dark mode" type="button" data-i18n-aria="nav.theme">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
@@ -906,12 +908,12 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <div class="topbar">
       <div class="greet">
         <p class="hi" id="homeGreeting">Hello</p>
-        <h1>Welcome Back</h1>
+        <h1 data-i18n="menu.welcome">Welcome Back</h1>
       </div>
       <div class="topbar-right">
         <label class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input type="text" placeholder="Search" />
+          <input type="text" placeholder="Search" data-i18n-placeholder="menu.searchPlaceholder" />
         </label>
         <button class="cart-btn" id="cartBtn" onclick="openCartDrawer()" aria-label="View cart">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -922,18 +924,18 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
     <!-- Promo -->
     <section class="promo">
-      <h2>Make Your First Order<br/>and Get <span class="pct">50% Off</span></h2>
-      <p>Order from the city's best kitchens and have a hot meal delivered to your door in under thirty minutes. New customers get half off their first order.</p>
-      <button class="cta">Order Now</button>
+      <h2><span data-i18n="menu.promoTitle1">Make Your First Order</span><br/><span data-i18n="menu.promoTitle2">and Get</span> <span class="pct" data-i18n="menu.promoPct">50% Off</span></h2>
+      <p data-i18n="menu.promoBody">Order from the city's best kitchens and have a hot meal delivered to your door in under thirty minutes. New customers get half off their first order.</p>
+      <button class="cta" data-i18n="menu.orderNow">Order Now</button>
       <div class="pizza" style="background-image:url('ai-hero.jpg')"></div>
     </section>
 
     <!-- Our Menu tabs -->
     <div class="menu-head">
-      <h3>Our Menu</h3>
+      <h3 data-i18n="menu.ourMenu">Our Menu</h3>
       <div class="menu-tabs" id="menuTabs"></div>
     </div>
-    <p style="margin:-10px 0 16px;font-size:12px;color:var(--muted);font-weight:500">Every dish comes in a Small or Big Tray — perfect for a quick bite or a group order.</p>
+    <p style="margin:-10px 0 16px;font-size:12px;color:var(--muted);font-weight:500" data-i18n="menu.trayNote">Every dish comes in a Small or Big Tray — perfect for a quick bite or a group order.</p>
 
     <!-- Dishes -->
     <div class="dishes" id="dishesGrid"></div>
@@ -954,7 +956,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="ccard back"></div>
       <div class="ccard front">
         <div class="row">
-          <div class="brand">No card on file</div>
+          <div class="brand" data-i18n="menu.noCardOnFile">No card on file</div>
           <div class="chip"></div>
         </div>
         <div class="num">••••&nbsp;&nbsp;••••&nbsp;&nbsp;••••&nbsp;&nbsp;••••</div>
@@ -964,23 +966,23 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
     <!-- Order menu -->
     <div class="order-head">
-      <h4>Order Menu</h4>
-      <a href="#" class="see-all">See All</a>
+      <h4 data-i18n="menu.orderMenu">Order Menu</h4>
+      <a href="#" class="see-all" data-i18n="menu.seeAll">See All</a>
     </div>
 
     <div class="order-list" id="orderList"></div>
 
     <div class="fulfill-toggle" data-fulfill-toggle>
-      <button type="button" class="fulfill-btn" data-fulfill="delivery">🚚 Delivery</button>
-      <button type="button" class="fulfill-btn" data-fulfill="pickup">🏠 Pickup</button>
+      <button type="button" class="fulfill-btn" data-fulfill="delivery"><span data-i18n="menu.delivery">🚚 Delivery</span></button>
+      <button type="button" class="fulfill-btn" data-fulfill="pickup"><span data-i18n="menu.pickup">🏠 Pickup</span></button>
     </div>
 
     <div class="total">
-      <span class="lbl">Total Price</span>
+      <span class="lbl" data-i18n="menu.totalPrice">Total Price</span>
       <span class="amt" id="totalAmt">CA$52.00</span>
     </div>
 
-    <button class="checkout">Checkout</button>
+    <button class="checkout" data-i18n="menu.checkout">Checkout</button>
   </aside>
   </div><!-- /page-menu -->
 
@@ -989,12 +991,12 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <main class="center">
       <div class="topbar">
         <div class="greet">
-          <p class="hi">Account</p>
-          <h1>My Profile</h1>
+          <p class="hi" data-i18n="profile.account">Account</p>
+          <h1 data-i18n="profile.myProfile">My Profile</h1>
         </div>
         <label class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input type="text" placeholder="Search" />
+          <input type="text" placeholder="Search" data-i18n-placeholder="common.search" />
         </label>
       </div>
 
@@ -1004,37 +1006,37 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
           <h2 id="profName">Customer</h2>
           <div class="em" id="profEmail"></div>
           <div class="stats">
-            <div class="stat"><b>0</b>Orders</div>
-            <div class="stat"><b>0</b>Favorites</div>
-            <div class="stat"><b>—</b>Rating</div>
+            <div class="stat"><b>0</b><span data-i18n="profile.orders">Orders</span></div>
+            <div class="stat"><b>0</b><span data-i18n="profile.favorites">Favorites</span></div>
+            <div class="stat"><b>—</b><span data-i18n="profile.rating">Rating</span></div>
           </div>
         </div>
-        <button class="edit">Edit Profile</button>
+        <button class="edit" data-i18n="profile.editProfile">Edit Profile</button>
       </section>
 
-      <div class="sec-head"><h3>Personal Information</h3></div>
+      <div class="sec-head"><h3 data-i18n="profile.personalInfo">Personal Information</h3></div>
       <div class="info-grid">
         <div class="info-card">
-          <div class="lbl">Full Name</div>
+          <div class="lbl" data-i18n="profile.fullName">Full Name</div>
           <div class="val" id="profValName">Customer</div>
         </div>
         <div class="info-card">
-          <div class="lbl">Date of Birth</div>
-          <div class="val">Not set</div>
+          <div class="lbl" data-i18n="profile.dob">Date of Birth</div>
+          <div class="val" data-i18n="profile.notSet">Not set</div>
         </div>
         <div class="info-card">
-          <div class="lbl">Email Address</div>
+          <div class="lbl" data-i18n="profile.emailAddress">Email Address</div>
           <div class="val row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span id="profValEmail"></span></div>
         </div>
         <div class="info-card">
-          <div class="lbl">Phone Number</div>
-          <div class="val row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg></span><span id="profValPhone">Not set</span></div>
+          <div class="lbl" data-i18n="profile.phoneNumber">Phone Number</div>
+          <div class="val row"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg></span><span id="profValPhone" data-i18n="profile.notSet">Not set</span></div>
         </div>
       </div>
 
-      <div class="sec-head"><h3>Delivery Addresses</h3><a class="see-all" href="#">+ Add New</a></div>
+      <div class="sec-head"><h3 data-i18n="profile.deliveryAddresses">Delivery Addresses</h3><a class="see-all" href="#" data-i18n="profile.addNew">+ Add New</a></div>
       <div class="addresses" id="addressList">
-        <div style="text-align:center;color:var(--muted);padding:20px 0;font-size:13px">No delivery addresses added yet</div>
+        <div style="text-align:center;color:var(--muted);padding:20px 0;font-size:13px" data-i18n="profile.noAddresses">No delivery addresses added yet</div>
       </div>
     </main>
 
@@ -1047,13 +1049,13 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         </button>
       </div>
 
-      <div class="order-head"><h4>Payment Methods</h4><a href="#" class="see-all">Manage</a></div>
+      <div class="order-head"><h4 data-i18n="profile.paymentMethods">Payment Methods</h4><a href="#" class="see-all" data-i18n="profile.manage">Manage</a></div>
       <div class="pay-list">
-        <div style="text-align:center;color:var(--muted);padding:14px 0;font-size:13px">No payment methods added yet</div>
+        <div style="text-align:center;color:var(--muted);padding:14px 0;font-size:13px" data-i18n="profile.noPaymentMethods">No payment methods added yet</div>
       </div>
       <button class="add-card-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="16" height="16"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-        Add Payment Method
+        <span data-i18n="profile.addPaymentMethod">Add Payment Method</span>
       </button>
     </aside>
   </div><!-- /page-profile -->
@@ -1063,57 +1065,57 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <main class="center">
       <div class="topbar">
         <div class="greet">
-          <p class="hi">Your Balance</p>
-          <h1>Wallet</h1>
+          <p class="hi" data-i18n="wallet.yourBalance">Your Balance</p>
+          <h1 data-i18n="wallet.wallet">Wallet</h1>
         </div>
         <label class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input type="text" placeholder="Search transactions" />
+          <input type="text" placeholder="Search transactions" data-i18n-placeholder="wallet.searchTransactions" />
         </label>
       </div>
 
       <section class="balance-card">
-        <div class="lbl">Available Balance</div>
+        <div class="lbl" data-i18n="wallet.availableBalance">Available Balance</div>
         <div class="amt">CA$0<small>.00</small></div>
         <div class="row2">
           <button class="primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-            Top Up
+            <span data-i18n="wallet.topUp">Top Up</span>
           </button>
           <button>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4z"/></svg>
-            Send
+            <span data-i18n="wallet.send">Send</span>
           </button>
           <button>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 17 10-10"/><path d="M17 17V7H7"/></svg>
-            Withdraw
+            <span data-i18n="wallet.withdraw">Withdraw</span>
           </button>
         </div>
       </section>
 
-      <div class="sec-head"><h3>Quick Actions</h3></div>
+      <div class="sec-head"><h3 data-i18n="wallet.quickActions">Quick Actions</h3></div>
       <div class="quick-grid">
         <button class="quick">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg></div>
-          <div class="lbl">Cards</div>
+          <div class="lbl" data-i18n="wallet.cards">Cards</div>
         </button>
         <button class="quick">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><path d="M6 14h4"/></svg></div>
-          <div class="lbl">Bank</div>
+          <div class="lbl" data-i18n="wallet.bank">Bank</div>
         </button>
         <button class="quick">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3"/><path d="M12 2v12"/><path d="m9 5 3-3 3 3"/></svg></div>
-          <div class="lbl">Receive</div>
+          <div class="lbl" data-i18n="wallet.receive">Receive</div>
         </button>
         <button class="quick">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
-          <div class="lbl">Scan QR</div>
+          <div class="lbl" data-i18n="wallet.scanQR">Scan QR</div>
         </button>
       </div>
 
-      <div class="sec-head"><h3>Recent Transactions</h3></div>
+      <div class="sec-head"><h3 data-i18n="wallet.recentTransactions">Recent Transactions</h3></div>
       <div class="txlist">
-        <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No transactions yet</div>
+        <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px" data-i18n="wallet.noTransactions">No transactions yet</div>
       </div>
     </main>
 
@@ -1130,7 +1132,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div class="ccard back"></div>
         <div class="ccard front">
           <div class="row">
-            <div class="brand">No card on file</div>
+            <div class="brand" data-i18n="menu.noCardOnFile">No card on file</div>
             <div class="chip"></div>
           </div>
           <div class="num">••••&nbsp;&nbsp;••••&nbsp;&nbsp;••••&nbsp;&nbsp;••••</div>
@@ -1138,18 +1140,18 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         </div>
       </div>
 
-      <div class="order-head"><h4>This Month</h4></div>
+      <div class="order-head"><h4 data-i18n="wallet.thisMonth">This Month</h4></div>
       <div class="info-grid" style="grid-template-columns:1fr;gap:10px">
         <div class="info-card">
-          <div class="lbl">Total Spent</div>
+          <div class="lbl" data-i18n="wallet.totalSpent">Total Spent</div>
           <div class="val" style="font-size:22px">CA$0.00</div>
         </div>
         <div class="info-card">
-          <div class="lbl">Cashback Earned</div>
+          <div class="lbl" data-i18n="wallet.cashbackEarned">Cashback Earned</div>
           <div class="val" style="font-size:22px">CA$0.00</div>
         </div>
         <div class="info-card">
-          <div class="lbl">Most Used</div>
+          <div class="lbl" data-i18n="wallet.mostUsed">Most Used</div>
           <div class="val">—</div>
         </div>
       </div>
@@ -1161,79 +1163,79 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <main class="center">
       <div class="topbar">
         <div class="greet">
-          <p class="hi">Preferences</p>
-          <h1>Settings</h1>
+          <p class="hi" data-i18n="settings.preferences">Preferences</p>
+          <h1 data-i18n="settings.settingsTitle">Settings</h1>
         </div>
         <label class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input type="text" placeholder="Search settings" />
+          <input type="text" placeholder="Search settings" data-i18n-placeholder="settings.searchSettings" />
         </label>
       </div>
 
       <div class="settings-list">
         <div class="set-group">
-          <h5>Account</h5>
-          <div class="set-row">
+          <h5 data-i18n="settings.account">Account</h5>
+          <div class="set-row" data-setting="Personal Information">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
-            <div class="lbl"><p class="t">Personal Information</p><p class="s">Name, email, phone number</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.personalInformation">Personal Information</p><p class="s" data-i18n="settings.personalInfoSub">Name, email, phone number</p></div>
             <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
           </div>
-          <div class="set-row">
+          <div class="set-row" data-setting="Change Password">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-            <div class="lbl"><p class="t">Change Password</p><p class="s">Last changed 3 months ago</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.changePassword">Change Password</p><p class="s" data-i18n="settings.changePasswordSub">Last changed 3 months ago</p></div>
             <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
           </div>
-          <div class="set-row">
+          <div class="set-row" data-setting="Language">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20"/><path d="M12 2a15 15 0 0 0 0 20"/></svg></div>
-            <div class="lbl"><p class="t">Language</p><p class="s">Choose your preferred language</p></div>
-            <span class="pill-val">English (US)</span>
+            <div class="lbl"><p class="t" data-i18n="settings.language">Language</p><p class="s" data-i18n="settings.language.sub">Choose your preferred language</p></div>
+            <span class="pill-val" id="langPillVal">English</span>
           </div>
-          <div class="set-row">
+          <div class="set-row" data-setting="Log Out">
             <div class="ic" style="background:#fdecea;color:#e54848"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg></div>
-            <div class="lbl"><p class="t" style="color:#e54848">Log Out</p><p class="s">Sign out of your account</p></div>
+            <div class="lbl"><p class="t" style="color:#e54848" data-i18n="settings.logOut">Log Out</p><p class="s" data-i18n="settings.logOutSub">Sign out of your account</p></div>
             <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
           </div>
         </div>
 
         <div class="set-group">
-          <h5>Notifications</h5>
+          <h5 data-i18n="settings.notifications">Notifications</h5>
           <div class="set-row">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></div>
-            <div class="lbl"><p class="t">Push Notifications</p><p class="s">Order updates and offers</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.pushNotif">Push Notifications</p><p class="s" data-i18n="settings.pushNotifSub">Order updates and offers</p></div>
             <div class="tgl on" data-toggle></div>
           </div>
           <div class="set-row">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
-            <div class="lbl"><p class="t">Email Notifications</p><p class="s">Receipts and weekly digest</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.emailNotif">Email Notifications</p><p class="s" data-i18n="settings.emailNotifSub">Receipts and weekly digest</p></div>
             <div class="tgl on" data-toggle></div>
           </div>
           <div class="set-row">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-            <div class="lbl"><p class="t">Promotional Messages</p><p class="s">Deals, discounts, new launches</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.promoMessages">Promotional Messages</p><p class="s" data-i18n="settings.promoMessagesSub">Deals, discounts, new launches</p></div>
             <div class="tgl" data-toggle></div>
           </div>
         </div>
 
         <div class="set-group">
-          <h5>Privacy &amp; Security</h5>
+          <h5 data-i18n="settings.privacySecurity">Privacy &amp; Security</h5>
           <div class="set-row">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6z"/></svg></div>
-            <div class="lbl"><p class="t">Two-Factor Authentication</p><p class="s">Extra layer of security</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.twoFactor">Two-Factor Authentication</p><p class="s" data-i18n="settings.twoFactorSub">Extra layer of security</p></div>
             <div class="tgl on" data-toggle></div>
           </div>
           <div class="set-row">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg></div>
-            <div class="lbl"><p class="t">Location Services</p><p class="s">For accurate delivery</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.locationServices">Location Services</p><p class="s" data-i18n="settings.locationServicesSub">For accurate delivery</p></div>
             <div class="tgl on" data-toggle></div>
           </div>
-          <div class="set-row">
+          <div class="set-row" data-setting="Privacy Policy">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-6 0v4"/><rect x="5" y="9" width="14" height="11" rx="2"/></svg></div>
-            <div class="lbl"><p class="t">Privacy Policy</p><p class="s">How we use your data</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.privacyPolicy">Privacy Policy</p><p class="s" data-i18n="settings.privacyPolicySub">How we use your data</p></div>
             <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
           </div>
-          <div class="set-row">
+          <div class="set-row" data-setting="Terms of Service">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div>
-            <div class="lbl"><p class="t">Terms of Service</p><p class="s">Rules for using Dede's African Kitchen</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.termsOfService">Terms of Service</p><p class="s" data-i18n="settings.termsOfServiceSub">Rules for using Dede's African Kitchen</p></div>
             <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
           </div>
         </div>
@@ -1255,17 +1257,17 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div class="ver">Version 4.2.1 · May 2026</div>
       </div>
 
-      <div class="order-head" style="margin-top:22px"><h4>Support</h4></div>
+      <div class="order-head" style="margin-top:22px"><h4 data-i18n="settings.support">Support</h4></div>
       <div class="settings-list">
         <div class="set-group">
-          <div class="set-row">
+          <div class="set-row" data-setting="Help Center">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9.1a3 3 0 0 1 5.7 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg></div>
-            <div class="lbl"><p class="t">Help Center</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.helpCenter">Help Center</p></div>
             <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
           </div>
-          <div class="set-row">
+          <div class="set-row" data-setting="Contact Us">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.2L3 21l1.8-6.4A8 8 0 1 1 21 12z"/></svg></div>
-            <div class="lbl"><p class="t">Contact Us</p></div>
+            <div class="lbl"><p class="t" data-i18n="settings.contactUs">Contact Us</p></div>
             <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></span>
           </div>
         </div>
@@ -1279,11 +1281,11 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <div class="topbar">
         <div class="greet">
           <p class="hi" id="analyticsMonth"></p>
-          <h1>Analytics</h1>
+          <h1 data-i18n="nav.analytics">Analytics</h1>
         </div>
         <label class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input type="text" placeholder="Search" />
+          <input type="text" placeholder="Search" data-i18n-placeholder="common.search" />
         </label>
       </div>
 
@@ -1293,48 +1295,48 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg></div>
           </div>
           <div class="v">CA$0.00</div>
-          <div class="l">Total Spent</div>
+          <div class="l" data-i18n="wallet.totalSpent">Total Spent</div>
         </div>
         <div class="stat-card">
           <div class="head">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10a2 2 0 0 1 2 2v16l-7-3-7 3V5a2 2 0 0 1 2-2z"/></svg></div>
           </div>
           <div class="v">0</div>
-          <div class="l">Orders Placed</div>
+          <div class="l" data-i18n="analytics.ordersPlaced">Orders Placed</div>
         </div>
         <div class="stat-card">
           <div class="head">
             <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m12 7 1.4 3 3.4.3-2.5 2.3.7 3.4L12 14.2 9 16l.7-3.4-2.5-2.3 3.4-.3z"/></svg></div>
           </div>
           <div class="v">—</div>
-          <div class="l">Avg Delivery</div>
+          <div class="l" data-i18n="analytics.avgDelivery">Avg Delivery</div>
         </div>
       </div>
 
       <section class="chart-card">
         <div class="head">
-          <h4>Spending by Day</h4>
+          <h4 data-i18n="analytics.spendingByDay">Spending by Day</h4>
           <div class="range">
-            <button>Week</button>
-            <button class="active">Month</button>
-            <button>Year</button>
+            <button data-range="Week" data-i18n="analytics.week">Week</button>
+            <button class="active" data-range="Month" data-i18n="analytics.month">Month</button>
+            <button data-range="Year" data-i18n="analytics.year">Year</button>
           </div>
         </div>
         <div class="chart">
-          <div class="bar" style="height:0%"><span class="lab">Mon</span></div>
-          <div class="bar" style="height:0%"><span class="lab">Tue</span></div>
-          <div class="bar" style="height:0%"><span class="lab">Wed</span></div>
-          <div class="bar" style="height:0%"><span class="lab">Thu</span></div>
-          <div class="bar" style="height:0%"><span class="lab">Fri</span></div>
-          <div class="bar" style="height:0%"><span class="lab">Sat</span></div>
-          <div class="bar" style="height:0%"><span class="lab">Sun</span></div>
+          <div class="bar" style="height:0%"><span class="lab" data-i18n="analytics.mon">Mon</span></div>
+          <div class="bar" style="height:0%"><span class="lab" data-i18n="analytics.tue">Tue</span></div>
+          <div class="bar" style="height:0%"><span class="lab" data-i18n="analytics.wed">Wed</span></div>
+          <div class="bar" style="height:0%"><span class="lab" data-i18n="analytics.thu">Thu</span></div>
+          <div class="bar" style="height:0%"><span class="lab" data-i18n="analytics.fri">Fri</span></div>
+          <div class="bar" style="height:0%"><span class="lab" data-i18n="analytics.sat">Sat</span></div>
+          <div class="bar" style="height:0%"><span class="lab" data-i18n="analytics.sun">Sun</span></div>
         </div>
-        <div style="text-align:center;color:var(--muted);padding:8px 0 0;font-size:13px">No spending data yet</div>
+        <div style="text-align:center;color:var(--muted);padding:8px 0 0;font-size:13px" data-i18n="analytics.noSpendingData">No spending data yet</div>
         <div style="height:18px"></div>
       </section>
 
-      <div class="sec-head"><h3>Top Dishes</h3></div>
-      <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No orders yet — your favorite dishes will show up here</div>
+      <div class="sec-head"><h3 data-i18n="analytics.topDishes">Top Dishes</h3></div>
+      <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px" data-i18n="analytics.noOrdersYet">No orders yet — your favorite dishes will show up here</div>
     </main>
 
     <aside class="right">
@@ -1346,9 +1348,9 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         </button>
       </div>
 
-      <div class="order-head"><h4>Top Items</h4><a href="#" class="see-all">See All</a></div>
+      <div class="order-head"><h4 data-i18n="analytics.topItems">Top Items</h4><a href="#" class="see-all" data-i18n="menu.seeAll">See All</a></div>
       <div class="top-items">
-        <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No orders yet — your favorite dishes will show up here</div>
+        <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px" data-i18n="analytics.noOrdersYet">No orders yet — your favorite dishes will show up here</div>
       </div>
     </aside>
   </div><!-- /page-analytics -->
@@ -1358,18 +1360,18 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <main class="center">
       <div class="topbar">
         <div class="greet">
-          <p class="hi" id="msgsHi">1 conversation</p>
-          <h1>Messages</h1>
+          <p class="hi" id="msgsHi" data-i18n="messages.oneConversation">1 conversation</p>
+          <h1 data-i18n="messages.messages">Messages</h1>
         </div>
         <label class="search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input type="text" placeholder="Search" />
+          <input type="text" placeholder="Search" data-i18n-placeholder="common.search" />
         </label>
       </div>
 
       <div class="inbox-tabs" id="msgsTabs">
-        <button class="active">Chats <span class="num">1</span></button>
-        <button>Notifications</button>
+        <button class="active" data-tab="chats"><span data-i18n="messages.chats">Chats</span> <span class="num">1</span></button>
+        <button data-tab="notifications" data-i18n="messages.notifications">Notifications</button>
       </div>
 
       <!-- Chats section -->
@@ -1379,7 +1381,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
           <div class="av"></div>
           <div>
             <div class="head"><div class="nm">Dede's African Kitchen</div><span class="tm"></span></div>
-            <div class="pv">Message the restaurant about your order</div>
+            <div class="pv" data-i18n="messages.defaultPreview">Message the restaurant about your order</div>
           </div>
         </div>
       </div>
@@ -1388,7 +1390,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       <!-- Notifications section -->
       <div id="msgsNotifs" style="display:none">
         <div class="inbox-list">
-          <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No notifications yet</div>
+          <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px" data-i18n="messages.noNotificationsYet">No notifications yet</div>
         </div>
       </div><!-- /msgsNotifs -->
     </main>
@@ -1400,7 +1402,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
           <div class="av"></div>
           <div style="flex:1">
             <p class="nm">Dede's African Kitchen</p>
-            <div class="st">Restaurant</div>
+            <div class="st" data-i18n="messages.restaurant">Restaurant</div>
           </div>
           <button class="bell" aria-label="Call">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg>
@@ -1410,7 +1412,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         <div class="chat-stream" id="chatStream"></div>
 
         <div class="chat-input">
-          <input placeholder="Type a message…" id="chatBox" />
+          <input placeholder="Type a message…" id="chatBox" data-i18n-placeholder="messages.typeMessage" />
           <button class="send" aria-label="Send" id="sendBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4z"/></svg>
           </button>
@@ -1427,7 +1429,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
           </button>
         </div>
         <div class="nx-detail">
-          <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px">No notifications yet</div>
+          <div style="text-align:center;color:var(--muted);padding:24px 0;font-size:13px" data-i18n="messages.noNotificationsYet">No notifications yet</div>
         </div>
       </div><!-- /msgsNxDetail -->
     </aside>
@@ -1436,11 +1438,11 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
   <!-- Mobile bottom tabbar -->
   <nav class="m-tabbar">
-    <button class="m-tab active" data-page="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg><span>Menu</span></button>
-    <button class="m-tab" data-page="wallet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M16 15h2"/></svg><span>Wallet</span></button>
-<button class="m-tab" data-page="messages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.2L3 21l1.8-6.4A8 8 0 1 1 21 12z"/></svg><span>Messages</span></button>
-    <button class="m-tab" data-page="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Profile</span></button>
-    <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+    <button class="m-tab active" data-page="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg><span data-i18n="nav.menu">Menu</span></button>
+    <button class="m-tab" data-page="wallet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M16 15h2"/></svg><span data-i18n="nav.wallet">Wallet</span></button>
+<button class="m-tab" data-page="messages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.2L3 21l1.8-6.4A8 8 0 1 1 21 12z"/></svg><span data-i18n="nav.messages">Messages</span></button>
+    <button class="m-tab" data-page="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span data-i18n="nav.profile">Profile</span></button>
+    <button class="theme-toggle" aria-label="Toggle dark mode" type="button" data-i18n-aria="nav.theme">
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
@@ -1453,7 +1455,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   <div class="cart-drawer">
     <div class="drawer-handle"></div>
     <div class="drawer-head">
-      <h4>My Cart</h4>
+      <h4 data-i18n="cart.myCart">My Cart</h4>
       <button class="drawer-close" onclick="closeCartDrawer()" aria-label="Close cart">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
       </button>
@@ -1461,14 +1463,14 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     <div class="drawer-body" id="drawerList"></div>
     <div class="drawer-foot">
       <div class="fulfill-toggle" data-fulfill-toggle>
-        <button type="button" class="fulfill-btn" data-fulfill="delivery">🚚 Delivery</button>
-        <button type="button" class="fulfill-btn" data-fulfill="pickup">🏠 Pickup</button>
+        <button type="button" class="fulfill-btn" data-fulfill="delivery"><span data-i18n="menu.delivery">🚚 Delivery</span></button>
+        <button type="button" class="fulfill-btn" data-fulfill="pickup"><span data-i18n="menu.pickup">🏠 Pickup</span></button>
       </div>
       <div class="drawer-total">
-        <span class="lbl">Total Price</span>
+        <span class="lbl" data-i18n="menu.totalPrice">Total Price</span>
         <span class="amt" id="drawerTotal">CA$0.00</span>
       </div>
-      <button class="checkout" style="width:100%">Checkout</button>
+      <button class="checkout" style="width:100%" data-i18n="menu.checkout">Checkout</button>
     </div>
   </div>
 </div>
@@ -1499,7 +1501,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     realMenu.forEach(i=>{ if(i.category && !cats.includes(i.category)) cats.push(i.category); });
     const tabsEl = document.getElementById('menuTabs');
     tabsEl.innerHTML = ['All', ...cats].map(c =>
-      `<button class="tab${c===activeMenuCategory?' active':''}" data-tab="${escAttr(c)}"><span>${c}</span></button>`
+      `<button class="tab${c===activeMenuCategory?' active':''}" data-tab="${escAttr(c)}"><span>${c==='All' ? window.t('menu.all') : c}</span></button>`
     ).join('');
     tabsEl.querySelectorAll('.tab').forEach(t=>{
       t.addEventListener('click', ()=>{
@@ -1515,7 +1517,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     const wrap = document.getElementById('dishesGrid');
     const items = activeMenuCategory === 'All' ? realMenu : realMenu.filter(i=>i.category===activeMenuCategory);
     if(items.length === 0){
-      wrap.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:14px;font-weight:500;padding:30px 0">${realMenu.length===0 ? 'No dishes available yet — check back soon!' : 'No dishes in this category yet.'}</p>`;
+      wrap.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:14px;font-weight:500;padding:30px 0">${realMenu.length===0 ? window.t('menu.noDishesYet') : window.t('menu.noDishesCategory')}</p>`;
       return;
     }
     wrap.innerHTML = items.map(item => `
@@ -1578,7 +1580,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     let sum = 0;
     const entries = Object.entries(cart);
     if(entries.length === 0){
-      list.innerHTML = '<p style="text-align:center;color:var(--muted);font-size:14px;padding:28px 0">Your cart is empty</p>';
+      list.innerHTML = `<p style="text-align:center;color:var(--muted);font-size:14px;padding:28px 0">${window.t('cart.empty')}</p>`;
     } else {
       entries.forEach(([id, item])=>{
         sum += item.price * item.qty;
@@ -1623,7 +1625,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
 
   // ---- Add to cart (shared by dish cards + size modal) ----
   function addToCart(name, size, price, qty, img){
-    const sizeLabel = size === 'big' ? 'Big Tray' : 'Small Tray';
+    const sizeLabel = size === 'big' ? window.t('cart.bigTray') : window.t('cart.smallTray');
     const id = name.toLowerCase().replace(/\s+/g,'-') + '-' + size;
     if(cart[id]){
       cart[id].qty += qty;
@@ -1651,7 +1653,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     const existing = document.querySelector(`.order-item[data-id="${id}"]`);
     if(existing) renderItem(existing, cart[id]);
     recalcTotal();
-    showToast(`Added ${name} (${sizeLabel}) to cart`);
+    showToast(`${window.t('cart.addedToCart')} ${name} (${sizeLabel}) ${window.t('cart.toCart')}`);
   }
 
   // ---- Choose Tray Size modal ----
@@ -1659,19 +1661,19 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   function openSizeModal(name, priceSmall, priceBig, img){
     _sizeModal = { name, priceSmall, priceBig, img, size:'small', qty:1 };
     openModal(`
-      <h4>Choose Your Tray — ${name}</h4>
+      <h4>${window.t('cart.chooseTray')} — ${name}</h4>
       <div style="display:flex;gap:10px;margin-bottom:18px">
         <button type="button" class="size-opt active" data-size="small" onclick="selectTraySize(this,'small')">
-          <div class="size-opt-lbl">Small Tray</div>
+          <div class="size-opt-lbl">${window.t('cart.smallTray')}</div>
           <div class="size-opt-price">CA$${priceSmall}</div>
         </button>
         <button type="button" class="size-opt" data-size="big" onclick="selectTraySize(this,'big')">
-          <div class="size-opt-lbl">Big Tray</div>
+          <div class="size-opt-lbl">${window.t('cart.bigTray')}</div>
           <div class="size-opt-price">CA$${priceBig}</div>
         </button>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-        <span style="font-size:13px;font-weight:600;color:var(--ink-soft)">Quantity</span>
+        <span style="font-size:13px;font-weight:600;color:var(--ink-soft)">${window.t('cart.quantity')}</span>
         <div class="qty">
           <button class="dec" aria-label="decrease" onclick="stepTrayQty(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
           <span class="n" id="sizeModalQty">01</span>
@@ -1679,8 +1681,8 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         </div>
       </div>
       <div class="mbtns">
-        <button class="mprimary" onclick="confirmAddToCart()">Add to Cart</button>
-        <button class="mcancel" onclick="closeModal()">Cancel</button>
+        <button class="mprimary" onclick="confirmAddToCart()">${window.t('cart.addToCart')}</button>
+        <button class="mcancel" onclick="closeModal()">${window.t('common.cancel')}</button>
       </div>
     `);
   }
@@ -1734,7 +1736,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       document.getElementById('msgsNotifs').style.display    = isChats ? 'none' : '';
       document.getElementById('msgsChat').style.display      = isChats ? 'flex' : 'none';
       document.getElementById('msgsNxDetail').style.display  = isChats ? 'none' : 'flex';
-      document.getElementById('msgsHi').textContent = isChats ? '1 conversation' : 'No notifications';
+      document.getElementById('msgsHi').textContent = isChats ? window.t('messages.oneConversation') : window.t('messages.noNotificationsShort');
     });
   });
 
@@ -1836,7 +1838,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   _ov.innerHTML = '<div class="mbox" id="mboxInner"></div>';
   document.body.appendChild(_ov);
   _ov.addEventListener('click', e=>{ if(e.target===_ov) closeModal(); });
-  function openModal(html){ document.getElementById('mboxInner').innerHTML=html; _ov.classList.add('open'); }
+  function openModal(html){ document.getElementById('mboxInner').innerHTML=html; _ov.classList.add('open'); window.applyLanguage?.(window.currentLang()); }
   function closeModal(){ _ov.classList.remove('open'); }
 
   // ── Show/hide password toggle ───────────────────────────
@@ -1925,7 +1927,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     document.getElementById('msgsNotifs').style.display   = '';
     document.getElementById('msgsChat').style.display     = 'none';
     document.getElementById('msgsNxDetail').style.display = 'flex';
-    document.getElementById('msgsHi').textContent = 'No notifications';
+    document.getElementById('msgsHi').textContent = window.t('messages.noNotificationsShort');
   }));
 
   // ── Pickup / Delivery ───────────────────────────────────
@@ -1946,7 +1948,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   // ── Checkout ───────────────────────────────────────────
   document.querySelectorAll('.checkout').forEach(b=>b.addEventListener('click', async ()=>{
     const entries = Object.entries(cart);
-    if(entries.length === 0){ showToast('Your cart is empty'); return; }
+    if(entries.length === 0){ showToast(window.t('cart.empty')); return; }
     if(b.disabled) return;
     b.disabled = true;
     try{
@@ -1959,22 +1961,22 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
         items, total, status: 'pending', fulfillment,
       }).select().single();
 
-      if(error){ showToast('Could not place your order — please try again'); return; }
+      if(error){ showToast(window.t('cart.couldNotPlace')); return; }
 
       clearCart();
       closeCartDrawer();
       const shortId = '#' + data.id.slice(0, 4).toUpperCase();
       const etaLine = fulfillment === 'pickup'
-        ? 'Ready for pickup in 20–30 min.'
-        : 'Estimated delivery: 20–30 min.';
+        ? window.t('cart.readyPickup')
+        : window.t('cart.estDelivery');
       openModal(`<div style="text-align:center;padding:8px 0">
         <div style="width:64px;height:64px;background:#e7f7ef;border-radius:50%;display:grid;place-items:center;margin:0 auto 16px;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="32" height="32"><path d="M20 6 9 17l-5-5"/></svg></div>
-        <h4 style="margin:0 0 8px">Order Placed!</h4>
-        <p style="font-size:13px;color:var(--muted-3);margin:0 0 16px;line-height:1.55">Order ${shortId} sent to the kitchen.<br/>${etaLine}</p>
+        <h4 style="margin:0 0 8px">${window.t('cart.orderPlaced')}</h4>
+        <p style="font-size:13px;color:var(--muted-3);margin:0 0 16px;line-height:1.55">Order ${shortId} ${window.t('cart.sentToKitchen')}<br/>${etaLine}</p>
         <p style="font-size:13px;background:var(--chip);border-radius:12px;padding:12px 14px;margin:0 0 22px;line-height:1.5">
-          Please call <a href="tel:+15194774701" style="color:var(--orange-2);font-weight:700">+1 (519) 477-4701</a> to confirm your order and arrange payment.
+          ${window.t('cart.pleaseCall')} <a href="tel:+15194774701" style="color:var(--orange-2);font-weight:700">+1 (519) 477-4701</a> ${window.t('cart.confirmPayment')}
         </p>
-        <div class="mbtns"><button class="mprimary" onclick="closeModal();goTo('messages')">Track Order</button><button class="mcancel" onclick="closeModal()">Close</button></div>
+        <div class="mbtns"><button class="mprimary" onclick="closeModal();goTo('messages')">${window.t('cart.trackOrder')}</button><button class="mcancel" onclick="closeModal()">${window.t('common.close')}</button></div>
       </div>`);
     } finally {
       b.disabled = false;
@@ -2018,30 +2020,34 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
   // ── Wallet features are not live yet — payment is confirmed by phone call,
   // so every wallet action here just says so instead of faking success. ────
   document.querySelector('.add-card-btn')?.addEventListener('click', ()=>{
-    showToast('Coming soon');
+    showToast(window.t('toast.comingSoon'));
   });
 
   document.querySelector('.balance-card .primary')?.addEventListener('click', ()=>{
-    showToast('Coming soon');
+    showToast(window.t('toast.comingSoon'));
   });
   const _wb = document.querySelectorAll('.balance-card .row2 button');
-  _wb[1]?.addEventListener('click', ()=>{ showToast('Coming soon'); });
-  _wb[2]?.addEventListener('click', ()=>{ showToast('Coming soon'); });
+  _wb[1]?.addEventListener('click', ()=>{ showToast(window.t('toast.comingSoon')); });
+  _wb[2]?.addEventListener('click', ()=>{ showToast(window.t('toast.comingSoon')); });
 
   // ── Quick actions ──────────────────────────────────────
   document.querySelectorAll('.quick').forEach(b=>{
-    b.addEventListener('click', ()=>{ showToast('Coming soon'); });
+    b.addEventListener('click', ()=>{ showToast(window.t('toast.comingSoon')); });
   });
 
   // ── Analytics range ────────────────────────────────────
   // No real per-customer order history exists yet, so every range shows a zero/empty state.
   const _rD={Week:[0,0,0,0,0,0,0],Month:[0,0,0,0,0,0,0],Year:[0,0,0,0,0,0,0]};
-  const _rL={Week:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],Month:['W1','W2','W3','W4','W5','W6','W7'],Year:['Jan','Mar','May','Jul','Aug','Oct','Dec']};
+  function _rangeLabels(k){
+    if(k==='Month') return ['w1','w2','w3','w4','w5','w6','w7'].map(x=>window.t('analytics.'+x));
+    if(k==='Year') return ['jan','mar','may','jul','aug','oct','dec'].map(x=>window.t('analytics.'+x));
+    return ['mon','tue','wed','thu','fri','sat','sun'].map(x=>window.t('analytics.'+x));
+  }
   document.querySelectorAll('.chart-card .range button').forEach(b=>{
     b.addEventListener('click', ()=>{
       document.querySelectorAll('.chart-card .range button').forEach(x=>x.classList.remove('active'));
       b.classList.add('active');
-      const k=b.textContent.trim(); const vals=_rD[k]||_rD.Month; const labs=_rL[k]||_rL.Month;
+      const k=b.dataset.range; const vals=_rD[k]||_rD.Month; const labs=_rangeLabels(k);
       const mx=Math.max(...vals);
       document.querySelectorAll('.chart .bar').forEach((bar,i)=>{
         bar.querySelector('.v')?.remove();
@@ -2053,39 +2059,51 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
     });
   });
 
-  // ── Settings rows ──────────────────────────────────────
+  // ── Settings rows (identified by a stable data-setting attribute, NOT the
+  // visible label text, since that text changes when the language switches) ──
   document.querySelectorAll('.set-row').forEach(row=>{
     if(!row.querySelector('.chev') && !row.querySelector('.pill-val')) return;
     row.style.cursor='pointer';
     row.addEventListener('click', ()=>{
-      const t=row.querySelector('.t')?.textContent?.trim();
-      if(t==='Personal Information') openModal(`<h4>Personal Information</h4>
-        <input class="mfield" placeholder="Full Name" value="${window.__customer?.name||''}" />
-        <input class="mfield" placeholder="Email" value="${window.__customer?.email||''}" />
-        <input class="mfield" placeholder="Phone" value="" />
-        <input class="mfield" placeholder="Date of Birth" value="" />
-        <div class="mbtns"><button class="mprimary" onclick="showToast('Information saved');closeModal()">Save</button><button class="mcancel" onclick="closeModal()">Cancel</button></div>`);
-      else if(t==='Change Password') openModal(`<h4>Change Password</h4>
-        ${pwFieldHTML('Current Password')}
-        ${pwFieldHTML('New Password')}
-        ${pwFieldHTML('Confirm Password')}
-        <div class="mbtns"><button class="mprimary" onclick="showToast('Password changed');closeModal()">Update</button><button class="mcancel" onclick="closeModal()">Cancel</button></div>`);
-      else if(t==='Language') openModal(`<h4>Language</h4>
-        ${ddTriggerHTML('langSelect', ['English (US)','Spanish','French','German'], 'English (US)')}
-        <div class="mbtns"><button class="mprimary" onclick="showToast('Language updated');closeModal()">Save</button><button class="mcancel" onclick="closeModal()">Cancel</button></div>`);
-      else if(t==='Privacy Policy') window.open('privacy.html', '_blank');
-      else if(t==='Terms of Service') window.open('terms.html', '_blank');
-      else if(t==='Help Center') openModal(`<h4>Help Center</h4>
-        <p style="font-size:13px;color:var(--muted-3);line-height:1.6;margin:0 0 16px">Browse FAQs or reach our support team 24/7.</p>
-        <div class="mbtns"><button class="mprimary" onclick="showToast('Opening Help Center…');closeModal()">Open</button><button class="mcancel" onclick="closeModal()">Close</button></div>`);
-      else if(t==='Contact Us') openModal(`<h4>Contact Us</h4>
-        <input class="mfield" placeholder="Subject" />
-        <textarea class="mfield mtextarea" placeholder="Describe your issue…"></textarea>
-        <div class="mbtns"><button class="mprimary" onclick="showToast('Message sent!');closeModal()">Send</button><button class="mcancel" onclick="closeModal()">Cancel</button></div>`);
-      else if(t==='Log Out') FoodieAuth.signOut();
-      else showToast(t||'Settings');
+      const key = row.dataset.setting;
+      if(key==='Personal Information') openModal(`<h4 data-i18n="settings.personalInformation">Personal Information</h4>
+        <input class="mfield" placeholder="${window.t('profile.fullName')}" value="${window.__customer?.name||''}" />
+        <input class="mfield" placeholder="${window.t('profile.emailAddress')}" value="${window.__customer?.email||''}" />
+        <input class="mfield" placeholder="${window.t('profile.phoneNumber')}" value="" />
+        <input class="mfield" placeholder="${window.t('profile.dob')}" value="" />
+        <div class="mbtns"><button class="mprimary" onclick="showToast(window.t('settings.informationSaved'));closeModal()" data-i18n="common.save">Save</button><button class="mcancel" onclick="closeModal()" data-i18n="common.cancel">Cancel</button></div>`);
+      else if(key==='Change Password') openModal(`<h4 data-i18n="settings.changePassword">Change Password</h4>
+        ${pwFieldHTML(window.t('settings.currentPassword'))}
+        ${pwFieldHTML(window.t('settings.newPassword'))}
+        ${pwFieldHTML(window.t('settings.confirmPassword'))}
+        <div class="mbtns"><button class="mprimary" onclick="showToast(window.t('settings.passwordChanged'));closeModal()" data-i18n="settings.update">Update</button><button class="mcancel" onclick="closeModal()" data-i18n="common.cancel">Cancel</button></div>`);
+      else if(key==='Language') openModal(`<h4 data-i18n="settings.language">Language</h4>
+        ${ddTriggerHTML('langSelect', ['English','Español','Français','Deutsch'], window.I18N_LABELS[window.currentLang()])}
+        <div class="mbtns"><button class="mprimary" onclick="confirmLanguage()" data-i18n="common.save">Save</button><button class="mcancel" onclick="closeModal()" data-i18n="common.cancel">Cancel</button></div>`);
+      else if(key==='Privacy Policy') window.open('privacy.html', '_blank');
+      else if(key==='Terms of Service') window.open('terms.html', '_blank');
+      else if(key==='Help Center') openModal(`<h4 data-i18n="settings.helpCenter">Help Center</h4>
+        <p style="font-size:13px;color:var(--muted-3);line-height:1.6;margin:0 0 16px" data-i18n="settings.helpCenterBody">Browse FAQs or reach our support team 24/7.</p>
+        <div class="mbtns"><button class="mprimary" onclick="showToast(window.t('settings.openingHelpCenter'));closeModal()" data-i18n="settings.openBtn">Open</button><button class="mcancel" onclick="closeModal()" data-i18n="common.close">Close</button></div>`);
+      else if(key==='Contact Us') openModal(`<h4 data-i18n="settings.contactUs">Contact Us</h4>
+        <input class="mfield" placeholder="${window.t('settings.subject')}" />
+        <textarea class="mfield mtextarea" placeholder="${window.t('settings.describeIssue')}"></textarea>
+        <div class="mbtns"><button class="mprimary" onclick="showToast(window.t('settings.messageSent'));closeModal()" data-i18n="wallet.send">Send</button><button class="mcancel" onclick="closeModal()" data-i18n="common.cancel">Cancel</button></div>`);
+      else if(key==='Log Out') FoodieAuth.signOut();
+      else showToast(row.querySelector('.t')?.textContent?.trim()||'Settings');
     });
   });
+
+  function confirmLanguage(){
+    const label = document.getElementById('langSelect')?.dataset.value;
+    const map = {'English':'en','Español':'es','Français':'fr','Deutsch':'de'};
+    const lang = map[label] || 'en';
+    window.applyLanguage(lang);
+    if(typeof renderMenuTabs === 'function') renderMenuTabs();
+    if(typeof renderDishes === 'function') renderDishes();
+    showToast(window.t('toast.languageUpdated'));
+    closeModal();
+  }
 
   // ── Inbox list → update detail panel ──────────────────
   // (no real notifications system exists yet — nothing to wire up here;
@@ -2113,7 +2131,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], onAuthorized(profile, session){
       noRes = document.createElement('p');
       noRes.id = 'menuNoResults';
       noRes.style.cssText = 'grid-column:1/-1;text-align:center;color:var(--muted);font-size:14px;font-weight:500;padding:20px 0';
-      noRes.textContent = 'No dishes found';
+      noRes.textContent = window.t('menu.noResults');
       document.querySelector('#page-menu .dishes').appendChild(noRes);
     }
     noRes.style.display = visible === 0 && q ? '' : 'none';

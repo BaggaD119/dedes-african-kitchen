@@ -2,9 +2,16 @@ window.FoodieAuth = {
   isMobile(){ return window.matchMedia('(max-width:768px)').matches; },
   customerHome(){ return this.isMobile() ? 'food-mobile.html' : 'food-web.html'; },
 
-  async guardPage({ allowRoles, onAuthorized }){
+  async guardPage({ allowRoles, allowGuest = false, onAuthorized }){
     try{
-      const { data:{ session } } = await window.sbClient.auth.getSession();
+      let { data:{ session } } = await window.sbClient.auth.getSession();
+
+      if(!session && allowGuest){
+        const { data, error } = await window.sbClient.auth.signInAnonymously();
+        if(error){ console.error('Guest sign-in failed', error); location.replace('login.html'); return; }
+        session = data.session;
+      }
+
       if(!session){ location.replace('login.html'); return; }
 
       const { data: profile, error } = await window.sbClient
