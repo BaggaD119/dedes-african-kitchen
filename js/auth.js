@@ -59,13 +59,6 @@ window.FoodieAuth = {
     return window.sbClient.auth.signInWithPassword({ email, password });
   },
 
-  async signUp({ fullName, email, password }){
-    return window.sbClient.auth.signUp({
-      email, password,
-      options:{ data:{ full_name: fullName } }
-    });
-  },
-
   async signOut(){
     await window.sbClient.auth.signOut();
     location.href = 'index.html';

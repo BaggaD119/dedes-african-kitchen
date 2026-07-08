@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <script src="js/theme.js"></script>
-<title>Dede's African Kitchen — Sign In</title>
+<title>Dede's African Kitchen — Staff Login</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <link rel="icon" type="image/png" href="favicon-32.png" />
 <link rel="apple-touch-icon" href="favicon-180.png" />
@@ -70,17 +70,11 @@
   .hero h1{font-size:38px;line-height:1.18;font-weight:700;margin:0 0 16px;letter-spacing:-.01em}
   .hero h1 span{color:var(--orange)}
   .hero p{font-size:14.5px;line-height:1.7;color:#c9ced3;margin:0 0 32px;max-width:400px}
-  .hero-stats{display:flex;gap:36px}
-  .hero-stats .stat b{display:block;font-size:22px;font-weight:700;margin-bottom:2px}
-  .hero-stats .stat span{font-size:11.5px;color:#9aa1a8;font-weight:500}
 
   /* ---------- Auth panel ---------- */
   .auth{display:flex;align-items:center;justify-content:center;padding:40px 24px}
   .auth-card{width:100%;max-width:400px}
   .auth-topbar{display:flex;justify-content:flex-end;margin-bottom:14px}
-  .auth-tabs{display:flex;gap:6px;background:var(--chip);padding:4px;border-radius:12px;margin-bottom:26px}
-  .auth-tab{flex:1;padding:10px;border-radius:9px;font-weight:600;font-size:13.5px;color:var(--muted-3);transition:all .15s ease}
-  .auth-tab.active{background:var(--card,#fff);color:var(--ink);box-shadow:var(--shadow-soft)}
 
   .auth-card h2{font-size:21px;font-weight:700;margin:0 0 6px;letter-spacing:-.01em}
   .auth-card .sub{font-size:12.5px;color:var(--muted);font-weight:500;margin:0 0 22px;line-height:1.6}
@@ -112,13 +106,10 @@
   .forgot{display:block;text-align:right;font-size:12px;color:var(--orange);font-weight:600;margin:-6px 0 18px}
   .forgot:hover{color:var(--orange-2)}
 
-  .vendor-note{margin-top:18px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6}
-
   @media(max-width:860px){
     .shell{grid-template-columns:1fr;grid-template-rows:auto 1fr}
     .hero{padding:44px 28px}
     .hero h1{font-size:28px}
-    .hero-stats{display:none}
   }
 </style>
 </head>
@@ -133,13 +124,8 @@
         </a>
         <span class="hero-brand-name"><span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span></span>
       </div>
-      <h1>Great food,<br/>delivered <span>your way</span></h1>
-      <p>Order from your favorite local kitchen and track it every step of the way — from the stove to your door.</p>
-      <div class="hero-stats">
-        <div class="stat"><b>15–30</b><span>Min Delivery</span></div>
-        <div class="stat"><b>4.8★</b><span>Customer Rating</span></div>
-        <div class="stat"><b>24/7</b><span>Order Anytime</span></div>
-      </div>
+      <h1>Staff <span>Login</span></h1>
+      <p>Sign in to manage the menu, track incoming orders, and reply to customer messages.</p>
     </div>
   </section>
 
@@ -151,15 +137,10 @@
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
       </div>
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tabLogin">Log In</button>
-        <button class="auth-tab" id="tabSignup">Sign Up</button>
-      </div>
-
       <!-- Login -->
       <div id="loginPane">
         <h2>Welcome back</h2>
-        <p class="sub">Log in to see your orders, wallet, and favorites.</p>
+        <p class="sub">Staff sign-in only — customers don't need an account to order.</p>
         <div class="auth-error" id="loginError"></div>
         <div class="auth-notice" id="loginNotice"></div>
         <form id="loginForm">
@@ -176,30 +157,6 @@
           <button class="mprimary" id="loginSubmit" type="submit">Log In</button>
         </form>
       </div>
-
-      <!-- Sign up -->
-      <div id="signupPane" style="display:none">
-        <h2>Create your account</h2>
-        <p class="sub">Sign up to start ordering.</p>
-        <div class="auth-error" id="signupError"></div>
-        <div class="auth-notice" id="signupNotice"></div>
-        <form id="signupForm">
-          <label class="field-lbl" for="suName">Full Name</label>
-          <input class="mfield" id="suName" type="text" autocomplete="name" required placeholder="Jane Doe" />
-          <label class="field-lbl" for="suEmail">Email</label>
-          <input class="mfield" id="suEmail" type="email" autocomplete="email" required placeholder="you@example.com" />
-          <label class="field-lbl" for="suPassword">Password</label>
-          <div class="pw-field">
-            <input class="mfield" id="suPassword" type="password" autocomplete="new-password" required minlength="6" placeholder="At least 6 characters" />
-            <button type="button" class="pw-toggle" onclick="togglePasswordField(this)" aria-label="Show password">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-          </div>
-          <button class="mprimary" id="signupSubmit" type="submit">Create Account</button>
-        </form>
-        <p class="vendor-note">By creating an account, you agree to our <a href="terms.html" style="color:var(--orange);font-weight:600">Terms</a> and <a href="privacy.html" style="color:var(--orange);font-weight:600">Privacy Policy</a>.</p>
-        <p class="vendor-note">Run this restaurant? Contact us directly for a staff account — sign up here is for customers only.</p>
-      </div>
     </div>
   </section>
 </div>
@@ -209,23 +166,6 @@
   FoodieAuth.redirectIfLoggedIn().finally(() => {
     document.documentElement.style.visibility = 'visible';
   });
-
-  // ---- Tabs ----
-  const tabLogin = document.getElementById('tabLogin');
-  const tabSignup = document.getElementById('tabSignup');
-  const loginPane = document.getElementById('loginPane');
-  const signupPane = document.getElementById('signupPane');
-
-  function switchTab(name){
-    const toLogin = name === 'login';
-    tabLogin.classList.toggle('active', toLogin);
-    tabSignup.classList.toggle('active', !toLogin);
-    loginPane.style.display = toLogin ? '' : 'none';
-    signupPane.style.display = toLogin ? 'none' : '';
-  }
-  tabLogin.addEventListener('click', () => switchTab('login'));
-  tabSignup.addEventListener('click', () => switchTab('signup'));
-  if(new URLSearchParams(location.search).get('tab') === 'signup') switchTab('signup');
 
   function setError(id, msg){
     const el = document.getElementById(id);
@@ -284,34 +224,6 @@
       setNotice('loginNotice', 'Check your email for a password reset link.');
     }catch(err){
       setError('loginError', 'Something went wrong. Please try again.');
-    }
-  });
-
-  // ---- Sign up ----
-  document.getElementById('signupForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    setError('signupError', '');
-    setNotice('signupNotice', '');
-    const btn = document.getElementById('signupSubmit');
-    btn.disabled = true; btn.textContent = 'Creating account…';
-    try{
-      const { data, error } = await FoodieAuth.signUp({
-        fullName: document.getElementById('suName').value.trim(),
-        email: document.getElementById('suEmail').value.trim(),
-        password: document.getElementById('suPassword').value,
-      });
-      if(error){ setError('signupError', error.message); return; }
-      if(data.session){
-        location.href = FoodieAuth.customerHome();
-      } else {
-        setNotice('signupNotice', 'Check your email to confirm your account, then log in.');
-        document.getElementById('signupForm').reset();
-        switchTab('login');
-      }
-    }catch(err){
-      setError('signupError', 'Something went wrong. Please try again.');
-    }finally{
-      btn.disabled = false; btn.textContent = 'Create Account';
     }
   });
 </script>
