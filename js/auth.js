@@ -2,16 +2,11 @@ window.FoodieAuth = {
   isMobile(){ return window.matchMedia('(max-width:768px)').matches; },
   customerHome(){ return this.isMobile() ? 'food-mobile.html' : 'food-web.html'; },
 
-  async guardPage({ allowRoles, allowGuest = false, onAuthorized }){
+  // Customer pages don't need any Supabase Auth session at all — see enterAsGuest.
+  // This guard is only for pages that require a real account (currently Vendor.html).
+  async guardPage({ allowRoles, onAuthorized }){
     try{
-      let { data:{ session } } = await window.sbClient.auth.getSession();
-
-      if(!session && allowGuest){
-        const { data, error } = await window.sbClient.auth.signInAnonymously();
-        if(error){ console.error('Guest sign-in failed', error); location.replace('login.html'); return; }
-        session = data.session;
-      }
-
+      const { data:{ session } } = await window.sbClient.auth.getSession();
       if(!session){ location.replace('login.html'); return; }
 
       const { data: profile, error } = await window.sbClient
@@ -33,6 +28,19 @@ window.FoodieAuth = {
       console.error('Auth guard failed', e);
       location.replace('login.html');
     }
+  },
+
+  // No login, no network wait — just a per-browser guest id from localStorage.
+  enterAsGuest(onReady){
+    const id = window.getGuestId();
+    const name = localStorage.getItem('guestName') || 'Customer';
+    const email = localStorage.getItem('guestEmail') || '';
+    const reveal = () => {
+      onReady?.({ id, name, email });
+      document.documentElement.style.visibility = 'visible';
+    };
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reveal);
+    else reveal();
   },
 
   async redirectIfLoggedIn(){

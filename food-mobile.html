@@ -218,12 +218,12 @@
 </head>
 <body>
 <script>
-FoodieAuth.guardPage({ allowRoles:['customer'], allowGuest:true, onAuthorized(profile, session){
-  const first = (profile.full_name || 'Customer').split(' ')[0];
+FoodieAuth.enterAsGuest(({ name, email })=>{
+  const first = name.split(' ')[0];
   const hi = document.querySelector('#screen-home .hi'); if(hi) hi.textContent = 'Hello, ' + first;
-  const nm = document.querySelector('#screen-profile .nm'); if(nm) nm.textContent = profile.full_name || 'Customer';
-  const em = document.querySelector('#screen-profile .em'); if(em) em.textContent = session.user.email || 'Guest account';
-}});
+  const nm = document.querySelector('#screen-profile .nm'); if(nm) nm.textContent = name;
+  const em = document.querySelector('#screen-profile .em'); if(em) em.textContent = email || 'Guest';
+});
 </script>
 <div class="app">
 

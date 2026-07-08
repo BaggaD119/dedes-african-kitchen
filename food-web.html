@@ -850,21 +850,19 @@
 </head>
 <body>
 <script>
-FoodieAuth.guardPage({ allowRoles:['customer'], allowGuest:true, onAuthorized(profile, session){
-  const name = profile.full_name || 'Customer';
-  const email = session.user.email || '';
-  window.__customer = { id: session.user.id, name, email, isGuest: !!session.user.is_anonymous };
+FoodieAuth.enterAsGuest(({ id, name, email })=>{
+  window.__customer = { id, name, email };
   document.getElementById('profName').textContent    = name;
   document.getElementById('profValName').textContent = name;
   document.querySelectorAll('.profile .name').forEach(el => el.textContent = name);
-  document.getElementById('profEmail').textContent    = email || 'Guest account';
-  document.getElementById('profValEmail').textContent = email || 'Guest account';
+  document.getElementById('profEmail').textContent    = email || 'Guest';
+  document.getElementById('profValEmail').textContent = email || 'Guest';
   const monthEl = document.getElementById('analyticsMonth');
   if(monthEl) monthEl.textContent = new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'});
   const greetEl = document.getElementById('homeGreeting');
   if(greetEl) greetEl.textContent = 'Hello, ' + name.split(' ')[0];
   window.dispatchEvent(new CustomEvent('customerReady'));
-}});
+});
 </script>
 
 <div class="app" data-screen-label="01 Dashboard">
@@ -2001,16 +1999,21 @@ FoodieAuth.guardPage({ allowRoles:['customer'], allowGuest:true, onAuthorized(pr
     const phone = document.getElementById('editPhone')?.value.trim();
     if(!name && !email && !phone){ closeModal(); return; }
     if(name){
+      localStorage.setItem('guestName', name);
+      if(window.__customer) window.__customer.name = name;
       document.getElementById('profName').textContent    = name;
       document.getElementById('profValName').textContent = name;
       // update name chip in any right-panel .name elements
       document.querySelectorAll('.profile .name').forEach(el => el.textContent = name);
     }
     if(email){
+      localStorage.setItem('guestEmail', email);
+      if(window.__customer) window.__customer.email = email;
       document.getElementById('profEmail').textContent    = email;
       document.getElementById('profValEmail').textContent = email;
     }
     if(phone){
+      localStorage.setItem('guestPhone', phone);
       document.getElementById('profValPhone').textContent = phone;
     }
     showToast('Profile updated ✓');
@@ -2089,7 +2092,7 @@ FoodieAuth.guardPage({ allowRoles:['customer'], allowGuest:true, onAuthorized(pr
         <input class="mfield" placeholder="${window.t('settings.subject')}" />
         <textarea class="mfield mtextarea" placeholder="${window.t('settings.describeIssue')}"></textarea>
         <div class="mbtns"><button class="mprimary" onclick="showToast(window.t('settings.messageSent'));closeModal()" data-i18n="wallet.send">Send</button><button class="mcancel" onclick="closeModal()" data-i18n="common.cancel">Cancel</button></div>`);
-      else if(key==='Log Out') FoodieAuth.signOut();
+      else if(key==='Log Out') location.href = 'index.html';
       else showToast(row.querySelector('.t')?.textContent?.trim()||'Settings');
     });
   });
