@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<script src="js/theme.js"></script>
+<title>Menu Admin</title>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="icon" type="image/png" href="favicon-32.png" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/supabase-client.js"></script>
+<link rel="stylesheet" href="css/common.css">
+<style>
+  :root{
+    --orange:#F39A36; --orange-2:#F08A1F; --ink:#222629; --ink-soft:#3a3f44;
+    --muted:#9aa1a8; --muted-2:#c9ced3; --muted-3:#5e646b; --bg:#f4f5f7;
+    --card:#ffffff; --green:#26C281; --red:#e54848; --chip:#f1f2f4;
+    --shadow-card: 0 10px 30px -16px rgba(20,24,28,.18), 0 2px 6px rgba(20,24,28,.04);
+  }
+  [data-theme="dark"]{
+    --ink:#F2F3F4; --ink-soft:#c7cbcf; --muted:#9aa1a8; --muted-2:#3a3f44; --muted-3:#9aa1a8;
+    --bg:#121316; --card:#1c1e22; --chip:#2a2d32; --page-bg:#0d0e10;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--page-bg,var(--bg));font-family:'Poppins',system-ui,sans-serif;color:var(--ink)}
+  button,input,select,textarea{font-family:inherit}
+  img{display:block;max-width:100%}
+  h1,h2,h3{margin:0;letter-spacing:-.01em}
+  .btn{padding:11px 20px;border-radius:11px;font-weight:600;font-size:13.5px;border:0;cursor:pointer;transition:all .15s ease}
+  .btn-primary{background:var(--orange);color:#fff}
+  .btn-primary:hover{background:var(--orange-2)}
+  .btn-primary:disabled{opacity:.6;cursor:default}
+  .btn-ghost{background:var(--chip);color:var(--ink)}
+  .btn-danger{background:#fdecea;color:var(--red)}
+  .btn-danger:hover{background:#fbdad7}
+
+  /* ---- Login gate ---- */
+  #loginGate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .login-card{width:100%;max-width:360px;background:var(--card);border-radius:20px;padding:32px;box-shadow:var(--shadow-card)}
+  .login-card h1{font-size:19px;margin-bottom:6px}
+  .login-card p{font-size:13px;color:var(--muted-3);margin:0 0 20px}
+  .field{display:block;width:100%;height:44px;border:1.5px solid var(--chip);border-radius:11px;padding:0 14px;font-size:14px;outline:none;color:var(--ink);background:var(--card);margin-bottom:12px}
+  .field:focus{border-color:var(--orange)}
+  .err{background:#fdecea;color:var(--red);font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:9px;margin-bottom:12px;display:none}
+  .err.show{display:block}
+
+  /* ---- App shell ---- */
+  #app{display:none;max-width:960px;margin:0 auto;padding:32px 20px 80px}
+  .app-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:12px;flex-wrap:wrap}
+  .app-header h1{font-size:22px}
+  .app-header p{margin:2px 0 0;font-size:13px;color:var(--muted-3)}
+
+  .toolbar{display:flex;justify-content:flex-end;margin-bottom:18px}
+
+  .item-list{display:flex;flex-direction:column;gap:12px;margin-bottom:36px}
+  .item-row{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:16px;padding:12px 16px;box-shadow:0 0 0 1px var(--chip)}
+  .item-row .thumb{width:56px;height:56px;border-radius:12px;background-size:cover;background-position:center;background-color:var(--chip);flex-shrink:0}
+  .item-row .info{flex:1;min-width:0}
+  .item-row .info h4{font-size:14.5px;font-weight:700;margin:0 0 2px}
+  .item-row .info span{font-size:12px;color:var(--muted-3)}
+  .item-row .unavailable{opacity:.5}
+  .item-row .badge{font-size:10.5px;font-weight:700;text-transform:uppercase;color:var(--red);margin-left:8px}
+  .item-row .actions{display:flex;gap:8px;flex-shrink:0}
+  .item-row .actions button{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--chip)}
+
+  .empty{font-size:13.5px;color:var(--muted-3);padding:20px 0}
+
+  /* ---- Form panel ---- */
+  .panel{background:var(--card);border-radius:20px;padding:26px;box-shadow:var(--shadow-card)}
+  .panel h2{font-size:16px;margin-bottom:18px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){ .grid2{grid-template-columns:1fr} }
+  label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin:0 0 6px}
+  .form-row{margin-bottom:14px}
+  textarea.field{height:auto;padding:10px 14px;min-height:70px;resize:vertical}
+  .photo-preview{width:100%;aspect-ratio:4/3;border-radius:12px;background-size:cover;background-position:center;background-color:var(--chip);margin-bottom:10px}
+  .checkbox-row{display:flex;align-items:center;gap:8px;margin:6px 0 16px}
+  .checkbox-row input{width:16px;height:16px}
+  .checkbox-row label{margin:0}
+  .form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
+  .msg{font-size:12.5px;font-weight:600;margin-bottom:12px;display:none}
+  .msg.show{display:block}
+  .msg.ok{color:var(--green)}
+  .msg.err{color:var(--red)}
+</style>
+</head>
+<body>
+
+<div id="loginGate">
+  <div class="login-card">
+    <h1>Menu Admin</h1>
+    <p>Enter the admin password to manage the menu.</p>
+    <div class="err" id="loginErr"></div>
+    <input class="field" id="pw" type="password" placeholder="Password" autocomplete="current-password" />
+    <button class="btn btn-primary" id="loginBtn" style="width:100%">Log In</button>
+  </div>
+</div>
+
+<div id="app">
+  <div class="app-header">
+    <div>
+      <h1>Menu Admin</h1>
+      <p>Add, edit, or remove dishes — changes go live immediately.</p>
+    </div>
+    <button class="btn btn-ghost" id="logoutBtn">Log Out</button>
+  </div>
+
+  <div class="toolbar">
+    <button class="btn btn-primary" id="newItemBtn">+ Add Dish</button>
+  </div>
+
+  <div class="item-list" id="itemList"><div class="empty">Loading…</div></div>
+
+  <div class="panel" id="formPanel" style="display:none">
+    <h2 id="formTitle">Add Dish</h2>
+    <div class="msg" id="formMsg"></div>
+    <div class="form-row">
+      <label>Photo</label>
+      <div class="photo-preview" id="photoPreview"></div>
+      <input type="file" id="photoFile" accept="image/*" />
+    </div>
+    <div class="grid2">
+      <div class="form-row">
+        <label>Name</label>
+        <input class="field" id="fName" placeholder="Jollof Rice" />
+      </div>
+      <div class="form-row">
+        <label>Category</label>
+        <input class="field" id="fCategory" placeholder="Rice Dishes" />
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="form-row">
+        <label>Price — Small (CA$)</label>
+        <input class="field" id="fPriceSmall" type="number" step="0.01" min="0" placeholder="12.00" />
+      </div>
+      <div class="form-row">
+        <label>Price — Large (CA$)</label>
+        <input class="field" id="fPriceBig" type="number" step="0.01" min="0" placeholder="16.00" />
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Prep Time</label>
+      <input class="field" id="fPrepTime" placeholder="15–20 min" />
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" id="fAvailable" checked />
+      <label for="fAvailable">Visible on the public menu</label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" id="cancelFormBtn">Cancel</button>
+      <button class="btn btn-primary" id="saveBtn">Save Dish</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const PW_KEY = 'dak-admin-pw';
+  const loginGate = document.getElementById('loginGate');
+  const app = document.getElementById('app');
+  const loginErr = document.getElementById('loginErr');
+  const pwInput = document.getElementById('pw');
+  const loginBtn = document.getElementById('loginBtn');
+
+  function setErr(msg){ loginErr.textContent = msg; loginErr.classList.toggle('show', !!msg); }
+
+  async function tryLogin(password){
+    setErr('');
+    loginBtn.disabled = true; loginBtn.textContent = 'Checking…';
+    try{
+      const res = await fetch('/api/admin-login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (!res.ok) { setErr('Incorrect password.'); return false; }
+      sessionStorage.setItem(PW_KEY, password);
+      loginGate.style.display = 'none';
+      app.style.display = 'block';
+      loadItems();
+      return true;
+    }catch(err){
+      setErr('Something went wrong. Please try again.');
+      return false;
+    }finally{
+      loginBtn.disabled = false; loginBtn.textContent = 'Log In';
+    }
+  }
+
+  loginBtn.addEventListener('click', () => tryLogin(pwInput.value));
+  pwInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin(pwInput.value); });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    sessionStorage.removeItem(PW_KEY);
+    location.reload();
+  });
+
+  const cached = sessionStorage.getItem(PW_KEY);
+  if (cached) { tryLogin(cached); }
+
+  // ---------------- App logic ----------------
+  let items = [];
+  let editingId = null;
+  let photoDataUrl = null;
+  let photoFilename = null;
+  let photoContentType = null;
+
+  const itemList = document.getElementById('itemList');
+  const formPanel = document.getElementById('formPanel');
+  const formTitle = document.getElementById('formTitle');
+  const formMsg = document.getElementById('formMsg');
+
+  function money(n){ return 'CA$' + Number(n).toFixed(2).replace(/\.00$/, ''); }
+
+  function pw(){ return sessionStorage.getItem(PW_KEY) || ''; }
+
+  async function loadItems(){
+    itemList.innerHTML = '<div class="empty">Loading…</div>';
+    const { data, error } = await window.sbClient.from('menu_items').select('*').order('category').order('name');
+    if (error) { itemList.innerHTML = '<div class="empty">Failed to load menu items.</div>'; return; }
+    items = data || [];
+    renderList();
+  }
+
+  function renderList(){
+    if (items.length === 0) { itemList.innerHTML = '<div class="empty">No dishes yet — add your first one.</div>'; return; }
+    itemList.innerHTML = '';
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'item-row' + (item.available ? '' : ' unavailable');
+      const priceLabel = item.price_small === item.price_big ? money(item.price_small) : `${money(item.price_small)} / ${money(item.price_big)}`;
+      row.innerHTML = `
+        <div class="thumb" style="background-image:url('${item.photo_url || ''}')"></div>
+        <div class="info">
+          <h4>${item.name}${item.available ? '' : '<span class="badge">Hidden</span>'}</h4>
+          <span>${item.category || ''} · ${priceLabel}</span>
+        </div>
+        <div class="actions">
+          <button type="button" class="editBtn" aria-label="Edit">✎</button>
+          <button type="button" class="delBtn" aria-label="Delete">🗑</button>
+        </div>`;
+      row.querySelector('.editBtn').addEventListener('click', () => openForm(item));
+      row.querySelector('.delBtn').addEventListener('click', () => deleteItem(item));
+      itemList.appendChild(row);
+    });
+  }
+
+  function setMsg(text, ok){
+    formMsg.textContent = text;
+    formMsg.className = 'msg show ' + (ok ? 'ok' : 'err');
+  }
+
+  function openForm(item){
+    editingId = item ? item.id : null;
+    photoDataUrl = null; photoFilename = null; photoContentType = null;
+    formTitle.textContent = item ? 'Edit Dish' : 'Add Dish';
+    formMsg.className = 'msg';
+    document.getElementById('fName').value = item ? item.name : '';
+    document.getElementById('fCategory').value = item ? (item.category || '') : '';
+    document.getElementById('fPriceSmall').value = item ? item.price_small : '';
+    document.getElementById('fPriceBig').value = item ? item.price_big : '';
+    document.getElementById('fPrepTime').value = item ? (item.prep_time || '') : '';
+    document.getElementById('fAvailable').checked = item ? !!item.available : true;
+    document.getElementById('photoPreview').style.backgroundImage = item && item.photo_url ? `url('${item.photo_url}')` : 'none';
+    document.getElementById('photoFile').value = '';
+    formPanel.style.display = 'block';
+    formPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.getElementById('newItemBtn').addEventListener('click', () => openForm(null));
+  document.getElementById('cancelFormBtn').addEventListener('click', () => { formPanel.style.display = 'none'; });
+
+  document.getElementById('photoFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    photoFilename = file.name;
+    photoContentType = file.type || 'image/jpeg';
+    const reader = new FileReader();
+    reader.onload = () => {
+      photoDataUrl = reader.result;
+      document.getElementById('photoPreview').style.backgroundImage = `url('${photoDataUrl}')`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  async function uploadPhotoIfNeeded(){
+    if (!photoDataUrl) return undefined;
+    const base64 = photoDataUrl.split(',')[1];
+    const res = await fetch('/api/admin-upload-photo', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw(), filename: photoFilename, contentType: photoContentType, dataBase64: base64 }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Photo upload failed');
+    return data.url;
+  }
+
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    const saveBtn = document.getElementById('saveBtn');
+    const name = document.getElementById('fName').value.trim();
+    const priceSmall = parseFloat(document.getElementById('fPriceSmall').value);
+    const priceBig = parseFloat(document.getElementById('fPriceBig').value);
+    if (!name) { setMsg('Name is required.', false); return; }
+    if (isNaN(priceSmall) || isNaN(priceBig)) { setMsg('Both prices are required.', false); return; }
+
+    saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
+    try{
+      const photoUrl = await uploadPhotoIfNeeded();
+      const payload = {
+        password: pw(),
+        name,
+        category: document.getElementById('fCategory').value.trim(),
+        price_small: priceSmall,
+        price_big: priceBig,
+        prep_time: document.getElementById('fPrepTime').value.trim(),
+        available: document.getElementById('fAvailable').checked,
+      };
+      if (photoUrl) payload.photo_url = photoUrl;
+
+      const res = await fetch('/api/admin-menu-items', {
+        method: editingId ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editingId ? { ...payload, id: editingId } : payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message || data.error || 'Save failed');
+
+      setMsg('Saved!', true);
+      formPanel.style.display = 'none';
+      await loadItems();
+    }catch(err){
+      setMsg(err.message, false);
+    }finally{
+      saveBtn.disabled = false; saveBtn.textContent = 'Save Dish';
+    }
+  });
+
+  async function deleteItem(item){
+    if (!confirm(`Delete "${item.name}"? This can't be undone.`)) return;
+    const res = await fetch('/api/admin-menu-items', {
+      method: 'DELETE', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw(), id: item.id }),
+    });
+    if (!res.ok) { alert('Delete failed.'); return; }
+    await loadItems();
+  }
+})();
+</script>
+</body>
+</html>

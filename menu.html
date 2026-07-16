@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<script src="js/theme.js"></script>
+<title>Menu — Dede's African Kitchen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="icon" type="image/png" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="favicon-180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/supabase-client.js"></script>
+<link rel="stylesheet" href="css/common.css">
+<style>
+  :root{
+    --orange:#F39A36;
+    --orange-2:#F08A1F;
+    --ink:#222629;
+    --ink-soft:#3a3f44;
+    --muted:#9aa1a8;
+    --muted-2:#c9ced3;
+    --muted-3:#5e646b;
+    --bg:#f4f5f7;
+    --card:#ffffff;
+    --green:#26C281;
+    --chip:#f1f2f4;
+    --shadow-card: 0 10px 30px -16px rgba(20,24,28,.18), 0 2px 6px rgba(20,24,28,.04);
+  }
+  [data-theme="dark"]{
+    --ink:#F2F3F4;
+    --ink-soft:#c7cbcf;
+    --muted:#9aa1a8;
+    --muted-2:#3a3f44;
+    --muted-3:#9aa1a8;
+    --bg:#121316;
+    --card:#1c1e22;
+    --chip:#2a2d32;
+    --page-bg:#0d0e10;
+    --nav-bg:rgba(18,19,22,.85);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  html,body{margin:0;padding:0;background:var(--page-bg,#fff);font-family:'Poppins',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;border:0;background:none;cursor:pointer;color:inherit}
+  a{text-decoration:none;color:inherit}
+  img{display:block;max-width:100%}
+  section{padding:56px 8vw 80px}
+  h1,h2,h3{letter-spacing:-.01em;margin:0}
+
+  /* ---------- Nav (shared with index.html) ---------- */
+  .nav{
+    position:sticky;top:0;z-index:50;background:var(--nav-bg,rgba(255,255,255,.85));backdrop-filter:blur(10px);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 8vw;border-bottom:1px solid var(--chip);
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700}
+  .brand .logo{
+    width:38px;height:38px;border-radius:11px;background:var(--orange);
+    display:grid;place-items:center;color:#fff;flex-shrink:0;
+    box-shadow:0 8px 16px -8px rgba(243,154,54,.7);overflow:hidden;
+  }
+  .brand .logo img{width:100%;height:100%;object-fit:cover}
+  .nav-links{display:flex;gap:34px;font-size:13.5px;font-weight:600;color:var(--muted-3)}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-cta{display:flex;align-items:center;gap:10px}
+  .btn{
+    padding:11px 22px;border-radius:11px;font-weight:600;font-size:13.5px;white-space:nowrap;
+    transition:all .15s ease;display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn-primary{background:var(--orange);color:#fff;box-shadow:0 12px 22px -12px rgba(243,154,54,.7)}
+  .btn-primary:hover{background:var(--orange-2);transform:translateY(-1px)}
+  @media(max-width:760px){ .nav-links{display:none} .call-cta{display:none} }
+  @media(max-width:420px){ .nav-cta .btn{padding:9px 14px;font-size:12px} }
+
+  /* ---------- Mobile drawer menu ---------- */
+  .menu-toggle{
+    display:none;position:relative;width:38px;height:38px;border-radius:11px;
+    background:var(--chip);align-items:center;justify-content:center;flex-direction:column;gap:5px;
+    cursor:pointer;transition:background .15s ease;flex-shrink:0;
+  }
+  .menu-toggle:hover{background:var(--muted-2)}
+  .menu-toggle span{width:16px;height:2px;border-radius:99px;background:var(--muted-3);transition:transform 200ms ease,opacity 200ms ease}
+  .menu-toggle.is-open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .menu-toggle.is-open span:nth-child(2){opacity:0}
+  .menu-toggle.is-open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+  @media(max-width:760px){ .menu-toggle{display:flex} }
+
+  .menu-overlay{display:none;position:fixed;inset:0;background:rgba(20,24,28,.45);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity 280ms ease;z-index:90;border:none;padding:0}
+  body.menu-open .menu-overlay{display:block;opacity:1;pointer-events:auto}
+
+  .mobile-drawer{
+    display:none;grid-template-rows:auto 1fr auto auto;position:fixed;top:.85rem;right:.85rem;bottom:.85rem;
+    width:min(86vw,360px);border-radius:28px 0 0 28px;background:var(--card,#fff);
+    box-shadow:0 28px 70px -20px rgba(20,24,28,.45);overflow:hidden;
+    transform:translateX(calc(100% + 1.2rem));opacity:0;pointer-events:none;
+    transition:transform 420ms cubic-bezier(.18,.95,.24,1.08),opacity 220ms ease;z-index:95;
+  }
+  body.menu-open .mobile-drawer{display:grid;transform:translateX(0);opacity:1;pointer-events:auto}
+
+  .mobile-drawer-header{position:relative;padding:1.4rem 1.4rem 1.55rem;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-2) 100%);color:#fff}
+  .mobile-drawer-brand{position:relative;z-index:1;display:grid;justify-items:center;gap:.7rem;text-align:center}
+  .mobile-drawer-brand .brand-mark{width:52px;height:52px;border-radius:999px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);display:grid;place-items:center;overflow:hidden}
+  .mobile-drawer-brand .brand-mark img{width:100%;height:100%;object-fit:cover}
+  .mobile-drawer-brand .brand-name{font-size:15.5px;font-weight:700;letter-spacing:-.01em}
+  .mobile-drawer-brand p{margin:0;font-size:12px;color:rgba(255,255,255,.85)}
+
+  .mobile-drawer-body{padding:1rem 1rem .5rem;overflow-y:auto}
+  .mobile-drawer-list{display:grid;gap:.65rem}
+  .mobile-drawer-item{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:.85rem;align-items:center;padding:.85rem;border-radius:18px;background:var(--bg);text-decoration:none;transition:transform 180ms ease,background 180ms ease}
+  .mobile-drawer-item:hover,.mobile-drawer-item:focus-visible{transform:translateX(-3px);background:var(--chip);outline:none}
+  .mobile-drawer-icon{width:2.6rem;height:2.6rem;border-radius:14px;display:grid;place-items:center;background:#FFF1E0;color:var(--orange)}
+  .mobile-drawer-icon svg{width:18px;height:18px}
+  .mobile-drawer-copy strong{display:block;font-size:14.5px;color:var(--ink);font-weight:700}
+  .mobile-drawer-copy span{display:block;margin-top:.15rem;font-size:12px;line-height:1.45;color:var(--muted-3)}
+
+  .mobile-drawer-cta{padding:.9rem 1rem .4rem}
+  .mobile-drawer-cta .btn-primary{display:block;text-align:center;padding:.85rem;border-radius:14px;font-weight:600;font-size:14.5px;text-decoration:none;background:var(--orange);color:#fff}
+
+  .mobile-drawer-footer{display:flex;justify-content:center;gap:1rem;padding:.7rem 1rem 1.1rem;font-size:11.5px}
+  .mobile-drawer-footer a{color:var(--muted-3);text-decoration:none}
+  .mobile-drawer-footer a:hover{color:var(--orange)}
+
+  body.menu-open{overflow:hidden}
+  @media(min-width:761px){ .menu-overlay,.mobile-drawer{display:none !important} }
+
+  /* ---------- Page head ---------- */
+  .page-head{text-align:center;max-width:640px;margin:0 auto 44px}
+  .page-head .eyebrow{color:var(--orange-2);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px;display:block}
+  .page-head h1{font-size:34px;font-weight:700;margin-bottom:12px}
+  .page-head p{font-size:14.5px;color:var(--muted-3);line-height:1.7}
+
+  /* ---------- Menu list ---------- */
+  .menu-wrap{max-width:1080px;margin:0 auto}
+  .category-block{margin-bottom:44px}
+  .category-block h2{font-size:20px;font-weight:700;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--chip)}
+  .dish-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:900px){ .dish-grid{grid-template-columns:1fr 1fr} }
+  @media(max-width:600px){ .dish-grid{grid-template-columns:1fr} }
+  .dish-card{
+    display:block;width:100%;text-align:left;cursor:pointer;
+    background:var(--card,#fff);border-radius:20px;box-shadow:var(--shadow-card);overflow:hidden;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .dish-card:hover{transform:translateY(-4px);box-shadow:0 24px 44px -22px rgba(20,24,28,.28)}
+  .dish-card .photo{width:100%;aspect-ratio:4/3;background-size:cover;background-position:center;background-color:var(--chip)}
+  .dish-card .body{padding:16px 18px 18px}
+  .dish-card h4{font-size:15.5px;font-weight:700;margin-bottom:6px}
+  .dish-card .meta{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:500}
+  .dish-card .price{color:var(--green);font-weight:700;font-size:14px}
+
+  .empty-state, .loading-state{text-align:center;color:var(--muted-3);font-size:14px;padding:60px 0}
+
+  /* ---------- Detail modal ---------- */
+  .detail-overlay{display:none;position:fixed;inset:0;background:rgba(20,24,28,.55);backdrop-filter:blur(4px);z-index:150;align-items:center;justify-content:center;padding:20px}
+  .detail-overlay.show{display:flex}
+  .detail-card{background:var(--card,#fff);border-radius:24px;max-width:440px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 40px 80px -20px rgba(0,0,0,.4);position:relative}
+  .detail-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(20,24,28,.55);color:#fff;display:grid;place-items:center;z-index:2}
+  .detail-photo{width:100%;aspect-ratio:4/3;background-size:cover;background-position:center;background-color:var(--chip)}
+  .detail-body{padding:22px 24px 26px}
+  .detail-body h3{font-size:21px;font-weight:700;margin-bottom:6px}
+  .detail-body .cat{font-size:12px;color:var(--orange-2);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px;display:block}
+  .detail-prices{display:flex;gap:22px;margin-bottom:18px}
+  .detail-prices .p{font-size:13px;color:var(--muted-3)}
+  .detail-prices .p b{display:block;font-size:19px;color:var(--green);font-weight:700}
+  .detail-prep{font-size:13px;color:var(--muted-3);margin-bottom:20px}
+  .detail-body .btn-primary{width:100%;justify-content:center;padding:14px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="brand">
+    <div class="logo"><img src="favicon-180.png" alt="Dede's African Kitchen" /></div>
+    <span class="brand-full">Dede's African Kitchen</span><span class="brand-short">D.A.K</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#why-us">Why Us</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <div class="nav-cta">
+    <button class="theme-toggle" aria-label="Toggle dark mode" type="button">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <a href="tel:+15194774701" class="btn btn-primary call-cta">Call to Order</a>
+    <button id="mobileMenuBtn" type="button" class="menu-toggle" aria-expanded="false" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<button type="button" id="menuOverlay" class="menu-overlay" aria-label="Close navigation menu"></button>
+<aside id="mobileDrawer" class="mobile-drawer" aria-hidden="true">
+  <div class="mobile-drawer-header">
+    <div class="mobile-drawer-brand">
+      <div class="brand-mark"><img src="favicon-180.png" alt="" /></div>
+      <span class="brand-name">Dede's African Kitchen</span>
+      <p>Home-cooked African food, made with love</p>
+    </div>
+  </div>
+  <div class="mobile-drawer-body">
+    <div class="mobile-drawer-list">
+      <a class="mobile-drawer-item" href="index.html">
+        <span class="mobile-drawer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
+        <span class="mobile-drawer-copy"><strong>Home</strong><span>Back to the homepage.</span></span>
+      </a>
+      <a class="mobile-drawer-item" href="index.html#why-us">
+        <span class="mobile-drawer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>
+        <span class="mobile-drawer-copy"><strong>Why Us</strong><span>What makes our kitchen different.</span></span>
+      </a>
+      <a class="mobile-drawer-item" href="index.html#about">
+        <span class="mobile-drawer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
+        <span class="mobile-drawer-copy"><strong>About</strong><span>Our story and where we started.</span></span>
+      </a>
+      <a class="mobile-drawer-item" href="index.html#faq">
+        <span class="mobile-drawer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg></span>
+        <span class="mobile-drawer-copy"><strong>FAQ</strong><span>Common questions, answered.</span></span>
+      </a>
+      <a class="mobile-drawer-item" href="index.html#contact">
+        <span class="mobile-drawer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+        <span class="mobile-drawer-copy"><strong>Contact</strong><span>Call, email, or find us.</span></span>
+      </a>
+    </div>
+  </div>
+  <div class="mobile-drawer-cta">
+    <a href="tel:+15194774701" class="btn-primary">Call to Order</a>
+  </div>
+  <div class="mobile-drawer-footer">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+  </div>
+</aside>
+
+<section>
+  <div class="page-head">
+    <span class="eyebrow">Full Menu</span>
+    <h1>Everything We Cook</h1>
+    <p>Tap any dish for details, then call us to place your order — no account, no app.</p>
+  </div>
+  <div class="menu-wrap" id="menuWrap">
+    <div class="loading-state">Loading menu…</div>
+  </div>
+</section>
+
+<div class="detail-overlay" id="detailOverlay">
+  <div class="detail-card">
+    <button type="button" class="detail-close" id="detailClose" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="detail-photo" id="detailPhoto"></div>
+    <div class="detail-body">
+      <span class="cat" id="detailCat"></span>
+      <h3 id="detailName"></h3>
+      <div class="detail-prices" id="detailPrices"></div>
+      <p class="detail-prep" id="detailPrep"></p>
+      <a href="tel:+15194774701" class="btn btn-primary">Call to Order</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Mobile drawer menu
+  (function () {
+    const toggle = document.getElementById('mobileMenuBtn');
+    const overlay = document.getElementById('menuOverlay');
+    const drawer = document.getElementById('mobileDrawer');
+
+    function closeMenu() {
+      document.body.classList.remove('menu-open');
+      toggle.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+    function openMenu() {
+      document.body.classList.add('menu-open');
+      toggle.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    toggle.addEventListener('click', () => {
+      document.body.classList.contains('menu-open') ? closeMenu() : openMenu();
+    });
+    overlay.addEventListener('click', closeMenu);
+    drawer.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && document.body.classList.contains('menu-open')) closeMenu();
+    });
+    window.addEventListener('resize', () => { if (window.innerWidth > 760) closeMenu(); });
+  })();
+
+  // Menu list + detail modal
+  (function () {
+    const wrap = document.getElementById('menuWrap');
+    const overlay = document.getElementById('detailOverlay');
+    const closeBtn = document.getElementById('detailClose');
+
+    function money(n){ return 'CA$' + Number(n).toFixed(2).replace(/\.00$/, ''); }
+
+    function openDetail(item){
+      document.getElementById('detailPhoto').style.backgroundImage = item.photo_url ? `url('${item.photo_url}')` : 'none';
+      document.getElementById('detailCat').textContent = item.category || '';
+      document.getElementById('detailName').textContent = item.name;
+      document.getElementById('detailPrep').textContent = item.prep_time ? `Ready in about ${item.prep_time}` : '';
+      const pricesEl = document.getElementById('detailPrices');
+      pricesEl.innerHTML = '';
+      if (item.price_small === item.price_big) {
+        pricesEl.innerHTML = `<div class="p">Price<b>${money(item.price_small)}</b></div>`;
+      } else {
+        pricesEl.innerHTML = `<div class="p">Small<b>${money(item.price_small)}</b></div><div class="p">Large<b>${money(item.price_big)}</b></div>`;
+      }
+      overlay.classList.add('show');
+    }
+    function closeDetail(){ overlay.classList.remove('show'); }
+    closeBtn.addEventListener('click', closeDetail);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeDetail(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDetail(); });
+
+    function dishCard(item){
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'dish-card';
+      const priceLabel = item.price_small === item.price_big
+        ? money(item.price_small)
+        : `${money(item.price_small)}–${money(item.price_big)}`;
+      card.innerHTML = `
+        <div class="photo" style="background-image:url('${item.photo_url || ''}')"></div>
+        <div class="body">
+          <h4>${item.name}</h4>
+          <div class="meta"><span>${item.prep_time || ''}</span><span class="price">${priceLabel}</span></div>
+        </div>`;
+      card.addEventListener('click', () => openDetail(item));
+      return card;
+    }
+
+    async function load(){
+      try{
+        const { data, error } = await window.sbClient
+          .from('menu_items')
+          .select('*')
+          .eq('available', true)
+          .order('category', { ascending: true })
+          .order('name', { ascending: true });
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          wrap.innerHTML = '<div class="empty-state">Our menu is being updated — please check back soon, or call us directly.</div>';
+          return;
+        }
+        const byCategory = {};
+        data.forEach(item => {
+          const cat = item.category || 'Menu';
+          (byCategory[cat] = byCategory[cat] || []).push(item);
+        });
+        wrap.innerHTML = '';
+        Object.keys(byCategory).forEach(cat => {
+          const block = document.createElement('div');
+          block.className = 'category-block';
+          const h2 = document.createElement('h2');
+          h2.textContent = cat;
+          const grid = document.createElement('div');
+          grid.className = 'dish-grid';
+          byCategory[cat].forEach(item => grid.appendChild(dishCard(item)));
+          block.appendChild(h2);
+          block.appendChild(grid);
+          wrap.appendChild(block);
+        });
+      }catch(err){
+        console.error(err);
+        wrap.innerHTML = '<div class="empty-state">Couldn\'t load the menu right now — please call us directly.</div>';
+      }
+    }
+    load();
+  })();
+</script>
+<script src="js/cookie-consent.js" defer></script>
+</body>
+</html>
